@@ -1,0 +1,212 @@
+var InitLife;
+var Corpses = 0;
+var scriptlist = [];
+var count = 0;
+var end = false;
+var rushlogs = "logs/rush/";
+var Rev = "ERusher 2.0";
+
+function NTMain() {
+	var i;
+
+	Delay(1000);
+
+	InitLife = me.hp;
+
+	Include("libs/common/NTCommon.ntl");
+	Include("libs/common/NTColorConverter.ntl");
+	Include("NTRush/funcs/RushCommon.ntl");
+
+	Common.IncludeFuncs();
+	NTC_IncludeLibs();
+
+	Config.Load();
+	Connect();
+	NT_LoadConfig();
+
+	NTSI_LoadNIPFiles("NTBot/item_configs");
+
+	// ubi21 Enigma reset start
+	////////////////////////////
+	NTU_LogExitStatus("F");
+
+	// ubi21 Enigma reset end
+	////////////////////////////
+
+	if (NTConfig_StartDelay > 0) {
+		NTC_Delay(NTConfig_StartDelay);
+	}
+
+	GetPath(me.areaid, me.x, me.y, me.x, me.y, true);
+
+	SetUIState(0x0A, true);
+
+	RegisterEvent(EVENT_KEYDOWN, KeyMsg);
+	RegisterEvent(EVENT_SCRIPTMSG, ScriptMsg);
+
+	if (!NTT_PutBackEnigma()) {
+		NTC_Delay(240000);
+		ExitGame();
+	}
+
+	Corpses = NTT_GetCorpses();
+	if (Corpses > 0 || InitLife < 10) {
+		NTU_DeathLog(Corpses, InitLife);
+	}
+
+	NTT_ClearInventory();
+	NTT_ClearBelt();
+
+	if (!NTT_LookForEnigma()) {
+		if (GetUIState(0x01)) {
+			SetUIState(0x01, false);
+		}
+		NTC_Delay(240000);
+		ExitGame();
+	}
+
+	if (!Script.Loaded("RushTools.ntj")) {
+		Load("NTRush/rush_tools/RushTools.ntj");
+		Print(COLOR_3 + "Tools loaded");
+	}
+
+	Include("libs/common/NTSnagit.ntl");
+	NTSI_ClearIgnoredItems();
+
+	if (Scripts.Command) {
+		Command();
+	}
+
+	for (i in Scripts) {
+		if (Scripts[i] === true) {
+			scriptlist.push(i);
+		}
+	}
+
+	if (scriptlist[count].length > -1) {
+		Script.Load("NTRush/rushbots/" + scriptlist[count] + ".ntj");
+		SetStatusText(Rev + "       " + scriptlist[count]);
+
+		while (!end) {
+			NTC_Delay(1000);
+		}
+	}
+	
+	ExitGame();
+}
+
+function Connect() {
+	Tracker.UpdateStats("game", me.gamename);
+	if (me.gamepassword !== undefined) {
+		Tracker.UpdateStats("gamepass", me.gamepassword);
+	}
+	Tracker.UpdateStats("ingame", true);
+}
+
+function KeyMsg(keycode) {
+	var i, _script;
+
+	switch(keycode) {
+		case Do_PauseBot: // Pause/Resume bot
+			_script = Script.Find(scriptlist[count] + ".ntj");
+
+			if (_script) {
+				if (_script.running) {
+					_script.Stop();
+					NTC_Delay(300);
+					ClickMap(NTC_CLICK_LUP, NTC_SHIFT_NONE, null);
+					SetStatusText(COLOR_1 + Rev + "    Paused " + scriptlist[count]);
+				} else {
+					Script.Load("NTRush/rushbots/" + scriptlist[count] + ".ntj");
+					SetStatusText(Rev + " " + scriptlist[count]);
+				}
+			}
+		break;
+
+		case Do_PrevScript: // "page down" previous script
+			_script = Script.Find(scriptlist[count] + ".ntj");
+
+			if (_script) {
+				if (_script.running) {
+					_script.Stop();
+					NTC_Delay(300);
+					ClickMap(NTC_CLICK_LUP, NTC_SHIFT_NONE, null);
+					SetStatusText(COLOR_2 + Rev + " Stopped " + scriptlist[count]);
+				} else if (--count > 0) {
+					//for (i = 0; i < scriptlist.length - 1; i += 1) {
+						// scriptlist.length - 1) {
+							//count += 1;
+					SetStatusText(COLOR_2 + Rev + " Back to " + scriptlist[count]);
+						//} else {
+				} else if (--count <= 0) {
+					count = scriptlist.length - 1;
+					SetStatusText(COLOR_2 + Rev + " Back to " + scriptlist[count]);
+				}
+			}
+		break;
+
+		case Do_NextScript: // "page up" next script
+			_script = Script.Find(scriptlist[count] + ".ntj");
+
+			if (_script) {
+				if (_script.running) {
+					_script.Stop();
+					SetStatusText(COLOR_11 + Rev + " Stopped " + scriptlist[count]);
+				} else if (++count < scriptlist.length) {
+					SetStatusText(COLOR_11 + Rev + " Skipped to " + scriptlist[count]);
+				} else if (++count >= scriptlist.length) {
+					count = 0;
+					SetStatusText(COLOR_11 + Rev + " Skipped to " + scriptlist[count]);
+				}
+			}
+		break;
+	}
+}
+
+function ScriptMsg(msg) {
+	var area;
+
+	switch(msg) {
+	case "QuitGame":
+		Script.Stop(scriptlist[count] + ".ntj");
+		NTC_CancelMenus();
+		end = true;
+		break;
+
+	case "SCRIPT_END":
+		if (++count < scriptlist.length) {
+			NTTM_CheckAct();
+			Script.Load("NTRush/rushbots/" + scriptlist[count] + ".ntj");
+			SetStatusText(Rev + "   " + scriptlist[count]);
+			File.OverWrite(me.account + "_scripts.txt", scriptlist[count]);
+		} else {
+			end = true;
+		}
+		break;
+
+	default:
+		Print(COLOR_1 + scriptlist[count] + " : " + msg + " failed");
+
+		area = GetArea();
+
+		if (area) {
+			Common.LogManager(COLOR_1 + scriptlist[count] + " : " + msg + " failed (" + area.name + ")");
+		} else {
+			Common.LogManager(COLOR_1 + scriptlist[count] + " : " + msg + " failed (unknown area)");
+		}
+
+		if (++count < scriptlist.length) {
+			NTTM_CheckAct();
+			Script.Load("NTRush/rushbots/" + scriptlist[count] + ".ntj");
+			SetStatusText(Rev + "       "  + scriptlist[count]);
+			File.OverWrite(me.account + "_scripts.txt", scriptlist[count]);
+		} else {
+			end = true;
+		}
+		break;
+	}
+}
+
+function D2NTStatus(where, time, message) {
+	return SendCopyData('D2NT Manager', null, where << 16 | time, message);
+}

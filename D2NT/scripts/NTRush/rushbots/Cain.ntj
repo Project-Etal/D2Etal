@@ -1,0 +1,20 @@
+function NTMain() {
+	Include("libs/common/NTCommon.ntl");
+	Include("NTRush/funcs/RushCommon.ntl");
+	Common.IncludeFuncs();
+	NTC_IncludeLibs();
+	Config.Load();
+
+	NT_LoadConfig();
+	NTSI_LoadNIPFiles("NTBot/item_configs");
+
+	NTA_Initialize();
+
+	if (!Extras.Cain()) {
+		Common.LogError("Cain()");
+		Script.SendMsg("OverWatch.ntj", "Cain()");
+		return;
+	}
+
+	Script.SendMsg("OverWatch.ntj", "SCRIPT_END"); 
+}

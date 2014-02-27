@@ -1,0 +1,1700 @@
+var Quests =  {
+	Andy: function () {
+		var i, _clearpos;
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(35)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+
+		for (i = 0; i < 2; i++) {
+			if (!NTM_MoveToStair(me.areaid, 36 + i)) {
+				Common.LogError("NTM_MoveToStair()");
+				return false;
+			}
+
+			if (!NTM_TakeStair(36 + i)) {
+				Common.LogError("NTM_TakeStair()");
+				return false;
+			}
+		}
+
+		NTC_PingDelay(100);
+
+		_clearpos = [22593, 9639, 22594, 9618, 22594, 9618];
+
+		for (i = 0; i < _clearpos.length; i += 2) {
+			if (!NTM_MoveTo(me.areaid, _clearpos[i], _clearpos[i + 1])) {
+				Common.LogError("NTM_MoveTo()");
+				return false;
+			}
+			NTA_ClearPosition(20);
+			NTC_PingDelay(200);
+		}
+
+		Say(Messages.andyup);
+
+		NTM_MakeTP();
+
+		NTA_ClearPosition(20);
+
+		while (!NTC_IsQuesterIn()) {
+			NTC_Delay(500);
+		}
+
+		NTP_DoPrecast(true);
+
+		if (!NTM_MoveTo(me.areaid, 22532, 9553)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		if (!NTA_KillMonster(156)) {
+			Common.LogError("NTA_KillMonster()");
+			return false;
+		}
+
+		NTSI_PickItems();
+
+		Say(Messages.andydown);
+
+		if (!NTM_MoveTo(me.areaid, 22595, 9617)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		NTM_UsePortal("BluePortal", 1, me.charname);
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		while (!NTC_IsGroupInAct(2)) {
+			Delay(500);
+		}
+
+		if (!NTM_TakeWaypoint(40)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		return true;
+	},
+
+	Cube: function () {
+		if (me.diff == 0) {
+			if (!NTTM_CheckAct()) {
+				Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+				return;
+			}
+
+			NTTMGR_TownManager();
+
+			if (!NTTM_TownMove("waypoint")) {
+				Common.LogError("NTTM_TownMove()");
+				return false;
+			}
+
+			if (!NTM_TakeWaypoint(57)) {
+				Common.LogError("NTM_TakeWaypoint()");
+				return false;
+			}
+
+			NTP_DoPrecast(true);		
+
+			if (!NTM_MoveToStair(me.areaid, 60)) {
+				Common.LogError("NTM_MoveToStair()");
+				return false;
+			}
+
+			if (!NTM_TakeStair(60)) {
+				Common.LogError("NTM_TakeStair()");
+				return false;
+			}
+
+			NTP_DoPrecast(true);
+
+			if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 354, -5, -5)) {
+				Common.LogError("NTM_MoveToPresetUnit()");
+				return false;
+			}
+
+			NTA_ClearPosition(30);
+
+			NTSI_PickItems();
+
+			_Cube = NTC_FindUnit(NTC_UNIT_OBJECT, 354);
+
+			if (_Cube) {	
+				if (NTM_MoveTo(me.areaid, _Cube.x+3, _Cube.y)) {
+					NTA_ClearPosition(30);
+					NTSI_PickItems();
+				}
+
+				if (NTC_OpenChest(_Cube)) {
+					NTC_PingDelay(100);
+					NTSI_PickItems();
+				}
+				NTM_MoveTo(me.areaid, _Cube.x+3, _Cube.y);
+				NTA_ClearPosition(30);
+
+				NTSI_PickItems();
+			}
+			
+			NTM_MoveTo(me.areaid, _Cube.x-5, _Cube.y-5);
+			NTM_MakeTP();
+
+			Say(Messages.cubeup);
+
+			while (!NTC_IsQuesterIn()) {
+				NTC_TPGuard(30);
+				NTM_MoveTo(me.areaid, _Cube.x-5, _Cube.y-5);
+			}
+
+			NTSI_PickItems();
+
+			NTM_UsePortal("BluePortal", 40, me.charname);
+		}
+		return true;
+	},
+
+	Staff: function () {
+		var i, _Staff;
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(43)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+
+		for (i = 0; i < 3; i += 1) {
+			if (!NTM_MoveToStair(me.areaid, 62+i)) {
+				Common.LogError("NTM_MoveToStair()"); 
+				return false;
+			}
+
+			if(!NTM_TakeStair(62+i))  {
+				Common.LogError("NTM_TakeStair()");
+				return false;
+			} 
+		}
+
+		NTA_ClearPosition(10);
+
+		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 356, -5, -5)) {
+			Common.LogError("NTM_MoveToPresetUnit()");
+			return false;
+		}
+
+		if (NTM_MoveToPresetUnit(me.areaid, 356)) {
+			Common.LogError("NTM_MoveToPresetUnit()");
+			return false;
+		}
+
+		for (i = 0; i < 2; i += 1) {
+			NTA_ClearPosition(15);
+			NTSI_PickItems();
+			NTC_PingDelay(100);
+		}
+
+		NTSI_PickItems();				
+
+		_Staff = NTC_FindUnit(NTC_UNIT_OBJECT, 356);
+
+		if (_Staff) {	
+			if (NTM_MoveTo(_Staff.areaid, _Staff.x+3, _Staff.y+3)) {
+				NTA_ClearPosition(15);
+				NTSI_PickItems();
+			}
+			if (NTC_OpenChest(_Staff)) {
+				NTC_PingDelay(100);
+				NTSI_PickItems();
+			}
+		}
+
+		if (NTM_MoveTo(_Staff.areaid, _Staff.x+3, _Staff.y+3)) {
+			NTA_ClearPosition(15);
+			NTSI_PickItems();
+		}
+
+		NTA_ClearPosition(30);
+		NTM_MoveTo(_Staff.areaid, _Staff.x-5, _Staff.y-5);
+
+		Say(Messages.staffup);
+
+		NTM_MakeTP(true);
+		
+		return true;
+	},
+
+	Ammy: function () {
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(44)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+			
+		NTP_DoPrecast(true);
+				
+		if (!NTM_MoveToStair(45, 58)) {
+			Common.LogError("NTM_MoveToStair()");
+			return false;
+		} 
+
+		if (!NTM_TakeStair(58)) {
+			Common.LogError("NTM_TakeStair()");
+			return false;
+		}
+				
+		if (!NTM_MoveToStair(me.areaid, 61)) {
+			Common.LogError("NTM_MoveToStair()");
+			return false;
+		} 
+
+		if (!NTM_TakeStair(61)) {
+			Common.LogError("NTM_TakeStair()");
+			return false;
+		}
+		
+		NTM_MoveTo(me.areaid,15022,14041,0,true);
+		NTM_MoveTo(me.areaid,15022,14061,0,true);
+		NTM_MoveTo(me.areaid,15040,14069,0,true);
+		NTM_MoveTo(me.areaid,15058,14065,0,true);
+		NTM_MoveTo(me.areaid,15063,14052,0,true);
+
+		NTA_ClearLevel(true);	
+			
+		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 149, +4, -8)) {
+			Common.LogError("NTM_MoveToPresetUnit()");
+			return false;
+		}
+			
+		NTM_MakeTP();
+			
+		NTC_PingDelay(100);
+			
+		Say(Messages.ammyup);
+			
+		while (!NTC_IsQuesterIn()) {
+			NTC_TPGuard(5);
+		}
+
+		NTM_UsePortal("BluePortal", 40, me.charname);
+		Say("Talk to Drognan");
+		return true;
+	},
+
+	Summoner: function () {
+		var _unit, _journalx, _journaly ;
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(74)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+			
+		_unit = GetPresetUnits(me.areaid, 2);
+			
+		for (i=0;i < _unit.length; i++) {
+			if (_unit[i].id == 357) {
+				_journalx = _unit[i].roomx*5+_unit[i].x;
+				_journaly = _unit[i].roomy*5+_unit[i].y;
+			}
+		}
+
+		if (_journalx < 25300) {
+			NTM_MoveTo(me.areaid, _journalx+55, _journaly);
+		}
+		if (_journaly < 5300) {
+			NTM_MoveTo(me.areaid, _journalx+15, _journaly+55);
+		}
+		if (_journalx > 25500) {
+			NTM_MoveTo(me.areaid, _journalx-40, _journaly+15);
+		}
+		if (_journaly > 5500) {
+			NTM_MoveTo(me.areaid, _journalx+15, _journaly-40);
+		}
+		var xx = me.x; var yy = me.y
+		
+		for (i = 0; i < 5; i += 1) {
+			NTA_ClearPosition(20);
+			NTM_MoveTo(me.areaid, xx, yy);
+		}
+
+		NTM_MakeTP();
+
+		Say(Messages.summonerup);
+		
+		while (!NTC_IsQuesterIn()) {
+			NTC_TPGuard(20);
+			NTM_MoveTo(me.areaid, xx, yy);
+		}
+
+		if (!NTM_MoveToPresetUnit(me.areaid, 2, 357, 0, 0, true)) {
+			Common.LogError("NTM_MoveToPresetUnit()");
+			return false;
+		}
+
+		if (!NTA_KillMonster(250)) {
+			Common.LogError("NTA_KillMonster()");
+			return false;
+		}
+
+		Say(Messages.summonerdown);
+
+		if (!NTM_MoveToPresetUnit(me.areaid, 2, 357, +10, +10)) {
+			Common.LogError("NTM_MoveToPresetUnit()");
+			return false;
+		}
+
+		while (!NTM_UsePortal("Portal", 46)) {
+			NTA_ClearPosition(40);
+			NTM_MoveTo(me.areaid, _journalx, _journaly);
+			NTC_Delay(500);
+		}
+
+		if (!NTM_MoveTo(me.areaid, me.x-17, me.y-21)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(40)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		return true;
+	},
+
+	Duriel: function () {
+		var _tombs, _harem;
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(46)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+
+		_tombs = GetRoom();
+
+		if (!_tombs) {
+			return false;
+		}
+
+		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_TILE, _tombs.correcttomb-28)) {
+			Common.LogError("NTM_MoveToPresetUnit()");
+			return false;
+		}
+
+		_tileunit = NTC_FindUnit(NTC_UNIT_TILE, _tombs.correcttomb-28);
+
+		if (!_tileunit) {
+			return false;
+		}
+
+		if (!NTM_TakeStair(_tileunit.subareaid)) {
+			Common.LogError("NTM_TakeStair()");
+			return false;
+		}
+
+		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 152, -2, 2)) {
+			Common.LogError("NTM_MoveToPresetUnit()");
+			return false;
+		}
+
+		if (NTA_ClearPosition()) {
+			NTSI_PickItems();
+		} else {
+			NTC_PingDelay(1500);
+		}
+
+		NTA_ClearPosition(40);
+
+		NTSI_PickItems();
+			
+		_orifice = NTC_FindUnit(NTC_UNIT_OBJECT, 152);
+
+		if (_orifice) {
+			NTM_MoveTo(_orifice.areaid, _orifice.x-3, _orifice.y);
+
+			NTC_Delay(150);
+
+			Say(Messages.durychamber);
+
+			NTM_MakeTP();
+
+			while (!NTC_IsQuesterIn()) {
+				NTC_TPGuard(20);
+			}
+
+			while (!NTC_FindUnit(NTC_UNIT_OBJECT, 100)) {
+				NTA_ClearPosition(20);
+				NTM_MoveTo(_orifice.areaid, _orifice.x-3, _orifice.y);
+				NTC_Delay(500);
+			}
+
+			if (!NTM_TakeUnit(NTC_UNIT_OBJECT, 100)) {
+				Common.LogError("NTM_TakeUnit()");
+				return false;
+			}
+
+			if (NTC_FindUnit(NTC_UNIT_MONSTER, 211)) {
+				if (!NTA_KillMonster(211)) {
+					Common.LogError("NTA_KillMonster()");
+					return false;
+				}
+			}
+
+			NTSI_PickItems();
+
+			NTC_Delay(2000);
+
+			Say(Messages.durydown);
+
+			NTM_MakeTP(true);	
+		}
+		
+		NTC_PutSkill(115, NTC_HAND_RIGHT);	
+				
+		if (NTConfig_TpHarem) {
+			if (!NTTM_TownMove("waypoint")) {
+				Common.LogError("NTTM_TownMove()");
+				return false;
+			}
+
+			if (!NTM_TakeWaypoint(52)) {
+				Common.LogError("NTM_TakeWaypoint()");
+				return false;
+			}
+
+			if (!NTM_MoveToStair(me.areaid, 51)) {
+				Common.LogError("NTM_MoveToStair()");
+				return false;
+			}
+
+			if (!NTM_TakeStair(51)) {
+				Common.LogError("NTM_TakeStair()");
+				return false;
+			}
+
+			_harem = [10031, 5608, 10058, 5610, 10084, 5611, 10109, 5612, 10133, 5613, 10148, 5603, 10143, 5599];
+
+			for (i = 0; i < _harem.length; i += 2) {
+				for (n = 0 ; n < 2 ; n++) {
+					if (!NTM_TeleportTo(_harem[i]+Random(-n, n), _harem[i+1]+Random(-n, n))) {
+						Common.LogError("NTM_TeleportTo()");
+						return false;
+					}
+				}
+			}
+
+			if (!NTM_TakeStair(50)) {
+				Common.LogError("NTM_TakeStair()");
+				return false;
+			}
+			
+			if (!NTM_MoveTo(me.areaid, 10022, 5046)) {
+				Common.LogError("NTM_MoveTo()");
+				return false;
+			}
+				
+			NTM_MakeTP(true);
+
+			NTC_PingDelay(100);
+				
+			Say(Messages.palacetp);
+		}
+
+		if (me.classid ==  NTC_CHAR_CLASS_PALADIN) {
+			NTC_PutSkill(115, NTC_HAND_RIGHT);
+		}
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		while (!NTC_IsGroupInAct(3)) {
+			Delay(500);
+		}
+
+		if (!NTM_TakeWaypoint(75)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		return true;
+	},
+
+	FindDurance: function() {
+		var i, _unit;
+
+		_unit = GetPresetUnits(me.areaid, NTC_UNIT_TILE);
+
+		for (i = 0 ; i < _unit.length ; i++) {
+			if (_unit[i].id == 64) {
+				_todurx = (_unit[i].roomx*5+_unit[i].x);
+				_todury = (_unit[i].roomy*5+_unit[i].y);
+			}
+		}
+	},
+
+	Travincal: function () {
+		var i,_pretp, _waypoint, _deltax, _deltay,
+			_attackpos = [5800, 1554, 5799, 1534, 5799, 1526, 5797, 1514, 5795, 1490, 5787, 1491, 5797, 1514, 5781, 1514];
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(83)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		_waypoint = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(22526));
+
+		if (!_waypoint) {
+			return false;
+		}
+
+		_deltax = _waypoint.x - 5699;
+			
+		_deltay = _waypoint.y - 1584;
+
+		NTP_DoPrecast(true);
+
+		this.FindDurance();
+
+		if (!NTM_MoveTo(me.areaid, _todurx-2, _todury-35)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		_pretp = [_todurx-2, _todury-35, me.x-30, me.y, me.x+60, me.y, me.x-30, me.y, _todurx-2, _todury-35];
+
+		for (i = 0 ; i < _pretp.length ; i += 2) {
+			NTM_MoveTo(me.areaid, _pretp[i], _pretp[i+1]);
+			NTA_ClearPosition(10);
+			NTC_PingDelay(200);
+		}
+			
+		Say(Messages.travup);
+
+		NTM_MakeTP();
+
+		while (!NTC_IsQuesterIn()) {
+			NTC_TPGuard(20);
+		}
+
+		NTP_DoPrecast(true);
+			
+		if (!NTM_MoveTo(me.areaid, 5780+_deltax, 1555+_deltay)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		for (i = 0 ; i < _attackpos.length ; i += 2) {
+			NTM_MoveTo(me.areaid, _attackpos[i]+_deltax, _attackpos[i+1]+_deltay);
+			NTA_ClearPosition(25);
+			NTC_PingDelay(200);
+		}
+
+		Say(Messages.travdown);
+
+		while (!NTC_IsQuesterOut()) {
+			Delay(500);
+		}
+
+		NTSI_PickItems();
+			
+		NTM_MoveTo(me.areaid, _todurx-17, _todury+10);
+
+		NTM_MakeTP(true);
+		
+		return true;
+	},
+
+	Mephisto: function () {
+		var i, _chest, _councils, _unit;
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(101)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+
+		if (!NTM_MoveToStair(me.areaid, 102)) {
+			Common.LogError("NTM_MoveToStair()");
+			return false;
+		}
+
+		if (!NTM_TakeStair(102)) {
+			Common.LogError("NTM_TakeStair()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+
+		if (!NTM_MoveTo(me.areaid, 17617, 8068)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		if (NTConfig_KillCouncils) {	
+			_unit = GetUnit(NTC_UNIT_MONSTER);
+			_councils = ["Bremm Sparkfist",  "Wyand Voidbringer", "Maffer Dragonhand", "Council Member"];
+
+			do {
+				for (i=0; i<_councils.length; i++) {
+					if (_unit.name == _councils[i]) {
+						if (GetDistance(me.x, me.y, _unit.x, _unit.y) < 35) {
+							NTA_KillMonster(_councils[i]);
+						}
+					}
+				}
+			} while(_unit.GetNext());
+		}
+
+		if (!NTM_MoveTo(me.areaid, 17589, 8068)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		Say(Messages.mephup);
+
+		NTM_MakeTP();
+
+		while (!NTC_IsQuesterIn()) {
+			NTC_Delay(500);
+		}
+
+		NTP_DoPrecast(true);
+
+		if (!NTM_MoveTo(me.areaid, 17564, 8069)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		NTC_Delay(100);
+		NTM_MoveTo(me.areaid, 17573, 8071);
+
+		if (!NTA_KillMonster(242)) {
+			Common.LogError("NTA_KillMonster()");
+			return false;
+		}
+
+		NTA_ClearPosition(25);
+
+		NTSI_PickItems();
+
+		Say(Messages.mephdown);
+
+		if (NTConfig_OpenChest) {
+			if (!NTM_MoveTo(me.areaid, 17520, 8063)) {
+				Common.LogError("NTM_MoveTo()");
+				return false;
+			}
+
+			_chest = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(3260));
+
+			if (_chest) {
+				do {
+					if (_chest.x == 17513 && _chest.y == 8063) {
+						if (NTM_MoveTo(_chest.areaid, _chest.x+1, _chest.y)) {
+							if (NTC_OpenChest(_chest)) {
+								NTSI_PickItems();
+								break;
+							}
+						}
+					}
+				} while(_chest.GetNext());
+			}
+		}	
+
+		NTM_MoveTo(me.areaid, 17589, 8068);
+
+		NTM_UsePortal("BluePortal", 75, me.charname);
+
+		if(!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		while(!NTC_IsGroupInAct(4)) {
+			Delay(500);
+		}
+
+		if(!NTM_TakeWaypoint(103)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTC_Delay(2000);
+
+		return true;
+	},
+
+	OpenSealsInt: function() {
+		var _unit, _result;
+
+		_unit = GetPresetUnits(108, NTC_UNIT_OBJECT, 396);
+
+		if (!_unit) {
+			return false;
+		}
+		if (_unit[0].roomy * 5 + _unit[0].y == 5275) {
+			_result = this.OpenVizierSealInt(1);
+		} else {
+			_result = this.OpenVizierSealInt(2);
+		}
+
+		NTP_DoPrecast(true);
+			
+		_unit = GetPresetUnits(108, NTC_UNIT_OBJECT, 394);
+		if (_unit[0].roomx * 5 + _unit[0].x == 7773) {
+			_result = this.OpenDeSeisSealInt(1);
+		} else {
+			_result = this.OpenDeSeisSealInt(2);
+		}
+		if (!_result) {
+			return false;
+		}
+
+		_unit = GetPresetUnits(108, NTC_UNIT_OBJECT, 392);
+		if (!_unit) {
+			return false;
+		}
+		if (_unit[0].roomx * 5 + _unit[0].x == 7893) {
+			_result = this.OpenVenomSealInt(1);
+		} else {
+			_result = this.OpenVenomSealInt(2);
+		}
+		NTP_DoPrecast(true);
+		return _result;
+	},
+
+	OpenVizierSealInt: function(type) {
+		var i, vx, vy;
+
+		if (NTConfig_ClearCS) {
+			if (type === 1) {
+				vx = [7767,7756,7744,7747,7750,7741,7729,7720,7720,7721,7719,7712,7700,7687,7676, 7666];//	|||  |||
+				vy = [5292,5284,5275,5290,5303,5310,5314,5312,5301,5288,5273,5292,5294,5294,5292, 5307];//      |||
+			} else {
+				vx = [7768,7755,7741,7733,7723,7714,7707,7680,7666, 7655];//   |||||||||
+				vy = [5289,5295,5282,5291,5300,5282,5315,5310,5311, 5282];//   |||
+			}
+			for (i = 0; i < vx.length; i += 1) {
+				NTM_MoveTo(108, vx[i], vy[i]);
+				this.ClearPosition(30, this.SealSort);
+			}
+		}
+		
+		if (!this.OpenSealInt(395) || !this.OpenSealInt(396)) {
+			return false;
+		}
+
+		this.ClearPosition(40, this.DistanceSort);
+		NTA_KillMonster(GetLocaleString(2851)); // Grand Vizier of Chaos
+		this.ClearPosition(20, this.DistanceSort);
+		
+		return true;
+	},
+
+	OpenDeSeisSealInt: function(type) {
+		var i, n, sx, sy;
+
+		if (NTConfig_ClearCS) {
+			if (type === 1) {
+				sx = [7791,7783,7800,7809,7785,7773,7773,7776,7794,7811,7817,7815,7798]; // Shape of "2"
+				sy = [5265,5256,5247,5232,5230,5222,5212,5194,5194,5193,5177,5157,5155];
+			} else {
+				sx = [7786,7801,7786,7787,7810,7811,7810,7790,7774,7773,7794]; // shape of an "S" or "5"
+				sy = [5263,5249,5245,5227,5233,5215,5198,5194,5181,5156,5154];
+			}
+			for (i = 0; i < sx.length; i += 1) {
+				NTM_MoveTo(108, sx[i], sy[i]);
+				this.ClearPosition(30, type === 1 ? this.SealSort : this.SealSortB);
+			}
+		}
+
+		if (!this.OpenSealInt(394)) {
+			return false;
+		}
+		if (type == 1) {
+			NTM_MoveTo(108, 7792, 5207);
+			for (i = 0; i < 3; i += 1) {
+				NTM_TeleportTo(7794, 5237);
+			}
+		} else {
+			NTM_MoveTo(108, 7798, 5186);
+		}
+
+		this.Preattack(GetLocaleString(2852));
+		this.ClearPosition(40, this.DistanceSort);
+		NTA_KillMonster(GetLocaleString(2852)); // Lord De Seis
+		this.ClearPosition(20, this.DistanceSort);
+
+		return NTM_MoveTo(108, 7800, 5255);
+	},
+
+	OpenVenomSealInt: function(type) {
+	var i, IX, IY;
+		if (NTConfig_ClearCS) {
+			if (type === 1) {
+				IX = [7825,7827,7834,7845,7855,7852,7875,7896,7917]; // shape of a "t"
+				IY = [5293,5276,5291,5315,5301,5278,5293,5295,5291];
+			} else {
+				IX = [7822,7826,7832,7850,7868,7877,7891,7907,7927,7932]; // looks like a hook
+				IY = [5297,5278,5307,5278,5297,5276,5276,5276,5279,5298];
+			}
+			for (i = 0; i < IX.length; i += 1) {
+				NTM_MoveTo(108, IX[i], IY[i]);
+				this.ClearPosition(30, type === 1 ? this.SealSort : this.SealSortB);
+			}
+		}
+
+		if (!this.OpenSealInt(393) || !this.OpenSealInt(392)) {
+			return false;
+		}
+
+		this.Preattack(GetLocaleString(2853));
+		this.ClearPosition(40, this.DistanceSort);
+		NTA_KillMonster(GetLocaleString(2853)); // Infector of Souls
+		this.ClearPosition(20, this.DistanceSort);
+		
+		if (NTC_PutSkill(124, NTC_HAND_RIGHT)) {
+			NTC_PingDelay(1000);
+		}
+		return true;
+	},
+
+	OpenSealInt: function(classid) {
+		var warn, i, seal;
+		switch (classid) {
+		case 396:
+		case 394:
+		case 392:
+			warn = true;
+			break;
+		default:
+			warn = false;
+			break;
+		}
+
+		for (i = 0; i < 5; i += 1) {
+			NTM_MoveToPresetUnit(108, 2, classid, classid === 394 ? 5 : 2, classid === 394 ? 5 : 0);
+
+			seal = NTC_FindUnit(NTC_UNIT_OBJECT, classid);
+
+			if (!seal) {
+				return false;
+			}
+
+			if (seal.mode) { // for pubbies
+				if (warn) {
+					Say("Dont touch the fucking seals!");
+				}
+				return true;
+			}
+
+			warn = false;
+
+			NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, seal);
+			NTC_Delay(classid === 394 ? 1000 : 500);
+
+			if (!seal.mode) {
+				if (classid === 394 && CheckCollision(seal.x + 15, seal.y)) { // de seis optimization
+					NTM_MoveTo(108, seal.x + 15, seal.y);
+				} else {
+					NTM_MoveTo(108, seal.x - 5, seal.y - 5);
+				}
+				NTC_Delay(500);
+			} else {
+				return true;
+			}
+		}
+		return false;
+	},
+
+	MonsterStats: function(unit) {
+		this.name = unit.name;
+		this.x = unit.x;
+		this.y = unit.y;
+		this.gid = unit.gid;
+		this.classid = unit.classid;
+		this.spectype = unit.spectype;
+	},
+
+	DistanceSort: function(unitA, unitB) {
+		if (GetDistance(me.x, me.y, unitA.x, unitA.y) < GetDistance(me.x, me.y, unitB.x, unitB.y)) {
+			return -1;
+		}
+		return 1;
+	},
+
+	EntranceSort: function(unitA, unitB) {
+		if (GetDistance(unitA.x, unitA.y, 7790, 5544) < GetDistance(unitB.x, unitB.y, 7790, 5544)) {
+			return -1;
+		}
+		return 1;
+	},
+
+	SealSort: function(unitA, unitB) {
+		if (GetDistance(unitA.x, unitA.y, 7784, 5310) < GetDistance(unitB.x, unitB.y, 7784, 5310)) {
+			return -1;
+		}
+		return 1;
+	},
+
+	SealSortB: function(unitA, unitB) {
+		if (GetDistance(unitA.x, unitA.y, 7800, 5255) < GetDistance(unitB.x, unitB.y, 7800, 5255)) {
+			return -1;
+		}
+		return 1;
+	},
+
+	Preattack: function(name) {
+		var i, n, target, pos, positions;
+
+		target = NTC_FindUnit(1, name, 10);
+
+		switch (me.classid) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				if (!target) {
+					return;
+				}
+				positions = [[6, 11], [0, 8], [8, -1], [-9, 2], [0, -11], [8, -8]];
+				for (i = 0; i < positions.length; i += 1) {
+					if (CheckCollision(me.areaid, target.x + positions[i][0], target.y + positions[i][1], 1)) { // check if we can move there
+						Print("Preattack position: " + positions[i][0] + " " + positions[i][1]);
+						NTM_MoveTo(108, target.x + positions[i][0], target.y + positions[i][1]);
+						NTC_PutSkill(NTConfig_AttackSkill[2], NTC_HAND_RIGHT);
+						for (n = 0; n < 8; n += 1) {
+							NTC_CastSkill(NTConfig_AttackSkill[1], 2);
+						}
+						break;
+					}
+				}
+				break;
+			case 4:
+				if (!target || NTConfig_AttackSkill[0] < 0) {
+					return;
+				}
+				pos = me.GetOptimalAttackPos(target.areaid, target.x, target.y, 20, 4);
+				if (pos) {
+					NTM_MoveTo(108, pos[0], pos[1]);
+				}
+				for (i = 0; i < 2; i += 1) {
+					NTC_CastSkill(130, NTC_HAND_RIGHT);
+					NTC_Delay(150);
+				}
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+		}
+	},
+
+	CheckPotionSafe: function() {
+		var i, items, hpCheck, mpCheck;
+
+		items = me.GetItems();
+
+		if (NTConfig_BeltColType.indexOf("hp") > -1) {
+			for (i = 0; i < items.length; i += 1) {
+				if (!hpCheck && items[i].mode === 2 && items[i].code.indexOf("hp") > -1) {
+					hpCheck = true;
+				}
+			}
+		} else {
+			hpCheck = true;
+		}
+		if (NTConfig_BeltColType.indexOf("mp") > -1) {
+			for (i = 0; i < items.length; i += 1) {
+				if (!mpCheck && items[i].mode === 2 && items[i].code.indexOf("mp") > -1) {
+					mpCheck = true;
+				}
+			}
+		} else {
+			mpCheck = true;
+		}
+		return !(hpCheck && mpCheck);
+	},
+
+	Dodge: function(target, distance) {
+		var i, j, coordx, coordy, monster, count,
+			maxcount = 999,
+			coords = [],
+			goodCoords = [],
+			monList = [],
+			angles = [45, 90, 135, 180, 225, 270, 305, 360];
+
+		for (i = 0; i < angles.length; i += 1) {
+			coordx = Math.round((Math.cos(angles[i] * Math.PI / 180)) * distance + target.x);
+			coordy = Math.round((Math.sin(angles[i] * Math.PI / 180)) * distance + target.y);
+			if (CheckCollision(me.areaid, coordx, coordy, 1)) {
+				coords.push([coordx, coordy]);
+			}
+		}
+		if (coords.length === 0) { // no valid positions - don't move
+			return true;
+		}
+
+		coords.sort(this.SortRooms);
+
+		monster = GetUnit(1);
+
+		if (monster) {
+			do {
+				if (monster.hp > 0) {
+					monList.push(new this.MonsterStats(target));
+				}
+			} while (monster.GetNext());
+		}
+		for (i = 0; i < coords.length; i += 1) {
+			count = 0;
+			for (j = 0; j < monList.length; j += 1) {
+				if (monList[j].hp > 0 && GetDistance(monList[j].x, monList[j].y, coords[i][0], coords[i][1]) < 10) {
+					count += 1;
+				}
+			}
+			if (count < maxcount) {
+				goodCoords = [coords[i][0], coords[i][1]];
+				maxcount = count;
+				if (count === 0) {
+					break;
+				}
+			}
+		}
+		if (goodCoords.length > 0) { // just in case goodCoords is empty (shouldn't happen)
+			if (Math.abs(me.x - goodCoords[0]) < 3 && Math.abs(me.y - goodCoords[1]) < 3) { // close enough
+				return true;
+			}
+			Say("!Dodge " + target.name);
+			NTM_MoveTo(me.areaid, goodCoords[0], goodCoords[1]);
+		}
+		return true;
+	},
+
+	ClearPosition: function(range, sortFunc, spectype, classid) {
+		var i, orgx, orgy, monList, ignoreList, target, result,
+			gidAttack = [],
+			dodgeIDs = [310, 362],
+			attackcount = 0;
+
+		if (NTConfig_AttackSkill[1] < 0 || NTConfig_AttackSkill[3] < 0) {
+			return false;
+		}
+
+		switch (arguments.length) {
+		case 0:
+			range = 20;
+			break;
+		case 1:
+			sortFunc = this.DistanceSort;
+			break;
+		case 2:
+			spectype = false;
+			break;
+		case 3:
+			classid = false;
+			break;
+		}
+
+		orgx = me.x;
+		orgy = me.y;
+		ignoreList = [];
+
+		MainLoop : while (attackcount < 300) {
+			monList = [];
+			target = NTC_FindUnit(NTC_UNIT_MONSTER);
+			if (target) {
+				do {
+					if (target.IsAttackable()) {
+						if ((me.classid === 1 || me.classid === 2 || me.classid === 6) && NTConfig_CSDodge && GetDistance(me, target) < 7 && dodgeIDs.indexOf(target.classid) > -1) {
+							this.Dodge(target, 15);
+							continue MainLoop;
+						}
+						if (ignoreList.indexOf(target.gid) < 0 && GetDistance(orgx, orgy, target.x, target.y) <= range) {
+							if (NTA_IsValidMonster(target)) {
+								monList.push(new this.MonsterStats(target));
+							} else {
+								ignoreList.push(target.gid);
+							}
+						}
+					}
+				} while (target.GetNext());
+			}
+			if (monList.length === 0) {
+				break;
+			}
+			monList.sort(sortFunc);
+			target = NTC_FindUnit(NTC_UNIT_MONSTER, monList[0].gid);
+			if (target && target.IsAttackable()) {
+				result = NTA_Attack(target, attackcount % 30 === 0);
+				switch (result) {
+				case 1:
+					monList.shift();
+					ignoreList.push(target.gid);
+					break;
+				case 2:
+				case 3:
+					if(!gidAttack[target.gid]) {
+						gidAttack[target.gid] = 0;
+					}
+					gidAttack[target.gid] += 1;
+					if (gidAttack[target.gid] > NTConfig_LowMaxAttacks) {
+						Print(COLOR_1 + " Skipping " + target.name);
+						monList.shift();
+						ignoreList.push(target.gid);
+					}
+					attackcount += 1;
+					if (target.mode === 0 || target.mode === 12) {
+						NTSI_FastPick();
+					}
+					break;
+				default:
+					return false;
+				}
+			} else {
+				monList.shift();
+				ignoreList.push(target.gid);
+			}
+		}
+		switch (me.classid) {
+			case NTC_CHAR_CLASS_PALADIN:
+				if (attackcount > 2 && (parseInt(me.hp * 100/ me.hpmax) < NTConfig_UseRedemptionHP || parseInt(me.mp * 100 / me.mpmax) < NTConfig_UseRedemptionMP)) {
+					if (NTC_PutSkill(124, NTC_HAND_RIGHT)) {
+						NTC_PingDelay(1000);
+					}
+				}
+				break;
+			case NTC_CHAR_CLASS_NECROMANCER:
+				if (typeof(NTA_SkeletonArmy) === 'function') { // old summon code
+					NTA_SkeletonArmy(NTConfig_SkeletonArmy);
+					NTA_MageArmy(NTConfig_MageArmy);
+					NTA_ReviveArmy(NTConfig_ReviveArmy);
+				} else {
+					NTA_RaiseArmy(); // new summon code
+				}
+				break;
+			case NTC_CHAR_CLASS_SORCERESS:
+				if (me.GetState(30) === 0) {
+					NTC_CastSkill(58, NTC_HAND_RIGHT);
+				}
+				break;
+			case NTC_CHAR_CLASS_BARBARIAN:
+				if (attackcount > 0) {
+					if (typeof(MWL_FindItem) === 'function') { // in case of using muddy's item find (like myself)
+						MWL_FindItem(20);
+					} else if (NTConfig_UseFindItem && !NTA_CheckForCloseMonsters(10)) {
+						NTA_FindItem(NTConfig_FindItemRange);
+					}
+				}
+				break;
+		}
+		if (attackcount > 0) {
+			NTSI_PickItems();
+		}
+		
+		if (NTT_CheckMerc()) {
+			Print(COLOR_1 + " Merc died, going to town.");
+			NTTMGR_VisitTown();
+		}
+
+		if (this.CheckPotionSafe()) {
+			Print(COLOR_1 + " Out of potions, going to town.");
+			NTTMGR_VisitTown();
+		}
+		if (NTConfig_IdInField) {
+			if (!NTT_CheckSpace(NTConfig_FreeSpaceXY[0], NTConfig_FreeSpaceXY[1])) {
+				NT_FieldID();
+			}
+		}
+		return true;
+	},
+
+	SortRooms: function(a, b) {
+		if (GetDistance(me.x, me.y, a[0], a[1]) < GetDistance(me.x, me.y, b[0], b[1])) {
+			return -1;
+		}
+		return 1;
+	},
+
+	Diablo: function () {
+		NTConfig_DancingSorc = false;
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(107)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+
+		if (!NTM_MoveTo(108, 7790, 5544)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		NTM_MoveTo(108, 7792, 5291);
+
+		if (!this.OpenSealsInt()) {
+			Common.LogError("OpenSealsInt()");
+			return false;
+		}
+
+		NTM_MoveTo(108, 7760, 5267);
+		NTM_MakeTP();
+			
+		Say(Messages.diabloup);
+
+		while (!NTC_IsQuesterIn()) {
+			Delay(500);
+		}
+
+		NTM_MoveTo(108, 7792, 5291);
+
+		for (i = 0; i < 200; i += 1) {
+			if (GetUnit(NTC_UNIT_MONSTER, 243)) {
+				break;
+			}
+			NTC_Delay(500);
+		}
+
+		if (!NTA_KillMonster(243)) {
+			Common.LogError("NTA_KillMonster()");
+			return false;
+		}
+
+		NTSI_PickItems();
+		
+		Say(Messages.diablodown);
+		
+		NTM_UsePortal("BluePortal", 103, me.charname);
+		
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		while (!NTC_IsGroupInAct(5)) {
+			Delay(500);
+		}
+
+		if (!NTM_TakeWaypoint(109)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		return true;
+	},
+
+	Ancients: function () {
+		var _Altar, _Korlic, _Talic, _Madawc ;
+
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(118)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);
+
+		if (!NTM_MoveToStair(me.areaid, 120)) {
+			Common.LogError("NTM_MoveToStair()");
+			return false;
+		}
+
+		if (!NTM_TakeStair(120)) {
+			Common.LogError("NTM_TakeStair()");
+			return false;
+		}
+			
+		if (!NTM_MoveTo(me.areaid, 10057, 12645)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+			
+		Say(Messages.ancientsup);
+				
+		NTM_MakeTP();
+				
+		while (!NTC_IsQuesterIn()) {
+			NTC_Delay(500);
+		}
+
+		NTA_ClearPosition(10);
+
+		NTP_DoPrecast(true);	
+
+		_Altar = NTC_FindUnit(NTC_UNIT_OBJECT, 546);
+
+		if (_Altar) {
+			if (NTM_MoveTo(_Altar.areaid, _Altar.x+3, _Altar.y+3)) {
+				NTC_OpenChest(_Altar);
+				me.Cancel(0);
+				NTC_Delay(100);
+				me.Cancel(0);
+			}
+		}
+
+		_Korlic = NTC_FindUnit(NTC_UNIT_OBJECT, 474);
+		_Talic = NTC_FindUnit(NTC_UNIT_OBJECT, 475);
+		_Madawc = NTC_FindUnit(NTC_UNIT_OBJECT, 476);
+
+		while (_Korlic.mode == 4 || _Talic.mode == 4 || _Madawc.mode == 4) {
+			NTA_ClearPosition(40);
+			NTC_PingDelay(200);
+		}	
+			
+		if (!NTM_MoveTo(me.areaid, 10057, 12645)) {
+			Common.LogError("NTM_MoveTo()");
+			return false;
+		}
+
+		Say(Messages.ancientsdown);
+
+		NTM_MakeTP(true);
+
+		return true;
+	},
+
+	ClearThroneInt: function () {
+		var i,
+			_attackpos = [15112, 5068, 15075, 5065, 15114, 5045, 15114, 5012, 15095, 5024, 15078, 5013, 15092, 5040];
+
+		for (i = 0 ; i < _attackpos.length ; i += 2) {
+			NTM_MoveTo(me.areaid, _attackpos[i], _attackpos[i+1]);
+			NTA_ClearPosition(25, true, 2);
+		}
+	},
+
+	ThroneCheckInt: function() {
+		var _monster;
+
+		if (!NTC_FindUnit(NTC_UNIT_MONSTER, 543)) {
+			return 5;
+		}
+
+		_monster = NTC_FindUnit(NTC_UNIT_MONSTER);
+
+		if (_monster) {
+			do {
+				if (NTA_IsValidMonster(_monster)) {
+					if (_monster.classid == 23 || _monster.classid == 62) {
+						return 1;
+					}
+
+					if (_monster.classid == 105 || _monster.classid == 381) {
+						return 2;
+					}
+
+					if (_monster.classid == 557) {
+						return 3;
+					}
+
+					if (_monster.classid == 558) {
+						return 4;
+					}
+
+					if (_monster.classid == 571) {
+						return 5;
+					}
+				}
+			} while(_monster.GetNext());
+		}
+
+		return 0;
+	},
+
+	ThronePreAttackInt: function() {
+		if (me.classid == NTC_CHAR_CLASS_SORCERESS) {
+			if (NTConfig_AttackSkill[3] == 56 || NTConfig_AttackSkill[3] == 59) {
+				return NTC_CastSkill(NTConfig_AttackSkill[3], 2, 15092, 5028);
+			}
+		} else if (me.classid == NTC_CHAR_CLASS_PALADIN) {
+			if (NTConfig_AttackSkill[3] == 112) {
+				if (NTConfig_AttackSkill[4] > 0) {
+					NTC_PutSkill(NTConfig_AttackSkill[4], NTC_HAND_RIGHT);
+				}
+				return NTC_CastSkill(NTConfig_AttackSkill[3], 2);
+			}
+		}
+		return false;
+	},
+
+	CheckHydraInt: function() {
+		var _hydra1, _hydra2, _hydra3;
+
+		_hydra1 = NTC_FindUnit(NTC_UNIT_MONSTER, 351);
+		_hydra2 = NTC_FindUnit(NTC_UNIT_MONSTER, 352);
+		_hydra3 = NTC_FindUnit(NTC_UNIT_MONSTER, 353);
+
+		if ((_hydra1 && _hydra1.GetStat(172) != 2 && _hydra1.GetState(105))
+			|| (_hydra2 && _hydra2.GetStat(172) != 2 && _hydra2.GetState(105))
+			|| (_hydra3 && _hydra3.GetStat(172) != 2 && _hydra3.GetState(105))) {
+			NTM_MoveTo(me.areaid, 15112, 5004);
+
+			if (me.GetState(2)) {
+				NTC_PutSkill(109, NTC_HAND_RIGHT);
+			}
+			NTC_PingDelay(3000);
+		}
+	},
+
+	Baal: function () {
+		if (!NTTM_CheckAct()) {
+			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
+			return;
+		}
+
+		NTTMGR_TownManager();
+
+		if (!NTTM_TownMove("waypoint")) {
+			Common.LogError("NTTM_TownMove()");
+			return false;
+		}
+
+		if (!NTM_TakeWaypoint(129)) {
+			Common.LogError("NTM_TakeWaypoint()");
+			return false;
+		}
+
+		NTP_DoPrecast(true);	
+			
+		for (i = 0 ; i < 2 ; i += 1) {
+			if (!NTM_MoveToStair(me.areaid, 130+i)) {
+			Common.LogError("NTM_MoveToStair()");
+			return false;
+			}
+
+			if (!NTM_TakeStair(130+i)) {
+			Common.LogError("NTM_TakeStair()");
+			return false;
+			}
+		}
+
+		NTM_MoveTo(me.areaid, 15116, 5068);
+			
+		this.ClearThroneInt();
+
+		NTM_MoveTo(me.areaid, 15112, 5004, 1, true);
+			
+		Say(Messages.baalup);
+			
+		NTM_MakeTP();
+
+		NTC_PingDelay(1000);
+
+		while (1) {
+			if (me.classid == NTC_CHAR_CLASS_PALADIN || me.classid == NTC_CHAR_CLASS_BARBARIAN) {
+				NTM_MoveTo(me.areaid, 15092, 5028);
+			} else {
+				NTM_MoveTo(me.areaid, 15092, 5040);
+			}
+
+			if (me.GetState(2)) {
+				NTC_PutSkill(109, NTC_HAND_RIGHT);
+			}
+
+			for (i = 0 ; i < 6 ; i++) {
+				_wave = this.ThroneCheckInt();
+				if (_wave > 0) {
+					break;
+				}
+				NTC_Delay(500);
+			}
+
+			_starttick = GetTickCount();
+
+			while(_wave == 0) {
+				if (!this.ThronePreAttackInt()) {
+					NTC_Delay(200);
+				}
+
+				if (GetTickCount() - _starttick > 15000) {
+					this.ClearThroneInt();
+					_starttick = GetTickCount();
+				}
+
+				_wave = this.ThroneCheckInt();
+			}
+
+			switch(_wave) {
+				case 1:
+					NTA_ClearPosition(40, true, 1);
+					NTP_DoPrecast(true);
+					break;
+				case 3:
+					NTA_ClearPosition(40, true, 2);
+					this.CheckHydraInt();
+					break;
+				case 4:
+					NTA_ClearPosition(40, true, 2);
+					break;
+				case 5:
+					NTA_ClearPosition(40, true);
+					break;
+				default:
+					NTA_ClearPosition(40, true, 1);
+					break;
+			}
+
+			if (_wave == 5) {
+				Say(Messages.wavesdown);
+				break;
+			}
+		}
+
+		NTM_MoveTo(me.areaid, 15092, 5010);
+
+		NTP_DoPrecast(true);
+
+		while (NTC_FindUnit(NTC_UNIT_MONSTER, 543)) {
+			NTC_Delay(500);
+		}
+
+		_portal = NTC_FindUnit(NTC_UNIT_OBJECT, 563);
+
+		if (!_portal) {
+			return false;
+		}
+
+		if (!NTM_UsePortal("Portal", 132, null, _portal)) {
+			Common.LogError("NTM_UsePortal()");
+			return false;
+		}
+
+		NTM_MoveTo(me.areaid, 15138, 5916);
+
+		if (!NTA_KillMonster(544)) {
+			Common.LogError("NTA_KillMonster()");
+			return false;
+		}
+
+		NTSI_PickItems();
+		NTC_PingDelay(200);
+
+		Say(Messages.endgame);
+		
+		return true;
+	}
+};

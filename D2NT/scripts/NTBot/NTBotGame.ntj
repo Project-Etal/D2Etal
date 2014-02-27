@@ -1,0 +1,536 @@
+var CurScriptIndex = 0;
+var LastScript = false;
+var Rev = "145-WW";
+
+var SoJNotify = false;
+var CloneDiabloString = GetLocaleString(11005);
+var SoJString = GetLocaleString(11004).substr(3);
+var CloneDiabloNotify = false;
+var SoJElapsedTime = 0;
+var InitLife;
+var Corpses = 0;
+var checkActOnce = false;
+function D2NTStatus(where, time, message) { return SendCopyData('D2NT Manager', null, where << 16 | time, message); }
+function NTMain()
+{
+	if (!Load("NTBot/tools/NTLogHandler.ntj")) {
+		NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "Error: Logger failed to initialize");
+	}
+	Delay(1000);
+
+	InitLife = me.hp;
+
+	Include("libs/common/NTCommon.ntl");
+	NTC_IncludeLibs();
+	NTC_IncludeConfig("NTBot/char_configs");
+	Include("libs/common/NTExp.ntl");
+
+	NT_LoadConfig();
+	NTE_InitializeStats();
+
+	if(!me.gamename && me.GetStat(12) > 90) { Say("/players 5"); } // For SP players to increase MF and such
+
+	if(NTConfig_FreeSpace == 0)
+		Print(COLOR_2 + "Please don't forget to set NTConfig_FreeSpace in your character config to avoid your inv filling");
+
+	NT_ClearMessages(); // leech improvements
+
+	if (!NTSI_LoadNIPFiles("NTBot/item_configs")) {
+		NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "Exiting Game- Either no inventory on character or invalid NIP filename/path in character configuration");
+		ExitGame();
+	}
+	NTU_LogExitStatus("F");
+	if(NTConfig_StartDelay > 0) {
+		NTC_Delay(NTConfig_StartDelay);
+	}
+
+	GetPath(me.areaid, me.x, me.y, me.x, me.y, true);
+
+	SetUIState(0x0A, true);
+
+	if(!NTT_PutBackEnigma()) {
+		NTC_Delay(240000); // Wait 4 mins to prevent r/d 240000
+		ExitGame();
+	}
+
+	if(NTConfig_CheckPassword && !me.gamepassword){
+		Print(COLOR_1 + "1No password found exiting game");//s
+		NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "Exiting Game- No Password");
+		NTC_Delay(2000);
+		ExitGame();
+	}
+
+	Corpses = NTT_GetCorpses();
+	if (Corpses > 0 || InitLife < 10)
+		NTU_DeathLog(Corpses, InitLife);
+	if(NTConfig_Script.length > 0)
+	{
+		NTCU_InitCubing();
+
+		NTT_ClearInventory();
+		NTT_ClearBelt();
+
+		if(!NTT_LookForEnigma()) {
+			if (GetUIState(0x01))
+				SetUIState(0x01, false);
+			NTC_Delay(240000); // Wait 4 mins to prevent r/d 240000
+			ExitGame();
+		}
+
+		if(NTConfig_GoWestFromLut){ // if bot starts in act 2 use warriv to go to act 1
+			GoWestFromLutGholein();
+		}
+
+		Load("NTBot/tools/NTToolsThread.ntj");
+
+		if(NTConfig_HostileHandler)
+			Load("NTBot/tools/NTHostHandler.ntj");
+
+		if(NTConfig_Announcer)
+			Load("NTBot/tools/NTLevelAnnouncer.ntj");
+
+		if(DPSMeter)
+			Load("NTBot/tools/DPS.ntj");
+			
+		Load("NTBot/tools/ChatR.ntj");
+
+		RegisterEvent(EVENT_GAMEMSG, NT_GameMsgEvents);
+		RegisterEvent(EVENT_KEYDOWN, NT_KeyEvents);
+		RegisterEvent(EVENT_SCRIPTMSG, NT_ScriptMsgEvents);
+
+		Load("NTBot/bots/" + NTConfig_Script[CurScriptIndex]);
+		SetStatusText(Rev + " "+ NTConfig_Script[CurScriptIndex]);
+
+		Include("libs/common/NTSnagit.ntl");
+		NTSI_ClearIgnoredItems();
+
+		NTC_LogCurScript(NTConfig_Script[CurScriptIndex]);//jinay item log
+
+		var leaderParty = false;
+		
+		// Dynamic leaders
+		var NTLeader_LoggedFromFile = NT_File("logs/" + me.account + ".leaderName.txt", 0);
+		
+		while(!LastScript || CloneDiabloNotify || SoJNotify || NTC_InMyParty(NTConfig_Leader) || NTC_InMyParty(NTLeader_LoggedFromFile)) // SoJNotify is a part of soj addon
+		{
+			NTC_Delay(1000);
+
+			for(var i = 0 ; i < NTConfig_Script.length && !leaderParty ; i++)
+			{
+				if(NTConfig_Script[i].toLowerCase().indexOf("leech") != -1 || NTConfig_Script[i].toLowerCase().indexOf("helper") != -1)
+				{
+					for(var j = 0 ; j < NTConfig_PartyMaxTime && !NTC_InMyParty(NTConfig_Leader) && !NTC_InMyParty(NTLeader_LoggedFromFile) ; j++)
+						Delay(1000);
+
+					if(NTC_InMyParty(NTConfig_Leader) || NTC_InMyParty(NTLeader_LoggedFromFile))
+					{
+						leaderParty = true;
+					}
+					else
+					{
+						NTC_PrintPossibleLeaders();
+						Print(COLOR_1 + "Can't find leader!");
+						Delay(500);
+						Print(COLOR_1 + "You either have it spelled or cased wrong");
+						Delay(500);
+						Print(COLOR_1 + "Or leader is not in game");
+						Delay(500);
+						Print(COLOR_1 + "Check logs/namelog/" + me.charname + "-leaderName.txt for possible leader names from this game"); // this should print a list of all toons in game so people can C/P if they are having probs
+						Delay(1500);
+						ExitGame();
+					}
+					break;
+				}
+			}
+
+			if(LastScript && !checkActOnce && leaderParty && NTC_InMyParty(NTConfig_Leader)) {
+				NTTM_CheckAct();
+				checkActOnce = true; // this is added so if you need to go back in someplace the bot doesn't keep towning
+			}
+
+			if(leaderParty && !NTC_InMyParty(NTConfig_Leader) && !NTC_InMyParty(NTLeader_LoggedFromFile)){
+				if(!LastScript) {
+					NTE_ComputeStats(false);
+				}
+				Delay(350);
+				_Checkscript = GetScript();
+				if(_Checkscript){
+					NTC_StopScriptLeecher();
+					Delay(150);
+				}
+				NTC_CancelMenus();
+				Delay(NTConfig_LeechExitDelay);
+				ExitGame();
+			}
+
+			if(SoJNotify)
+			{
+				SoJElapsedTime += 1;
+
+				if(LastScript)
+				{
+					NTTM_CheckAct();
+					SetStatusText(COLOR_4 + "Waiting for SoJ sales... " + COLOR_0 + (NTConfig_SoJWaitTime*60-SoJElapsedTime));
+				}
+
+				if(SoJElapsedTime >= NTConfig_SoJWaitTime*60)
+					SoJNotify = false;
+			}
+		}
+	}
+	NTE_ComputeStats(false);
+	if(NTConfig_PublicMode && NTConfig_PropsForEtal > 0) {
+		Include("NTBot/char_configs/EtalPR.ntl");
+		for(var i = 0 ; i < NTConfig_PropsForEtal ; i++) {
+			Say(NTC_RandomSelect(etalSpam));
+			Delay(1500);
+		}
+		Say("Check out ProjectEtal.com");
+		Delay(1000); // change this to 1 second
+	}
+	ExitGame();
+}
+var WhoDatIs; // Needed for spam catcher addition, DO NOT remove
+
+function NT_GameMsgEvents(msg, type)
+{
+	var _holdPauseCheck = "";
+	_area = GetArea();
+	switch(type){
+		case 0:
+			if(msg.indexOf(NTConfig_Leader) != -1){ // leech improvements
+				NTC_CheckPlayer(NTConfig_Leader);
+				if((_leaderareaid == 130 || _leaderareaid == 131) && msg.indexOf(NTConfig_TakeTpBaal) != -1){ // all baal leech scripts will use the same one
+					NT_File("logs/messagecomands/"+me.charname+"-baal.txt", 1, "takebtp")
+				}
+				else if((_leaderareaid == 130 || _leaderareaid == 131) && msg.indexOf(NTConfig_GrabShrine) != -1){ // so you can set the var for grabbing shrine different from the take tp one
+					NT_File("logs/messagecomands/"+me.charname+"-baal.txt", 1, "grabshrine")
+				}
+				else if(_leaderareaid == 108 && msg.indexOf(NTConfig_TakeTpDiablo) != -1){ // all diablo leech scripts will use the same one
+					NT_File("logs/messagecomands/"+me.charname+"-diablo.txt", 1, "takedtp")
+				}
+				else if(_leaderareaid == 83 && msg.indexOf(NTConfig_TakeTpTravincal) != -1){ // all diablo leech scripts will use the same one
+					NT_File("logs/messagecomands/"+me.charname+"-trav.txt", 1, "takettp")
+				}
+			}
+			else if(msg.length >= 150){
+				Delay(Random(2000,3000));
+				Say("Oh yeah dude?");
+			}
+			break;
+		case 1:
+			if(msg.toLowerCase().indexOf("d2nt") != -1 || msg.toLowerCase().indexOf("error") != -1 || msg.toLowerCase().indexOf("fail") != -1) {
+				var date = new Date().toLocaleFormat("<%a, %b %d, %H:%M>");
+				var logfile = FileOpen("logs/errorlog/"+me.charname+"-errorlog.txt", 2);
+				if(!logfile)
+					var logfile = FileOpen("logs/errorlog/"+me.charname+"-errorlog.txt", 1);
+
+				logfile.WriteLine(date + " - " + msg);
+				logfile.Close();
+			}
+			else if(msg.toLowerCase().indexOf("skipped") != -1 ) {
+				var date = new Date().toLocaleFormat("<%a, %b %d, %H:%M>");
+				var logfile = FileOpen("logs/skiplog/"+me.charname+"-skiplog.txt", 2);
+				if(!logfile)
+					var logfile = FileOpen("logs/skiplog/"+me.charname+"-skiplog.txt", 1);
+
+				logfile.WriteLine(date + " - " + msg + " ( " + _area.name + " ) ");
+				logfile.Close();
+			}
+			break;
+		case 2:
+			var ends = [".com", ".c0m", ".net", ".org", ".0rg"];
+			var DontIgnore = "ProjectEtal.com";
+			var x;
+			for (x in ends && !DontIgnore){
+				if (msg.toLowerCase().indexOf(ends[x]) != -1 && msg.indexOf(!me.charname) != -1){
+					SpamTastic = msg.split(": ")[0];
+					SpamTastic = stripColorCodes(SpamTastic);
+					Say("/ignore " + SpamTastic);
+				}
+			}
+			break;
+		case 3:
+			if(msg.indexOf("BattleNet>: That character is not") != -1){
+				Say("/ignore " + WhoDatIs);
+				return;
+			}
+			else if(msg.indexOf("BattleNet>: ") != -1){
+				HostileAccount = msg.split("*")[1];
+				HostileAccount = HostileAccount.split(") ")[0];
+				HostileAccount = stripColorCodes(HostileAccount);
+				if(HostileAccount == undefined) HostileAccount = 'N/A';
+				ScanPlayers();
+				return HostileAccount;
+			}
+			break;
+		case 4:
+			if(msg.indexOf(") joined our world") != -1){
+				WhoDatIs = msg.split("(")[0];
+				WhoDatIs = stripColorCodes(WhoDatIs);
+				Say("/whois " + WhoDatIs);
+				return WhoDatIs;
+			}
+			else if(msg.indexOf(CloneDiabloString) != -1) {
+				CloneDiabloNotify = true;
+				SoJNotify = false;
+
+				NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_4 + CloneDiabloString);
+				SetStatusText(COLOR_1 + CloneDiabloString);
+				D2NTStatus("Stop", 0, "Stop"); //This is a fake ID itll just interrupt the current status loop. Simple but effective.
+				D2NTStatus(8, 0, CloneDiabloString);
+				me.maxgametime = 0;
+
+				_holdPauseCheck = NTU_GetExitStatus();
+				while(_holdPauseCheck == "T") {
+					NTC_Delay(500);
+					_holdPauseCheck = NTU_GetExitStatus();
+				}
+				NTC_StopScript(NTConfig_Script[CurScriptIndex]);
+				NTC_Delay(500);
+
+				NTTM_CheckAct();
+			}
+			else if(msg.indexOf(SoJString) != -1 && !CloneDiabloNotify && NTConfig_SoJWaitTime > 0) { // part of soj addon. !CloneDiabloNotify was added to prevent timer start on oversales after Diablo walks.
+				if(me.diff < 2) {
+					NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_4 + "Not waiting for DClone - not in a hell game");
+				}
+				if(me.diff == 2) {
+					SoJNotify = true;
+					SoJElapsedTime = 0;             
+					NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_4 + msg);
+					me.maxgametime = 0;
+                }			
+			}
+			break;
+		default: break;
+	}
+}
+
+function NT_KeyEvents(keycode)
+{
+	var _script;
+	switch(keycode) {
+		case Do_PauseBot:
+		_script = NTC_FindScript(NTConfig_Script[CurScriptIndex]);
+			if(_script) {
+				if(_script.running) {
+					_script.Stop();
+					NT_ClearMessages();
+					NTC_Delay(300);
+					ClickMap(NTC_CLICK_LUP, NTC_SHIFT_NONE, null);
+					SetStatusText(COLOR_1 + Rev + "    Paused " + NTConfig_Script[CurScriptIndex]);
+				}
+				else {
+					Load("NTBot/bots/" + NTConfig_Script[CurScriptIndex]);
+					SetStatusText(Rev + " " + NTConfig_Script[CurScriptIndex]);
+				}
+			}
+			break;
+		case Do_PrevScript:
+			_script = NTC_FindScript(NTConfig_Script[CurScriptIndex]);
+
+			if(_script.running) {
+				_script.Stop();
+				NT_ClearMessages();
+				NTC_Delay(300);
+				ClickMap(NTC_CLICK_LUP, NTC_SHIFT_NONE, null);
+				SetStatusText(COLOR_11 + Rev + " Stopped " + NTConfig_Script[CurScriptIndex]);
+				break;
+			}
+			else {
+				for(i=0; i<NTConfig_Script.length-1; i++) {
+					if(CurScriptIndex < NTConfig_Script.length-1)
+						CurScriptIndex++;
+					else
+						CurScriptIndex = 0;
+				}
+				SetStatusText(COLOR_14 + Rev + " Back to " + NTConfig_Script[CurScriptIndex]);
+			}
+			break;
+		case Do_NextScript:
+			_script = NTC_FindScript(NTConfig_Script[CurScriptIndex]);
+
+			if(_script.running) {
+				_script.Stop();
+				NT_ClearMessages();
+				SetStatusText(COLOR_11 + Rev + " Stopped " + NTConfig_Script[CurScriptIndex]);
+			}
+			else if(++CurScriptIndex < NTConfig_Script.length)
+				SetStatusText(COLOR_14 + Rev + " Skipped to " + NTConfig_Script[CurScriptIndex]);
+			else if(++CurScriptIndex >= NTConfig_Script.length) {
+				CurScriptIndex = 0;
+				SetStatusText(COLOR_2 + Rev + " Skipped to " + NTConfig_Script[CurScriptIndex]);
+			}
+			break;
+		case Do_DropItems:
+			NTU_DropItems();
+			break;
+		case Do_DevTools:
+			NTU_DevelopementTools();
+			break;
+		case Do_CoordLog:
+			NTU_LogPrint("logs/testlog/"+me.charname+"-Coords.txt", " New Coord[" + me.x + ", " + me.y + "] " );
+			break;
+		case Do_HotKeyList:
+			Key_HotList();
+			break;
+		case Do_CursorILvL:
+			NTU_CursorILvl();
+			break;
+		case Do_StatsLog:
+			NTU_CheckMyStats();
+			break;
+		case Do_PrintCoord:
+			NTU_CheckCoord();
+			break;
+		case Do_CheckSpace:
+			if(CheckStashSpace)
+				NTT_CheckFreeStashSpace(true);
+			if(CheckInvSpace)
+				NTT_CheckFreeInventorySpace(true);
+			break;
+		case Do_NipCheck:
+			NTU_TLNipCheck();
+			break;
+		case Do_InvTxtLog:
+			NTU_TLInventory();
+			break;
+		case Do_CheckBPs:
+			T_BPsPrint();
+			break;
+		case Do_ExitGame:
+			Print(COLOR_4 + "Calculating stats for game!");
+			NTE_ComputeStats(false);
+			ExitGame();
+			break;
+	}
+}
+
+function NT_ScriptMsgEvents(msg)
+{
+	var _area;
+
+	switch(msg)
+	{
+	case "QuitGame":
+		NTC_StopScript(NTConfig_Script[CurScriptIndex]);
+		NTC_CancelMenus();
+		LastScript = true;
+		break;
+	case "HOSTILE":
+		NTC_SendMsgToScript(NTConfig_Script[CurScriptIndex], "pause");
+		break;
+	case "SCRIPT_END":
+		if(++CurScriptIndex < NTConfig_Script.length)
+		{
+			NTTM_CheckAct();
+			Load("NTBot/bots/" + NTConfig_Script[CurScriptIndex]);
+			SetStatusText(Rev + "   " + NTConfig_Script[CurScriptIndex]);
+			NTC_LogCurScript(NTConfig_Script[CurScriptIndex]);
+		}
+		else{
+			LastScript = true;
+		}
+		break;
+	default:
+		Print(COLOR_1 + NTConfig_Script[CurScriptIndex] + " : " + msg + " failed");
+
+		_area = GetArea();
+
+		if(_area)
+			NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + NTConfig_Script[CurScriptIndex] + " : " + msg + " failed (" + _area.name + ")");
+		else
+			NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + NTConfig_Script[CurScriptIndex] + " : " + msg + " failed (unknown area)");
+
+		if(++CurScriptIndex < NTConfig_Script.length)
+		{
+			NTTM_CheckAct();
+			Load("NTBot/bots/" + NTConfig_Script[CurScriptIndex]);
+			SetStatusText(Rev + "  "  + NTConfig_Script[CurScriptIndex]);
+			NTC_LogCurScript(NTConfig_Script[CurScriptIndex]);
+		}
+		else
+			LastScript = true;
+		break;
+	}
+}
+
+function NT_ClearMessages(){ // leech improvemetst
+	for(var i = 0 ; i < NTConfig_Script.length ; i++){
+		if(NTConfig_Script[i].toLowerCase().indexOf("leech") != -1){
+			if(NTConfig_Script[i].toLowerCase().indexOf("baal") != -1){
+				NT_File("logs/messagecomands/"+me.charname+"-baal.txt", 1, " ");
+			}
+			if(NTConfig_Script[i].toLowerCase().indexOf("diablo") != -1){
+				NT_File("logs/messagecomands/"+me.charname+"-diablo.txt", 1, " ");
+			}
+			if(NTConfig_Script[i].toLowerCase().indexOf("trav") != -1){
+				NT_File("logs/messagecomands/"+me.charname+"-trav.txt", 1, " ");
+			}
+		}
+	}
+}
+
+function NTC_CancelMenus() { // more koreans
+	while (GetUIState(0x01) || GetUIState(0x08) || GetUIState(0x0C) || GetUIState(0x0F) || GetUIState(0x14) ||
+		GetUIState(0x17) || GetUIState(0x19) ||   GetUIState(0x1A) || GetUIState(0x24)){
+
+		for (var i = 0; i < 40; i++){
+			if ((i % 20) == 0){
+				me.Cancel(1);
+			}
+			Delay(100);
+			if (!GetUIState(0x01) && !GetUIState(0x08) && !GetUIState(0x0C) && !GetUIState(0x0F) && !GetUIState(0x14) &&
+					!GetUIState(0x17) && !GetUIState(0x19) &&  !GetUIState(0x1A) && !GetUIState(0x24)){
+
+				NTC_PingDelay(300);
+				break;
+			}
+		}
+	}
+}
+
+function NTC_StopScriptLeecher(){
+	_script = NTC_FindScript(NTConfig_Script[CurScriptIndex]);
+	if(_script){
+		if(_script.running){
+			_script.Stop();
+			NTC_Delay(150);
+			ClickMap(NTC_CLICK_LUP, NTC_SHIFT_NONE, null);
+		}
+	}
+	return;
+}
+
+function NTC_PrintPossibleLeaders()
+{
+	var _player;
+	var _myPartyId;
+
+	_player = GetPlayerUnit();
+
+	if(_player)
+	{
+		do
+		{
+			if( _player.name == me.name)
+				continue;
+			NTC_LogPrintSimple("logs/namelog/"+me.charname+"-leaderName.txt", _player.name);
+		} while(_player.GetNext());
+	}
+	return false;
+}
+
+function NT_LoadConfigError()
+{
+	Print(COLOR_4 + "You have an error in your character configuration file");
+	Delay(750);
+	Print(COLOR_4 + "You MUST fix it before the bot will run");
+	Delay(750);
+	Print(COLOR_2 + "Go to http://wiki.projectetal.com/");
+	Delay(750);
+	Print(COLOR_4 + "Then find the Etal First Time Configuration Guide");
+	Delay(750);
+	Print(COLOR_1 + "READ THE GUIDE VERY CLOSELY BEFORE POSTING ON THE FORUMS");
+}

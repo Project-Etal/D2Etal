@@ -1,0 +1,109 @@
+//-----------------------------------------------------------------------------------------------------
+//		This is a list of rare items that you want your bot to pick up.
+//		Note that you will find more rare items listed in the Magic.nip under combined RARE/MAGIC categories.
+//
+//		Any item on this list which starts with //[ will NOT be picked up at all
+//		Any item on this list which starts with [ 	will be picked up, THEN kept unid'ed OR checked and then kept if it's good enough.
+//		More detailed instructions can be found at: http://www.projectetal.com/wiki/index.php/Nip_Config
+// -----------------------------------------------------------------------------------------------------
+
+//RARE RINGS
+[Type] == Ring && [Quality] == Rare # [ItemMagicBonus] >= 25
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && ([Dexterity] >= 10 || [Strength] >= 15) && [MaxHP] >= 15
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && ([Dexterity] >= 13 || [Strength] >= 17) && [HPRegen] >= 7
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && ([Dexterity] >= 13 || [Strength] >= 17) && ([ColdResist] >= 15 || [FireResist] >= 15 || [LightResist] >= 15)
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && ([Dexterity] >= 13 || [Strength] >= 17) && (([ColdResist]+[FireResist] >= 15) || ([ColdResist]+[LightResist] >= 15) || ([FireResist]+[LightResist] >= 15))
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && ([Dexterity] >= 13 || [Strength] >= 17) && [Mana] >= 50
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && [Strength]+[Dexterity] >= 20
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && [MaxHP] >= 25 && [HPRegen] >= 7
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && [MaxHP] >= 35 && ([ColdResist] >= 15 || [FireResist] >= 15 || [LightResist] >= 15)
+[Type] == Ring && [Quality] == Rare # [FCR] >= 10 && [MaxHP] >= 25 && (([ColdResist]+[FireResist] >= 20) || ([ColdResist]+[LightResist] >= 20) || ([FireResist]+[LightResist] >= 20))
+[Type] == Ring && [Quality] == Rare # [Dexterity]+[Strength] >= 30 && (([ColdResist]+[FireResist] >= 15) || ([ColdResist]+[LightResist] >= 15) || ([FireResist]+[LightResist] >= 15))
+[Type] == Ring && [Quality] == Rare # [Dexterity]+[Strength] >= 30 && ([ColdResist] >= 15 || [FireResist] >= 15 || [LightResist] >= 15)
+[Type] == Ring && [Quality] == Rare # [Dexterity]+[Strength] >= 30 && [MaxHP] >= 15
+[Type] == Ring && [Quality] == Rare # [Dexterity]+[Strength] >= 30 && [Mana] >= 50
+[Type] == Ring && [Quality] == Rare # [Strength]+[Dexterity] >= 30 && [ManaLeech]+[LifeLeech] >= 6
+[Type] == Ring && [Quality] == Rare # ([Dexterity] >= 15 || [Strength] >= 20) && [MaxHP] >= 35
+[Type] == Ring && [Quality] == Rare # ([Dexterity] >= 15 || [Strength] >= 20) && [HPRegen] >= 7
+[Type] == Ring && [Quality] == Rare # ([Dexterity] >= 15 || [Strength] >= 17) && [ManaLeech]+[LifeLeech] >= 10
+[Type] == Ring && [Quality] == Rare # [ManaLeech]+[LifeLeech] >= 10 && (([ColdResist]+[FireResist] >= 30) || ([ColdResist]+[LightResist] >= 30) || ([FireResist]+[LightResist] >= 30))
+[Type] == Ring && [Quality] == Rare # [ManaLeech]+[LifeLeech] >= 10 && [MaxHP] >= 35
+
+//RARE MF AMULET
+[Type] == Amulet && [Quality] == Rare # [ItemMagicBonus] >= 35
+
+//RARE VISIONARY CIRCLET
+[Type] == Circlet && [Quality] == Rare # [ItemToHitPercentPerLevel] > 1
+
+//RARE VISIONARY BARB HELM
+[Type] == PrimalHelm && [Quality] == Rare # [ItemToHitPercentPerLevel] > 1
+
+//RARE VISIONARY HELM
+//[Type] == Helm && [Quality] == Rare # [ItemToHitPercentPerLevel] > 1
+
+//RARE BATTLE ORDER HELM
+[Type] == PrimalHelm && [Quality] == Rare # [WarcriesSkillTab] >= 2
+[Type] == PrimalHelm && [Quality] == Rare # [BarbarianSkills] == 2
+
+//RARE SHIELDS
+[Type] == AuricShields && [Quality] == Rare && [Flag] != Ethereal # ([PaladinSkills] == 2 || [PaliCombatSkillTab] == 2)
+[Type] == AuricShields && [Quality] == Rare && [Flag] == Ethereal # ([PaladinSkills] == 2 || [PaliCombatSkillTab] == 2) && [ItemReplenishDurability] >= 1
+
+//RARE GLOVES
+[Type] == Gloves && [Quality] == Rare && [Flag] != Ethereal # [Dexterity] >= 15 || [Strength] >= 15
+[Type] == Gloves && [Quality] == Rare && [Flag] != Ethereal # [IAS] == 20 && ([Dexterity] >= 10 || [Strength] >= 13)
+[Type] == Gloves && [Quality] == Rare && [Flag] != Ethereal # [IAS] == 20 && ([BowAndCrossbowSkillTab] == 2 || [PassiveAndMagicSkillTab] == 2 || [JavelinAndSpearSkillTab] == 2)
+[Type] == Gloves && [Quality] == Rare && [Flag] == Ethereal # [Dexterity] >= 15 || [Strength] >= 15 && [ItemReplenishDurability] >= 1
+[Type] == Gloves && [Quality] == Rare && [Flag] == Ethereal # [IAS] == 20 && ([Dexterity] >= 10 || [Strength] >= 13) && [ItemReplenishDurability] >= 1
+[Type] == Gloves && [Quality] == Rare && [Flag] == Ethereal # [IAS] == 20 && ([BowAndCrossbowSkillTab] == 2 || [PassiveAndMagicSkillTab] == 2 || [JavelinAndSpearSkillTab] == 2) && [ItemReplenishDurability] >= 1
+
+//RARE BOOTS
+[Type] == Boots && [Quality] == Rare && [Flag] != Ethereal # [FRW] >= 30 && (([ColdResist]+[FireResist] >= 70) || ([ColdResist]+[LightResist] >= 70) || ([FireResist]+[LightResist] >= 70))
+[Type] == Boots && [Quality] == Rare && [Flag] != Ethereal # [FRW] >= 30 && (([ColdResist]+[FireResist]+[LightResist] >= 75) || ([ColdResist]+[FireResist]+[PoisonResist] >= 90) || ([ColdResist]+[LightResist]+[PoisonResist] >= 90) || ([FireResist]+[LightResist]+[PoisonResist] >= 90))
+[Type] == Boots && [Quality] == Rare && [Flag] == Ethereal # [FRW] >= 30 && (([ColdResist]+[FireResist] >= 70) || ([ColdResist]+[LightResist] >= 70) || ([FireResist]+[LightResist] >= 70)) && [ItemReplenishDurability] >= 1
+[Type] == Boots && [Quality] == Rare && [Flag] == Ethereal # [FRW] >= 30 && (([ColdResist]+[FireResist]+[LightResist] >= 75) || ([ColdResist]+[FireResist]+[PoisonResist] >= 90) || ([ColdResist]+[LightResist]+[PoisonResist] >= 90) || ([FireResist]+[LightResist]+[PoisonResist] >= 90)) && [ItemReplenishDurability] >= 1
+
+//RARE BELTS
+[Type] == Belt && [Quality] == Rare && [Flag] != Ethereal # [FHR] == 24 && [Strength] >= 20 && [MaxHP] >= 40
+[Type] == Belt && [Quality] == Rare && [Flag] == Ethereal # [FHR] == 24 && [Strength] >= 20 && [MaxHP] >= 40 && [ItemReplenishDurability] >= 1
+
+//RARE MELEE WEAPONS
+[Type] == Axe && [Quality] == Rare && [Flag] != Ethereal # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == Sword && [Quality] == Rare && [Flag] != Ethereal # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == Mace && [Quality] == Rare && [Flag] != Ethereal # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == Hammer && [Quality] == Rare && [Flag] != Ethereal # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == Scepter && [Quality] == Rare && [Flag] != Ethereal # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == Polearm && [Quality] == Rare && [Flag] != Ethereal # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == Knife && [Quality] == Rare && [Flag] != Ethereal # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+
+//RARE BOWS
+[Type] == Bow && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == AmazonBow && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+
+//RARE JAVELINS
+[Type] == Javelin && [Quality] == Rare && [Flag] != Ethereal # [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == Javelin && [Quality] == Rare && [Flag] == Ethereal # ([EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250) && [ItemReplenishQuantity] >= 1
+[Type] == AmazonJavelin && [Quality] == Rare && [Flag] != Ethereal # [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == AmazonJavelin && [Quality] == Rare && [Flag] == Ethereal # ([EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250) && [ItemReplenishQuantity] >= 1
+
+//RARE THROWING WEAPONS
+[Type] == ThrownWeapon && [Quality] == Rare && [Flag] != Ethereal # [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == ThrownWeapon && [Quality] == Rare && [Flag] == Ethereal # ([EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250) && [ItemReplenishQuantity] >= 1
+[Type] == ThrowingKnife && [Quality] == Rare && [Flag] != Ethereal # [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == ThrowingKnife && [Quality] == Rare && [Flag] == Ethereal # ([EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250) && [ItemReplenishQuantity] >= 1
+[Type] == ThrowingAxe && [Quality] == Rare && [Flag] != Ethereal # [EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250
+[Type] == ThrowingAxe && [Quality] == Rare && [Flag] == Ethereal # ([EnhancedDamage] >= 300 || [ItemMaxDamagePerLevel] >= 1 && [EnhancedDamage] >= 250) && [ItemReplenishQuantity] >= 1
+
+//RARE CLAWS
+[Type] == AssassinClaw && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 250
+[Type] == AssassinClaw && [Quality] == Rare && [Flag] == Ethereal # [EnhancedDamage] >= 250 && [ItemReplenishDurability] >= 1
+[Type] == HandToHand && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 250
+[Type] == HandToHand && [Quality] == Rare && [Flag] == Ethereal # [EnhancedDamage] >= 250 && [ItemReplenishDurability] >= 1
+[Type] == RunicTalons && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 250
+[Type] == RunicTalons && [Quality] == Rare && [Flag] == Ethereal # [EnhancedDamage] >= 250 && [ItemReplenishDurability] >= 1
+[Type] == FeralClaws && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 250
+[Type] == FeralClaws && [Quality] == Rare && [Flag] == Ethereal # [EnhancedDamage] >= 250 && [ItemReplenishDurability] >= 1
+[Type] == WristSword && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 250
+[Type] == WristSword && [Quality] == Rare && [Flag] == Ethereal # [EnhancedDamage] >= 250 && [ItemReplenishDurability] >= 1
+[Type] == BattleCestus && [Quality] == Rare # [IAS] >= 20 && [EnhancedDamage] >= 250
+[Type] == BattleCestus && [Quality] == Rare && [Flag] == Ethereal # [EnhancedDamage] >= 250 && [ItemReplenishDurability] >= 1
