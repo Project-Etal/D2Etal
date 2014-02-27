@@ -1,0 +1,49 @@
+// NTLogHandler.ntj
+
+function NTMain() {
+	Include("libs/common/NTLogger.ntl");
+	if (NTConfig_LoggingEnabled) {
+		Print(COLOR_4 + "LogHandler: " + COLOR_2 + " registered");
+		//NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_2 + "NTLogHandler: registered");
+		RegisterEvent(EVENT_SCRIPTMSG, scriptMsgEvents);
+	}
+	while(1) {
+		NTC_Delay(700);
+	}
+}
+
+// log msgs are of the format: scriptname, ticks, type, level, msg separated by NTLG_DELIM
+function scriptMsgEvents(msg) {
+    log = msg.split(NTLG_DELIM);
+    if (log.length != 4) {
+		NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "NTLogHandler: invalid log message dropped");
+		return;
+	} 
+	time = NTLG_TimeStamp(parseInt(log[0]));
+	type = parseInt(log[1]);
+	level = parseInt(log[2]);
+	message = log[3];
+
+	switch(type) {
+		case NTLG_TYPE_LOG:
+			if (level < NTConfig_Log_Level) return;
+			filename = "logs/Logger/" + me.account + "-" + me.charname + "-log.txt";
+			break;
+		case NTLG_TYPE_ITEM:
+			if (level < NTConfig_Item_Level) return;
+			filename = "logs/Logger/" + me.account + "-" + me.charname + "-item.txt";
+			break;
+		default:
+			NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "NTLogHandler: invalid log message (type) dropped");
+			
+	}
+	if (message == "") {
+		NTLG_InitLog(filename, time);
+	} else {
+		NTLG_LogLine(filename, time, level, message);
+	}
+}
+
+
+
+	

@@ -1,0 +1,141 @@
+// life watch for cow king written by stairbuilder on 1-19-12
+/////////////////////////////////////// directions for use ////////////////////////////////////////////////////////////////////////
+// create a file called NTKingLifeWatch.ntj and put it into your D2NT\scripts\NTBot\tools folder
+// in your cow script add this line: "Load("NTBot/tools/NTKingLifeWatch.ntj");" 
+// just below this block of code
+//	if(!NT_TakeCowPortal()){
+//		NTC_SendMsgToScript("NTBotGame.ntj", "Failed to take Cow Portal.");
+//		return;
+//	}
+// then add this into  your character_configs
+
+
+//NTConfig_CowKingChicken = 25;  // percentage of king's hp if below this the bot will close d2.  Set to 0 to dissable.
+
+var debugKingLifeWatch = false;
+var firstCheck = true;
+var firstCheckKing = true;
+var changeInLife = false;
+
+function NTMain() {
+
+	Include("libs/common/NTCommon.ntl");
+	Include("libs/common/NTCubing.ntl");
+	Include("libs/common/NTUtilities.ntl");
+	NTC_IncludeConfig("NTBot/char_configs");
+	
+	var startKingHpPerc = 100;
+    var theCowKing;
+	var exitGame = false;
+	
+	Print(NTC_PrintRandomColor()  + "King Life Watch Loaded");
+    while (1){ 
+		// if we are in the cow level then check for king
+		if (me.areaid == 39) { 
+			if(firstCheck) {
+				if(debugKingLifeWatch) {
+					NT_LogPrint("logs/testlog/"+me.charname+"-CowTest.txt", "--------------------------------------------------------");
+					NT_LogPrint("logs/testlog/"+me.charname+"-CowTest.txt", "Start king watch");
+				}
+				if(debugKingLifeWatch) { Print(NTC_PrintRandomColor()  + "In cow level looking for king"); }
+				firstCheck = false;
+			}
+
+			theCowKing = NT_FindTheKing();
+
+			// if NT_FindTheKing returns false then we end the script because it is of no use 
+			//if(!theCowKing) {
+
+				//Print(NTC_PrintRandomColor()  + "King is not in range");
+				//break;
+
+			//}
+			// if we find the king then we check to see if it is alive
+			if(theCowKing) {
+				
+				if(firstCheckKing || startKingHpPerc > (parseInt(theCowKing.hp*100/theCowKing.hpmax))) {
+					if(!firstCheckKing) {
+						changeInLife = true;
+					}
+					firstCheckKing = false;
+					startKingHpPerc = (parseInt(theCowKing.hp*100/theCowKing.hpmax));
+				}
+				// if it is not alive then we end this because we don't need to run it
+				if(theCowKing.hp <= 0 || theCowKing.mode == 0 || theCowKing.mode == 12) {
+					if(debugKingLifeWatch) { NT_LogPrint("logs/testlog/"+me.charname+"-CowTest.txt", "The king is already dead :("); }
+					Print(NTC_PrintRandomColor()  + "The king is already dead :(");
+					break;
+				}
+				// at this point we have found the king so check it's hp
+				if(parseInt(theCowKing.hp*100/theCowKing.hpmax) < NTConfig_CowKingChicken) {
+					// if it is less than the configured amount we want to exit game so set the var to true
+					if(debugKingLifeWatch) { 
+						NT_LogPrint("logs/testlog/"+me.charname+"-CowTest.txt", "Life of king is under configured amount...exit game");
+						Print(NTC_PrintRandomColor()  + "Life of king is under configured amount...exit game"); 
+					}
+					exitGame = true;
+					break;
+				}
+			} 
+		}
+		// if we are not in 39(cow level), 1(act one town), 0(in limbo), then we have moved on to next script so we don't need to run this any longer
+		else if( me.areaid == 0) {
+			Delay(500)
+		}	
+		else if(me.areaid != 1 && debugKingLifeWatch) { 
+			if(debugKingLifeWatch) {
+				NT_LogPrint("logs/testlog/"+me.charname+"-CowTest.txt", "we are no longer doing cows...end script");
+				Print(NTC_PrintRandomColor()  + "we are no longer doing cows...end script");
+			}
+			break;
+		}
+		Delay(200);
+	}
+	// from above hp is lower than the config amount so we send a chicken message to manager and shut down d2 because that is fast and we don't get wsod that way
+	if(exitGame) {
+		SendCopyData("D2NT Manager", null, 7<<16, COLOR_1 + "CowKing Chicken : CowKing (" + theCowKing.hp + "/" + theCowKing.hpmax + ")");
+		if(debugKingLifeWatch) { NT_LogPrint("logs/testlog/"+me.charname+"-CowTest.txt", "Cow king life has dropped...goodbye"); }
+		Say("Cow king life has dropped...goodbye");
+		CloseD2();
+	// if exitGame is false then we have completed the cow script without problems and no longer need to be running it
+	} else {
+		return;
+	}
+}
+
+function NT_FindTheKing() { // this simply finds the king and returns to main if it is found or not
+	
+	theCowKingGet = GetUnit(NTC_UNIT_MONSTER, GetLocaleString(2850));
+
+	if(!theCowKingGet) {
+		return false;
+	} 
+	else if(changeInLife) {
+		if(debugKingLifeWatch) {
+			NT_LogPrint("logs/testlog/"+me.charname+"-CowTest.txt", "Found the cow king and it's life is " + (parseInt(theCowKingGet.hp*100/theCowKingGet.hpmax)) +"% " );
+			Print(NTC_PrintRandomColor()  + "Found the cow king and it's life is " + (parseInt(theCowKingGet.hp*100/theCowKingGet.hpmax)) +"% " );
+		}
+		changeInLife = false;
+		return theCowKingGet;
+	} else {
+
+		return theCowKingGet;
+
+	}
+}
+
+function NT_LogPrint(filepath, mesg){
+	
+	var _Myarea = GetArea();
+	var _filepath = filepath;
+	var _mesg = mesg;
+	
+	var date = new Date().toLocaleFormat("<%a, %b %d, %H:%M>");
+	var logfile = FileOpen(_filepath, 2); // opens file 
+	if(!logfile)
+		var logfile = FileOpen(_filepath, 1); // if file not there then creates it
+
+	logfile.WriteLine(date + " " + _mesg + " Area[" + _Myarea.name + "]");
+	logfile.Close();
+}
+

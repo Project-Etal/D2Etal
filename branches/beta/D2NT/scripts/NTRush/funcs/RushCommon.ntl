@@ -1,0 +1,31 @@
+Include("libs/common/NTColorConverter.ntl");
+Include("NTRush/rush_configs/NTConfig_Global.ntl");
+
+var Common = {
+	IncludeFuncs: function () {
+		Include("NTRush/funcs/Config.ntl");
+		Include("NTRush/funcs/Extras.ntl");
+		Include("NTRush/funcs/File.ntl");
+		Include("NTRush/funcs/Json.ntl");
+		Include("NTRush/funcs/Message.ntl");
+		Include("NTRush/funcs/Quests.ntl");
+		Include("NTRush/funcs/Script.ntl");
+		Include("NTRush/funcs/Tracker.ntl");
+		Include("NTRush/funcs/Command.ntl");
+	},
+
+	LogManager: function (logString) {
+		return SendCopyData("D2NT Manager", null, 9<<16|0, logString);
+	},
+
+	LogError: function (logstring) {
+		var area;
+		area = GetArea();
+
+		if (area) {
+			return SendCopyData("D2NT Manager", null, 9<<16|0, COLOR_1 + logstring + " failed in " + area.name);
+		}
+
+		return SendCopyData("D2NT Manager", null, 9<<16|0, COLOR_1 + logstring + " failed.");
+	}
+};

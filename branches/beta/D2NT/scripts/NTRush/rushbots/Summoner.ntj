@@ -1,0 +1,20 @@
+function NTMain() {
+	Include("libs/common/NTCommon.ntl");
+	Include("NTRush/funcs/RushCommon.ntl");
+	Common.IncludeFuncs();
+	NTC_IncludeLibs();
+	Config.Load();
+
+	NT_LoadConfig();
+	NTSI_LoadNIPFiles("NTBot/item_configs");
+
+	NTA_Initialize();
+
+	if (!Quests.Summoner()) {
+		Common.LogError("Summoner()");
+		Script.SendMsg("OverWatch.ntj", "Summoner()");
+		return;
+	}
+
+	Script.SendMsg("OverWatch.ntj", "SCRIPT_END"); 
+}
