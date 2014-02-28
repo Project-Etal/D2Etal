@@ -287,6 +287,7 @@ var NTConfig_Script = [];
 	var NTConfig_StartDelay;
 	var NTConfig_AreaDelay;
 	var NTConfig_SnagDelay;
+	var NTConfig_MinIngameTime= 0;
 // Chicken
 	var NTConfig_SkipHealLife;
 	var NTConfig_SkipHealMana;
