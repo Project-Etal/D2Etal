@@ -23,16 +23,6 @@ function NT_LoadConfig()
 		NTConfig_JustAHunter = true; 					// Used if only hunting IP's, set true to idle in town (Make sure this is the only script pushed).
 		NTConfig_AvoidRD = 180;							// Time in seconds to wait in town to avoid R/D before creating next game (NTConfig_JustAHunter must be true).
 
-	//------------------------------------------------------------------------------
-	// Aura Stacking
-	//		Note: There are no failsafes, these are heavy beta. For manually enhanced play ONLY.
-	//		(Gear WILL be dropped.)
-	//------------------------------------------------------------------------------
-	//NTConfig_Script.push("NTAuraStacking.ntj"); 		// THIS IS NOT SAFE, WE ARE NOT RESPONSIBLE FOR LOST GEAR!!!!
-		NTConfig_ArmorStack 	= 0;					// Stacks armor aura the # of times, 0 to disable
-		NTConfig_HelmStack 		= 0;					// Stacks helm aura the # of times, 0 to disable
-		NTConfig_WeaponStack 	= 0;					// Stacks weapon aura the # of times, 0 to disable
-
 	//-------------------------------------------------------------------------------
 	// 		Level announcer
 	//-------------------------------------------------------------------------------
