@@ -94,10 +94,10 @@ var NTConfig_Script = [];
 	var NTConfig_SaySomethingNoob;
 	var NTConfig_JustAHunter;
 	var NTConfig_AvoidRD;
-//Aura Stack
-	var NTConfig_ArmorStack;
-	var NTConfig_HelmStack;
-	var NTConfig_WeaponStack;
+//Aura Stack							// Need removed eventually
+	var NTConfig_ArmorStack;			// Need removed eventually
+	var NTConfig_HelmStack;				// Need removed eventually
+	var NTConfig_WeaponStack;			// Need removed eventually
 // Leech/Fighter
 	var NTConfig_Leader;
 	var NTConfig_PartyOnlyLeader;
