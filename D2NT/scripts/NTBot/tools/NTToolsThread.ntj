@@ -16,11 +16,10 @@ function NTMain(){
 
 	NT_LoadConfig();
 
-
 	_LifeMax = me.hpmax;
 	_ManaMax = me.mpmax;
 
-	if(NTConfig_LifeChicken > 0) {
+	/*if(NTConfig_LifeChicken > 0) {
 		me.chickenhp = parseInt((_LifeMax*NTConfig_LifeChicken)/100);
 	} else {
 		me.chickenhp = 0;}
@@ -28,39 +27,32 @@ function NTMain(){
 	if(NTConfig_ManaChicken > 0) {
 		me.chickenmp = parseInt((_ManaMax*NTConfig_ManaChicken)/100);
 	} else {
-		me.chickenmp = 0;}
+		me.chickenmp = 0;}*/
 
 	for(var i = 0 ; i < 5 ; i++)
 		_NTLW_timerLastDrink[i] = 0;
 
 	while(1){
 		if(!NTC_InTown()){
-			if(_LifeMax != me.hpmax){
-				_LifeMax = me.hpmax;
-
-				if(NTConfig_LifeChicken > 0) {
-					me.chickenhp = parseInt((_LifeMax*NTConfig_LifeChicken)/100);
-				} else {
-					me.chickenhp = 0;}
-			}
-			if(_ManaMax != me.mpmax){
-				_ManaMax = me.mpmax;
-
-				if(NTConfig_ManaChicken > 0) {
-					me.chickenmp = parseInt((_ManaMax*NTConfig_ManaChicken)/100);
-				} else {
-					me.chickenmp = 0;}
-			}
-
 			// ** start etal chicken code
-			if (me.hp < parseInt(me.hpmax * NTConfig_EtalLifeChicken,10) / 100) {
+			if (me.hp < parseInt(_LifeMax * NTConfig_EtalLifeChicken,10) / 100) {
 				NTU_ChickenLog("EtalLifeChicken");
-				CloseD2();
+				if(NTConfig_ChickenStyle == 0){
+					CloseD2();
+				}
+				else{
+					ExitGame();
+				}
 				break;
 			}
-			if (me.mp < parseInt(me.mpmax * NTConfig_EtalManaChicken,10) / 100) {
+			if (me.mp < parseInt(_ManaMax * NTConfig_EtalManaChicken,10) / 100) {
 				NTU_ChickenLog("EtalManaChicken");
-				CloseD2();
+				if(NTConfig_ChickenStyle == 0){
+					CloseD2();
+				}
+				else{
+					ExitGame();
+				}
 				break;
 			}
 			// ** end etal chicken code
@@ -140,7 +132,6 @@ function NTMain(){
 
 			if(NTConfig_PartyOnlyLeader){
 				_player = GetPlayerUnit();
-				var NTLeader_LoggedFromFile = NT_File("logs/" + me.account + ".leaderName.txt", 0);
 
 				if(_player){
 					_mypartyid = _player.partyid;
@@ -152,7 +143,7 @@ function NTMain(){
 								ExitGame();
 							}
 						}
-						if((_player.name == NTConfig_Leader || _player.name == NTLeader_LoggedFromFile) && _player.partyflag == 2
+						if(_player.name == NTConfig_Leader && _player.partyflag == 2
 						&& (_player.partyid == 65535 || _player.partyid != _mypartyid)){
 
 						me.ClickParty(_player, 2);

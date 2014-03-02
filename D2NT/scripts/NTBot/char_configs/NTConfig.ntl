@@ -295,8 +295,9 @@ var NTConfig_Script = [];
 	var NTConfig_LifeRejuvThresh;
 	var NTConfig_ManaThresh;
 	var NTConfig_ManaRejuvThresh;
-	var NTConfig_LifeChicken;
-	var NTConfig_ManaChicken;
+	var NTConfig_LifeChicken;			// Needs removed after a few commits
+	var NTConfig_ManaChicken;			// Needs removed after a few commits
+	var NTConfig_ChickenStyle;
 	var NTConfig_EtalLifeChicken;
 	var NTConfig_EtalManaChicken;
 	var NTConfig_TPChicken;
