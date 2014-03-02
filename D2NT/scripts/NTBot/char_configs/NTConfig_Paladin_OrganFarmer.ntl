@@ -340,6 +340,7 @@ function NT_LoadConfig()
 	// Speed settings
 	//------------------------------------------------------------------------------
 	me.maxgametime = 1200; 		// time in seconds, maximum game length (0 is infinite)
+	NTConfig_MinIngameTime= 0;						// Amount of minutes to remain ingame. Ensures game length. Setting is in minutes
 	NTConfig_StartDelay = 0;		// Delay time in milliseconds to start;
 	NTConfig_AreaDelay = 500;	// Delay time in milliseconds to change area;
 	NTConfig_SnagDelay = 500;	// Delay time in milliseconds to wait before starting picking items
