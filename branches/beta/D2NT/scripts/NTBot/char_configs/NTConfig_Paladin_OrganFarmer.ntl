@@ -339,38 +339,33 @@ function NT_LoadConfig()
 	//------------------------------------------------------------------------------
 	// Speed settings
 	//------------------------------------------------------------------------------
-	me.maxgametime = 1200; 		// time in seconds, maximum game length (0 is infinite)
-	NTConfig_MinIngameTime= 0;						// Amount of minutes to remain ingame. Ensures game length. Setting is in minutes
-	NTConfig_StartDelay = 0;		// Delay time in milliseconds to start;
-	NTConfig_AreaDelay = 500;	// Delay time in milliseconds to change area;
-	NTConfig_SnagDelay = 500;	// Delay time in milliseconds to wait before starting picking items
+	me.maxgametime = 1200; 							// time in seconds, maximum game length (0 is infinite)
+	NTConfig_MinIngameTime = 0;						// Amount of minutes to remain ingame. Ensures game length. Setting is in minutes
+	NTConfig_StartDelay = 0;						// Delay time in milliseconds to start;
+	NTConfig_AreaDelay = 500;						// Delay time in milliseconds to change area;
+	NTConfig_SnagDelay = 500;						// Delay time in milliseconds to wait before starting picking items
 
 	//------------------------------------------------------------------------------
 	// Chicken settings
 	//------------------------------------------------------------------------------
-	NTConfig_SkipHealLife = 90;		// If you have more than this percent of life, you won't go to a healer
-	NTConfig_SkipHealMana = 70;		// If you have more than this percent of mana, you won't go to a healer
+	NTConfig_SkipHealLife = 90;							// If you are over this percentage of life, you won't go to a healer.
+	NTConfig_SkipHealMana = 70;							// If you are over this percentage of mana, you won't go to a healer.
 
-	NTConfig_LifeThresh = 85;		// Drink a normal potion if under this percent of life.
-	NTConfig_LifeRejuvThresh = 45;	// Drink a rejuvenation potion if under this percent of life.
-	NTConfig_ManaThresh = 30;		// Drink a normal potion if under this percent of mana.
-	NTConfig_ManaRejuvThresh = 0;	// Drink a rejuvenation potion if under this percent of mana.
+	NTConfig_LifeThresh = 85;							// Drink a health potion if under this percent of life.
+	NTConfig_LifeRejuvThresh = 45;						// Drink a rejuvenation potion if under this percent of life. (Will not use health potions under this %)
+	NTConfig_ManaThresh = 30;							// Drink a mana potion if under this percent of mana.
+	NTConfig_ManaRejuvThresh = 0;						// Drink a rejuvenation potion if under this percent of mana. (Will not use mana potions under this %)
 
-	NTConfig_LifeChicken = 0;							// This is your D2NT chicken life percent. If you go below this life total, exit game.
-	NTConfig_ManaChicken = 0;							// This is your D2NT chicken mana percent. If you go below this mana total, exit game.
-
-	// These chicken values are optional and can run alongside the traditional D2NT chicken or as a standalone chicken
-	// The Etal version comes with additional logging and will restart D2 instead of exitting the game for crash protection
-	// To disable, use 0
 	NTConfig_EtalLifeChicken = 30;						// This is your Etal chicken life percent. If you go below this life total, exit D2.
 	NTConfig_EtalManaChicken = 0;						// This is your Etal chicken mana percent. If you go below this mana total, exit D2.
-
-	NTConfig_TPChicken = 0; 		// life percent for tp chicken set to zero if you don't want to use
+	NTConfig_ChickenStyle = 0;							// What kind of chicken? 0 to CloseD2 - 1 to Exit game (Closing D2 is safer)
+	
+	NTConfig_TPChicken = 0; 							// Under this % of health will attempt to tp to town and heal. (Set 0 to disable.)
 	NTConfig_MercTPChicken = 0;						  	// Under this % of Merc health will attempt to tp to town and heal. (Set to 0 to disable.)
 
-	NTConfig_MercLifeThresh = 50;	// This is the threshold to use a life potion on your merc in percent.
-	NTConfig_MercRejuvThresh = 0;	// This is the threshold to use a rejuv potion on your merc in percent.
-	NTConfig_MercChicken = 0;		// This is your mercs chicken life percent. If he goes below this, exit game.
+	NTConfig_MercLifeThresh = 50;						// Give merc a health potion if under this percent of life.
+	NTConfig_MercRejuvThresh = 30;						// Give merc a rejuvenation potion if under this percent of life. (Will not use health potions under this %)
+	NTConfig_MercChicken = 0;							// This is your mercs chicken life percent. If he goes below this, exit game. (Set 0 to disable.)
 
 	//------------------------------------------------------------------------------
 	// Inventory settings

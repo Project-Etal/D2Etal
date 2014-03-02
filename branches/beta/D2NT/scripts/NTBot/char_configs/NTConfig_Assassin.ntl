@@ -366,7 +366,7 @@ function NT_LoadConfig()
 	// Speed Settings
 	//------------------------------------------------------------------------------
 	me.maxgametime = 1200; 								// Maximum game length in seconds (0 is infinite).
-	NTConfig_MinIngameTime= 0;						// Amount of minutes to remain ingame. Ensures game length. Setting is in minutes
+	NTConfig_MinIngameTime = 0;							// Amount of minutes to remain ingame. Ensures game length. Setting is in minutes
 	NTConfig_StartDelay = 0;							// Delay time in milliseconds to wait at start.
 	NTConfig_AreaDelay = 500;							// Delay time in milliseconds to wait on each area change.
 	NTConfig_SnagDelay = 500;							// Delay time in milliseconds (added to ping delay) to wait before each pickit call.
@@ -382,15 +382,10 @@ function NT_LoadConfig()
 	NTConfig_ManaThresh = 30;							// Drink a mana potion if under this percent of mana.
 	NTConfig_ManaRejuvThresh = 0;						// Drink a rejuvenation potion if under this percent of mana. (Will not use mana potions under this %)
 
-	NTConfig_LifeChicken = 0;							// This is your D2NT chicken life percent. If you go below this life total, exit game.
-	NTConfig_ManaChicken = 0;							// This is your D2NT chicken mana percent. If you go below this mana total, exit game.
-
-	// These chicken values are optional and can run alongside the traditional D2NT chicken or as a standalone chicken
-	// The Etal version comes with additional logging and will restart D2 instead of exitting the game for crash protection
-	// To disable, use 0
 	NTConfig_EtalLifeChicken = 30;						// This is your Etal chicken life percent. If you go below this life total, exit D2.
 	NTConfig_EtalManaChicken = 0;						// This is your Etal chicken mana percent. If you go below this mana total, exit D2.
-
+	NTConfig_ChickenStyle = 0;							// What kind of chicken? 0 to CloseD2 - 1 to Exit game (Closing D2 is safer)
+	
 	NTConfig_TPChicken = 0; 							// Under this % of health will attempt to tp to town and heal. (Set 0 to disable.)
 	NTConfig_MercTPChicken = 0;						  	// Under this % of Merc health will attempt to tp to town and heal. (Set to 0 to disable.)
 
