@@ -59,6 +59,7 @@ var Key_AntiIdle;
 var Key_GameStats;
 var Key_CursoriLvL;
 var Key_DPSMeter;
+var Key_Refresh;
 
 var NTMG_GetLocalStringIDs;
 var NTMG_ObjectIDs;
