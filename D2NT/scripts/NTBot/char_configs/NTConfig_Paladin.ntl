@@ -64,6 +64,7 @@ function NT_LoadConfig()
 		leechpos = [15118, 5003];						// X,Y coord for leechers to stand (passive leecher only).
 		NTConfig_LeechHydra = 0; 						// 0 = Don't Move, 1 = Right Side, 2 = Left Side. (Use left side if you have a leecher grabing xp shrines. (Settings Below))
 		NTConfig_FollowtoWorldStone = true;				// Go down to Baal in WS Chamber after waves?
+		NTConfig_WaitAtPassiveSPotForBaal = false;		// leech fighters will wait at passive leech spot for baal to enter WS Chamber.  Helpful if you having problems with baal bugging and not entering portal
 
 		NTConfig_GrabShrine = "config me";				// Use shrine & return to act 5 portal Area (Leaders hot tp message is very effective, also must be different than Diablo & Trav tp messages).
 		_FindXPArea = [];								// Area ID's, (2, 3, 4, 5, 6, 7). Set array empty "[]" to leech without grabbing shrines.
