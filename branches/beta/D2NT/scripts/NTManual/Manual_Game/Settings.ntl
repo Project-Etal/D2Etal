@@ -98,17 +98,5 @@ function MG_LoadConfig(MyChar)
 
 function MG_PickitLoad()
 {
-	//NTConfig_NIPFilePath.push("Master/Charms.nip");
-	//NTConfig_NIPFilePath.push("Master/Crafted.nip");
-	//NTConfig_NIPFilePath.push("Master/Cubed.nip");
-	//NTConfig_NIPFilePath.push("Master/CustomAdditions.nip");
-	//NTConfig_NIPFilePath.push("Master/FAST.nip");
-	//NTConfig_NIPFilePath.push("Master/Gold Potions Runes Gems Essences Keys Organs.nip");
-	//NTConfig_NIPFilePath.push("Master/Magic.nip");
-	//NTConfig_NIPFilePath.push("Master/Rare.nip");
-	//NTConfig_NIPFilePath.push("Master/Set.nip");
-	//NTConfig_NIPFilePath.push("Master/Unid.nip");
-	//NTConfig_NIPFilePath.push("Master/Unique.nip");
-	//NTConfig_NIPFilePath.push("Master/White.nip");
-	//NTConfig_NIPFilePath.push("Master/Runeword.nip");
+	NTConfig_NIPFilePath.push("Pickits/Pickit.nip");
 }

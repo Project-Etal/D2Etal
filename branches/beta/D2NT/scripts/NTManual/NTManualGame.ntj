@@ -1,4 +1,4 @@
-var Rev = "1.01";
+var Rev = "1.1";
 var warncount;
 var _AreaName;
 var busy = false;
@@ -24,7 +24,7 @@ function NTMain()
 		
 	if(MGConfig_PickItems){
 		MG_PickitLoad();
-		if (!NTSI_LoadNIPFiles("NTBot/item_configs")) {
+		if (!NTSI_LoadNIPFiles("NTManual/Manual_Game")) {
 			MG_LogToOOG(NTC_LOG_COMMON, COLOR_1 + "Error loading NIPFiles");
 		}
 		
