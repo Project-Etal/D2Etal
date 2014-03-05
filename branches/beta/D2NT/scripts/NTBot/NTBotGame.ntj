@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "152-BE";
+var Rev = "153-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -30,8 +30,8 @@ function NTMain()
 	NT_LoadConfig();
 	NTE_InitializeStats();
 
-	if (NTConfig_MinIngameTime != 0) {
-		endtime = _endTime = GetTickCount() + 1000 * 60 * NTConfig_MinIngameTime;
+	if (NTConfig_MinIngameTime > 0) {
+		endtime = GetTickCount() + 1000 * 60 * NTConfig_MinIngameTime;
 	}
 
 	if(!me.gamename && me.GetStat(12) > 90) { Say("/players 5"); } // For SP players to increase MF and such
