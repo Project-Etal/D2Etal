@@ -1,4 +1,4 @@
-var Rev = "1.001";
+var Rev = "1.01";
 var warncount;
 var _AreaName;
 var busy = false;
@@ -17,6 +17,7 @@ function NTMain()
 	AreaPoi();
 	ScanPlayers();
 	MG_InitializeStats();
+	MG_CheckBeltStuff(true);
 
 	if(NTConfig_HostileHandler)
 		Load("NTBot/tools/NTHostHandler.ntj");
@@ -36,7 +37,7 @@ function NTMain()
 	me.maxgametime = 0;
 	Delay(Random(100,200));
 	while(1) {	
-		ChickenStuff(); Refresh(); MG_AntiIdle();
+		ChickenStuff(); MG_Resists(); MG_AntiIdle();
 		if(_count++ > 10) {
 			if(MGConfig_AutoParty) { MG_PartyUp(); }
 			if(MGConfig_CheckStuff) { Town_CheckStuff(MG_CS[0], MG_CS[1], MG_CS[2], MG_CS[3]); }
@@ -166,6 +167,9 @@ function NT_KeyEvents(keycode)
 		case Key_CursoriLvL:
 			NTU_CursorILvl();
 			break;
+		case Key_Refresh:
+			MG_CheckBeltStuff();
+			break;
 		case Key_DevTools:
 			NTMG_DevelopementTools();
 			break;
@@ -189,7 +193,7 @@ function _classid(i)
 	}
 }
 
-function Refresh()
+function MG_Resists()
 {
 	Resi = [(me.GetStat(39) + DiffMod), (me.GetStat(43) + DiffMod), (me.GetStat(41) + DiffMod), (me.GetStat(45) + DiffMod)];
 }
@@ -441,6 +445,58 @@ function MG_ComputeStats(chickenFlag) {
 		MG_LogToOOG(NTC_LOG_COMMON, XPMangMsg);
 	}
 	return;
+}
+
+function MG_CheckBeltStuff(startup)
+{
+	var MGConfig_BeltColType = new Array(16);
+	var i;
+	var _result;
+	var _items;
+		_items = me.GetItems();
+	for(i = 0; i < _items.length; i++) {
+		if(_items[i].mode == 2){
+			if(_items[i].classid > 586 && _items[i].classid < 592){ // HP potions
+				MGConfig_BeltColType[_items[i].x] = COLOR_1 + "Heal";
+				MGConfig_BeltType[_items[i].x] = "hp";
+			}
+			else if(_items[i].classid > 591 && _items[i].classid < 597){ // MP potions
+				MGConfig_BeltColType[_items[i].x] = COLOR_3 + "Mana";
+				MGConfig_BeltType[_items[i].x] = "mp";
+			}
+			else if(_items[i].classid > 514 && _items[i].classid < 517){ // RV potions
+				MGConfig_BeltColType[_items[i].x] = COLOR_2 + "Reju";
+				MGConfig_BeltType[_items[i].x] = "rv";
+			}
+			else if(_items[i].classid == 517){ // Thawing
+				MGConfig_BeltColType[_items[i].x] = COLOR_9 + "Thaw";
+			}
+			else if(_items[i].classid == 514){ // Antidote
+				MGConfig_BeltColType[_items[i].x] = COLOR_5 + "Anti";
+			}
+			else if(_items[i].classid == 513){ // Stamina
+				MGConfig_BeltColType[_items[i].x] = COLOR_0 + "Stam";
+			}
+		}
+	}
+	for(x = 0; x < 16; x++){
+		if(MGConfig_BeltColType[x] == undefined)
+			MGConfig_BeltColType[x] = COLOR_8 + "None";
+	}
+	if(!startup){
+		MyBeltInfo = COLOR_8 + "Belt Info For " + COLOR_2 + me.charname + ";";
+		MyBeltInfo += MGConfig_BeltColType[12] + " " + MGConfig_BeltColType[13] + " " + MGConfig_BeltColType[14] + " " + MGConfig_BeltColType[15] + "\n";
+		MyBeltInfo += MGConfig_BeltColType[8] + " " + MGConfig_BeltColType[9] + " " + MGConfig_BeltColType[10] + " " + MGConfig_BeltColType[11] + "\n";
+		MyBeltInfo += MGConfig_BeltColType[4] + " " + MGConfig_BeltColType[5] + " " + MGConfig_BeltColType[6] + " " + MGConfig_BeltColType[7] + "\n";
+		MyBeltInfo += MGConfig_BeltColType[0] + " " + MGConfig_BeltColType[1] + " " + MGConfig_BeltColType[2] + " " + MGConfig_BeltColType[3] + "\n";
+		MG_LogToOOG(NTC_LOG_COMMON, MyBeltInfo);
+		//Print(MGConfig_BeltColType[12] + " " + MGConfig_BeltColType[13] + " " + MGConfig_BeltColType[14] + " " + MGConfig_BeltColType[15]);
+		//Print(MGConfig_BeltColType[8] + " " + MGConfig_BeltColType[9] + " " + MGConfig_BeltColType[10] + " " + MGConfig_BeltColType[11]);
+		//Print(MGConfig_BeltColType[4] + " " + MGConfig_BeltColType[5] + " " + MGConfig_BeltColType[6] + " " + MGConfig_BeltColType[7]);
+		//Print(MGConfig_BeltColType[0] + " " + MGConfig_BeltColType[1] + " " + MGConfig_BeltColType[2] + " " + MGConfig_BeltColType[3]);
+		Print(COLOR_8 + "Belt slots refreshed!");
+	}
+	return MGConfig_BeltType;
 }
 
 function MG_LogToOOG(type, logString)

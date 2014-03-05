@@ -16,8 +16,6 @@ function MG_LoadConfig(MyChar)
 			MGConfig_ManaThresh = 10;		// Drink a mana potion if under this percent of mana.
 			MGConfig_ManaRejuvThresh = 0;	// Drink a rejuvenation potion if under this percent of mana. (Will not use mana potions under this %)
 
-			MGConfig_BeltType = ["hp", "hp", "hp", "hp"]; // Belt slots are just as they show in game!
-
 			MGConfig_CheckStuff = false; 	// Gives a warning when low on pots/scrolls
 			MG_CS = ["2", "2", "1", "1"];	// Values to check [HPs, MPs, TPs, IDs];
 
@@ -32,8 +30,6 @@ function MG_LoadConfig(MyChar)
 			MGConfig_LifeRejuvThresh = 35;	// Drink a rejuvenation potion if under this percent of life. (Will not use health potions under this %)
 			MGConfig_ManaThresh = 20;		// Drink a mana potion if under this percent of mana.
 			MGConfig_ManaRejuvThresh = 0;	// Drink a rejuvenation potion if under this percent of mana. (Will not use mana potions under this %)
-
-			MGConfig_BeltType = ["hp", "hp", "mp", "rv"]; // Belt slots are just as they show in game!
 
 			MGConfig_CheckStuff = false; 	// Gives a warning when low on pots/scrolls
 			MG_CS = ["-1", "-1", "-1", "-1"];	// Values to check [HPs, MPs, TPs, IDs];
@@ -66,6 +62,7 @@ function MG_LoadConfig(MyChar)
 	Key_DoPrecast = 96;			 	// Num 0 - Precast your skills, obviously
 	Key_HiddenStats = 97;			// Num 1 - Resistances, FCR, FHR, IAS, %DR, %MDR, and absorbs! 
 	Key_Breakpoints = 100;			// Num 4 - Get your BPs for your character class
+	Key_Refresh = 102;				// Num 6 - Refresh settings (currently only belt slots)
 	Key_MyChicken = 103;			// Num 7 - Print your chicken values for HP/MP
 	Key_DPSMeter = 104;				// Num 8 - DPS Meter above character - YOU CAN NOT CHAT IN GAME WITH THIS ACTIVE!
 	Key_CursoriLvL = 105;			// Num 9 - Print the iLvl of the item on your cursor.
