@@ -969,7 +969,10 @@ function TPAtPlayersBody(playerName, enemysName)
 		else
 			NTM_MoveTo(leaderPlayerUnit.areaid, leaderPlayerUnit.x, leaderPlayerUnit.y);
 		TP("");
-		Whisper(playerName, "My TP for your corpse");
+		if(NTConfig_MessageDeadPlayers)
+		{
+			Whisper(playerName, NTConfig_DeadPlayerMsg);
+		}
 	}	
 }
 
