@@ -1,4 +1,7 @@
 // *** Global vars ***
+
+var debug = false;
+
 var pathRushBots = "NTRush/rushbots/";
 var isBusy = false;
 var isPaused;
@@ -57,14 +60,16 @@ function NTMain()
 	// End script if the leader wasn't found
 	if(!leaderInGame)
 	{
-		Say("Leader: " + leaderName + " - not found!");
+		if(debug)
+			Say("Leader: " + leaderName + " - not found!");
 		NTC_Delay(500);
 		NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 	}
 	else
 	{
 		RegisterEvent( EVENT_GAMEMSG, ChatHandler );
-		//Say("!Leader: " + leaderName);
+		if(debug)
+			Say("!Leader: " + leaderName);
 		leaderUnit = GetLeaderUnit(leaderName);
 		leaderPlayerUnit = GetLeader(leaderName);
 	}
@@ -94,7 +99,8 @@ function Action()
 		Delay(1000);
 		if(me.mode !== 0 && me.mode !== 17)
 		{
-			Say("I'm alive!");
+			if(debug)
+				Say("I'm alive!");
 			isFollowingEnabled = false;
 		}
 	}
@@ -318,8 +324,10 @@ function CommandHandler( msg1, msg2, msg3, msg4, msg5 )
 	switch( msg1 )
 	{
 	case "dbg": // keep right above goto command without a break
-		Say("Debug:  Leader Coordinates: X: " + leaderPlayerUnit.x + " " + "Y: " + leaderPlayerUnit.y);
-		Say("Debug:  Leader Area ID: " + leaderPlayerUnit.areaid);
+		if(debug)
+			Say("Debug:  Leader Coordinates: X: " + leaderPlayerUnit.x + " " + "Y: " + leaderPlayerUnit.y);
+		if(debug)
+			Say("Debug:  Leader Area ID: " + leaderPlayerUnit.areaid);
 		msg2 = leaderPlayerUnit.areaid;
 		msg3 = leaderPlayerUnit.x;
 		msg4 = leaderPlayerUnit.y;
@@ -1041,7 +1049,8 @@ function TakeLeaderTP(toArea) // Done
 					var leaderArea = leaderPlayerUnit.areaid;
 					if(leaderArea === p0 || leaderArea === p1 || leaderArea === p2 || isATown(p0))
 					{
-						//Say("!Found Portal");
+						if(debug)
+							Say("!Found Portal");
 						if(NTC_InTown(me) && NTC_GetSkillLevel(43))
 						{
 							NTC_CastSkill(43, NTC_HAND_RIGHT, _portal);
@@ -1343,7 +1352,7 @@ function TP(msg) // Done
 			{
 				if(!NTM_MakeTP())
 				{
-					Say("Out of tp scrolls!");
+					Say("Failed to make a TP");
 				}
 				break;
 			}
@@ -1377,7 +1386,7 @@ function TP(msg) // Done
 					NTM_TakeWaypoint(wpID);
 					if(!NTM_MakeTP())
 					{
-						Say("Out of tp scrolls!");
+						Say("Failed to make a TP");
 					}
 					break;
 				}
@@ -1395,7 +1404,7 @@ function TP(msg) // Done
 					NTM_TakeWaypoint(wpID);
 					if(!NTM_MakeTP())
 					{
-						Say("Out of tp scrolls!"); // this too
+						Say("Failed to make a TP"); // this too
 					}
 				}
 			}
