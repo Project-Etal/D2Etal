@@ -901,8 +901,8 @@ function NTCS_DiaSpam(){
 			for(var i=0;i<5;i++) {
 				if(i == 0 || i == 2 || i == 3) // Added delays to prevent trap miscast
 					NTC_Delay(25);
-				if(NTConfig_TrapSet[i] > 0)
-					NTC_CastSkill(NTConfig_TrapSet[i], NTC_HAND_RIGHT, _attackPos[i*2],_attackPos[(i*2)+1]);
+				if(NTConfig_ActBossTrapSet[i] > 0)
+					NTC_CastSkill(NTConfig_ActBossTrapSet[i], NTC_HAND_RIGHT, _attackPos[i*2],_attackPos[(i*2)+1]);
 			}
 			_trapsPreCasted = true;
 		}
