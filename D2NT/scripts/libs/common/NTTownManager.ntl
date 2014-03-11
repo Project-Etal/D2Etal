@@ -261,6 +261,53 @@ function NTTMGR_TownManager(simple)
 		NTC_SendLogToOOG(NTC_LOG_COMMON, 'If this is not set as entry point, either set NTConfig_AutoMule to false, or use the AutoMulingSystem entry point!');
 		}
 	}
+	NTTMGR_FreeGold();
+}
+
+function NTTMGR_FreeGold()
+{
+	CheckForGoldWho = ["akara", "fara", "ormus", "jamella", "malah"];
+	if((me.GetStat(14) + me.GetStat(15)) != ((me.GetStat(12) * 10000) + 2500000)){
+		switch(me.act){
+			case 1:
+				if(!NTTM_TownMove(CheckForGoldWho[0])) {
+					NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+					return;
+				}
+				NTSI_PickItems();
+				break;
+			case 2:
+				if(!NTTM_TownMove(CheckForGoldWho[1])) {
+					NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+					return;
+				}
+				NTSI_PickItems();
+				break;
+			case 3:
+				if(!NTTM_TownMove(CheckForGoldWho[2])) {
+					NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+					return;
+				}
+				NTSI_PickItems();
+				break;
+			case 4:
+				if(!NTTM_TownMove(CheckForGoldWho[3])) {
+					NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+					return;
+				}
+				NTSI_PickItems();
+				break;
+			case 5:
+				if(!NTTM_TownMove(CheckForGoldWho[4])) {
+					NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+					return;
+				}
+				NTSI_PickItems();
+				break;
+			default:
+				break;
+		} return;
+	}
 }
 
 function NTTMGR_VisitTown()
@@ -333,16 +380,12 @@ function NTTMGR_VisitAkara()
 		if(NTT_DoInteract(_npc))
 		{
 			if(_NTTMGR_DoID || _NTTMGR_BuyPotsInt || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey)
-			//if(_NTTMGR_DoID || _NTTMGR_BuyPots || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey)
 			{
 				if(NTT_DoTrade(_npc))
 				{
 					if(_NTTMGR_BuyPotsInt)
 						NTT_FillBelt(_npc);
-					//if(_NTTMGR_BuyID) {
 						NTT_FillTome(_npc);
-					//}
-					//if(_NTTMGR_BuyTP)
 						NTT_FillTome(_npc, 1);
 					if(_NTTMGR_BuyKey)
 						NTT_FillKey(_npc);
@@ -470,10 +513,7 @@ function NTTMGR_VisitDrognan()
 			{
 				if(_NTTMGR_BuyPotsInt)
 					NTT_FillBelt(_npc);
-				//if(_NTTMGR_BuyID) {
 					NTT_FillTome(_npc);
-				//}				
-				//if(_NTTMGR_BuyTP)
 					NTT_FillTome(_npc, 1);
 				if(_NTTMGR_DoID)
 					NTTMGR_IDItems(_npc);
@@ -567,10 +607,7 @@ function NTTMGR_VisitOrmus()
 				{
 					if(_NTTMGR_BuyPotsInt)
 						NTT_FillBelt(_npc);
-					//if(_NTTMGR_BuyID) {
 						NTT_FillTome(_npc);
-					//}					
-					//if(_NTTMGR_BuyTP)
 						NTT_FillTome(_npc, 1);
 					if(_NTTMGR_DoID)
 						NTTMGR_IDItems(_npc);
@@ -697,10 +734,7 @@ function NTTMGR_VisitJamella(gamble)
 					{
 						if(_NTTMGR_BuyPotsInt)
 							NTT_FillBelt(_npc);
-						//if(_NTTMGR_BuyID){
 							NTT_FillTome(_npc);
-						//}
-						//if(_NTTMGR_BuyTP)
 							NTT_FillTome(_npc, 1);
 						if(_NTTMGR_BuyKey)
 							NTT_FillKey(_npc);
@@ -778,10 +812,7 @@ function NTTMGR_VisitMalah()
 				{
 					if(_NTTMGR_BuyPotsInt)
 						NTT_FillBelt(_npc);
-					//if(_NTTMGR_BuyID){
 						NTT_FillTome(_npc);
-					//}
-					//if(_NTTMGR_BuyTP)
 						NTT_FillTome(_npc, 1);
 					if(_NTTMGR_BuyKey)
 						NTT_FillKey(_npc);
@@ -1369,10 +1400,7 @@ function NTTMGR_VisitCain(check){
 						if(_NTTMGR_BuyPotsInt || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey){
 							if(_NTTMGR_BuyPotsInt)
 								NTT_FillBelt(_npc);
-							//if(_NTTMGR_BuyID){
 								NTT_FillTome(_npc);
-							//}
-							//if(_NTTMGR_BuyTP)
 								NTT_FillTome(_npc, 1);
 							if(_NTTMGR_BuyKey)
 								NTT_FillKey(_npc);
@@ -1422,10 +1450,7 @@ function NTTMGR_VisitCain(check){
 						if(_buy && (_NTTMGR_DoID || _NTTMGR_BuyPotsInt || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey)){
 							if(_NTTMGR_BuyPotsInt)
 								NTT_FillBelt(_npc);
-							//if(_NTTMGR_BuyID){
 								NTT_FillTome(_npc);
-							//}
-							//if(_NTTMGR_BuyTP)
 								NTT_FillTome(_npc, 1);
 						}
 						me.Cancel(1);
@@ -1460,10 +1485,7 @@ function NTTMGR_VisitCain(check){
 						if(_NTTMGR_BuyPotsInt || _NTTMGR_BuyTP || _NTTMGR_BuyID){
 							if(_NTTMGR_BuyPotsInt)
 								NTT_FillBelt(_npc);
-							//if(_NTTMGR_BuyID){
 								NTT_FillTome(_npc);
-							//}
-							//if(_NTTMGR_BuyTP)
 								NTT_FillTome(_npc, 1);
 						}
 						me.Cancel(1);
@@ -1500,10 +1522,7 @@ function NTTMGR_VisitCain(check){
 						if(_NTTMGR_BuyPotsInt || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey) {
 							if(_NTTMGR_BuyPotsInt)
 								NTT_FillBelt(_npc);
-							//if(_NTTMGR_BuyID){
 								NTT_FillTome(_npc);
-							//}
-							//if(_NTTMGR_BuyTP)
 								NTT_FillTome(_npc, 1);
 							if(_NTTMGR_BuyKey)
 								NTT_FillKey(_npc);
@@ -1542,10 +1561,7 @@ function NTTMGR_VisitCain(check){
 						if(_NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey || _NTTMGR_BuyPotsInt) {
 							if(_NTTMGR_BuyPotsInt)
 								NTT_FillBelt(_npc);
-							//if(_NTTMGR_BuyID){
 								NTT_FillTome(_npc);
-							//}
-							//if(_NTTMGR_BuyTP)
 								NTT_FillTome(_npc, 1);
 							if(_NTTMGR_BuyKey)
 								NTT_FillKey(_npc);
