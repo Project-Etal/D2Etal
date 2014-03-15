@@ -445,6 +445,7 @@ function NTM_UsePortal(how, dest, ownername, portal)
 	if(NTM_ChangeAreaInt(how, dest, ownername, portal))
 	{
 		NTC_PingDelay(NTConfig_AreaDelay);
+		if(me.areaid == 103){ Delay(250);NTM_MoveTo(103, 5046, 5037);}// wall bug fix
 		return true;
 	}
 
@@ -1193,7 +1194,8 @@ function NTM_KoMoveToStair(areaId, subAreaId, offsetX, offsetY, clearpath) {
 }
 
 var wpsDontHave = [];
-function NTM_CheckWps() { 
+function NTM_CheckWps() {
+	wpsDontHave = [];// clears array before rebuilding it
 	for(var i = 0; i < 39; i++) {
 		if(!GetWaypoint(i)) {
 			if(debugVoyageTo) { Print(COLOR_1 + "We don't have wp # " + NTC_WPIdToAreaId[i]); }
