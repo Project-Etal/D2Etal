@@ -518,3 +518,8 @@ var NTConfig_TpHarem;
 var NTConfig_KillCouncils;
 var NTConfig_ClearCS;
 var NTConfig_CSDodge;
+
+// Chanter variables
+	var NTConfig_ChantLocation;
+	var NTConfig_PortalWait;
+	var NTConfig_DisplayTime;
