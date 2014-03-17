@@ -144,6 +144,11 @@ function NT_LoadConfig()
 	//NTConfig_Script.push("NTMooMooFarm.ntj");			// There are currently NO options for this script, still working on it
 		NTConfig_CowKingChicken = 95;  					// percentage of king's hp if below this the bot will close d2.  Set to 0 to dissable.  Note that this has a limited range will NOT help in pubs
 
+	//NTConfig_Script.push("NTChanter.ntj");
+		NTConfig_ChantLocation = 35; 					// valid wp area only or will cause error eg 35 = catacombs - 2 for outside town act1
+		NTConfig_PortalWait = 20; 						// Time in seconds to wait at Tp's
+		NTConfig_DisplayTime = false;					// Enable overhead gametime remaing display
+
 	//------------------------------------------------------------------------------
 	// Act 2 Scripts
 	//------------------------------------------------------------------------------
