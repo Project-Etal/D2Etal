@@ -1,0 +1,1396 @@
+//////////////////////////////////
+//    Chanter script by Ned     //
+//          Version 2           //
+//////////////////////////////////
+
+var _waypy = [3, 4, 5, 6, 27, 29, 32, 35, 48, 42, 57, 43, 44, 52, 74, 46, 76, 77, 78, 79, 80, 81, 83, 101, 106, 107, 111, 112, 113, 115, 123, 117, 118, 129];
+var _waypx = ["cold", "stony", "dark", "black", "outer", "jail", "inner", "cat", "sewer", "dry", "halls", "far", "lost", "palace", "arcane", "canyon", "spider", "great", "flayer", "lower", "kurast", "upper", "travincal", "durance", "city", "river", "frigid", "arreat", "cryst", "glacial", "pain", "frozen", "ancient", "world"];
+var busy = true;
+const _ENCHANT_RANGE = 25;
+var timex = Math.round(GetTickCount() / 1000);
+var gameEnding = false;
+
+function NTMain()
+{
+
+	Include("libs/common/NTCommon.ntl");
+	NTC_IncludeLibs();
+	NTC_IncludeConfig("NTBot/char_configs");
+	
+	NT_LoadConfig();
+	NTSI_LoadNIPFiles("NTBot/item_configs");
+	
+	NTA_Initialize();
+	
+	RegisterEvent(EVENT_GAMEMSG, CH_GameMsgEvents);
+	
+	Print(COLOR_1 + "Chanter Script Started");
+	var rectime = 120+(NTC_GetSkillLevel(52)*24);
+	Print("Suggested maxgametime = " + rectime);
+	
+	if(me.areaid != NTConfig_ChantLocation){NTTM_CheckAct();}
+	
+	CH_CheckMyLocation();
+
+	CH_MyLocation();
+
+	while (me.ingame) {
+		CH_DoEnchant();
+		Delay(998);
+		EndingGame();
+		if(!busy && NTConfig_DisplayTime && me.areaid == NTConfig_ChantLocation){Say("!" + CH_Time());}
+	}
+
+
+	NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+}
+
+function CH_GameMsgEvents(msg, type){
+
+   	if(type == 4 && (msg.indexOf("stronger") != -1))
+		{	
+			Say("/m " + msg.split("(")[0] + " I'm at " + GetArea(NTConfig_ChantLocation).name + " to get chant");
+			Say("/m " + msg.split("(")[0] + " My commands : commands : chant : timeleft : wp " + "\"" + "name" + "\"" + " : makecows");
+		}
+	
+	if(type == 4 && (msg.indexOf("slain") != -1))
+		{	Say("A moments silence for the fallen hero");}
+	
+	if(msg.indexOf(me.name) != -1 || type != 0 )// eliminates useless msg's
+		{return;}
+	
+	if((msg.indexOf("timeleft") != -1))
+		{Say(CH_Time());return}
+			
+	if((msg.indexOf("commands") != -1))
+		{
+			Say("My commands : commands : chant : timeleft : wp " + "\"" + "name" + "\"" + " : makecows");
+		}
+
+	if((msg.indexOf("chant") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true; CH_Chant(msg); busy = false; return;
+			}
+			
+	if((msg.indexOf("wp") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_MakeWpTp(msg);busy = false; return;
+			}
+		
+	if((msg.indexOf(".makecows") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_MakeCows(msg); busy = false; return;
+			}
+	
+		if((msg.indexOf(".and") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_AndarielQuest(msg);return;
+			}
+			
+	if((msg.indexOf(".cube") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_CubeQuest(msg);
+			}
+			
+	if((msg.indexOf(".amulet") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_AmuletQuest(msg);
+			}
+			
+	if((msg.indexOf(".staff") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_StaffQuest(msg);
+			}
+			
+	if((msg.indexOf(".summoner") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_SumonerQuest(msg);
+			}
+		
+	if((msg.indexOf(".duriel") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_DurielQuest(msg);
+			}
+			
+	if((msg.indexOf(".travincal") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_TravQuest(msg);
+			}
+
+	if((msg.indexOf(".mephisto") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_MephistoQuest(msg);return;
+			}
+
+	if((msg.indexOf(".izual") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_IzualQuest(msg);return;
+			}
+
+	if((msg.indexOf(".diablo") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_DiabloQuest(msg);return;
+			}
+
+	if((msg.indexOf(".shenk") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_ShenkQuest(msg);return;
+			}
+	
+	if((msg.indexOf(".anya") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_Anya(msg);return;
+			}
+	
+	if((msg.indexOf(".ancients") != -1))
+			{	if(busy){ Say("Busy - retry in a moment"); return;}
+				busy = true;CH_AncientsQuest(msg);return;
+			}
+
+	return;
+}
+
+function CH_CheckMyLocation()
+{
+	switch(NTConfig_ChantLocation)
+			{
+			case 1:
+			case 40:
+			case 75:
+			case 103:
+			case 109:Print("Invalid location set - setting to 35")
+					NTConfig_ChantLocation = 35
+					break;
+			}
+	return;
+}
+
+function CH_MyLocation()
+{
+	if(NTTMGR_CheckScrolls(1) < 8){NTTM_CheckAct();NTTMGR_TownManager();}
+	if(me.areaid == NTConfig_ChantLocation){busy = false; return;}
+	if(me.areaid == 1 || me.areaid == 40 || me.areaid == 75 || me.areaid == 103 || me.areaid == 109)
+		{NTTMGR_TownManager(); NTTM_TownMove("waypoint");}
+	if(NTConfig_ChantLocation == 2)
+		{
+		if(me.areaid != 1){NTM_TakeWaypoint(1);}
+		NTTMGR_TownManager();
+		NTTM_TownMove("exit");
+		NTTM_OutOfAct1();
+		busy = false;
+		return;
+		}
+
+	NTM_TakeWaypoint(NTConfig_ChantLocation);
+	if(me.areaid != NTConfig_ChantLocation){NTTM_CheckAct();return CH_MyLocation();}
+	NTM_MoveTo(me.areaid, me.x-5, me.y-5);
+	var xx = me.x, yy = me.y
+	NTA_ClearPosition(40, false);
+	NTM_MoveTo(me.areaid, xx, yy);
+	busy = false;
+	return;
+}
+
+function CH_GetPlayer(msg)
+{
+	var _player = GetPlayerUnit();
+
+		while(_player.GetNext())
+			{	
+				if(msg.indexOf(_player.name) != -1)
+					{return _player;}
+		}
+
+	return;
+}
+
+	
+function CH_MakeWpTp(msg)
+{
+		_playerx =	CH_GetPlayer(msg);
+		if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+
+		msg = msg.split(":")[1];
+		
+		for(var i = 0 ; i < _waypx.length ; i++)
+			{	if(msg.indexOf(_waypx[i]) != -1)
+					{
+						Say( "Creating portal at " + GetArea(_waypy[i]).name);
+						if(me.areaid == 2)
+							{
+								NTTM_CheckAct();
+								NTTMGR_TownManager();
+								NTTM_TownMove("waypoint");
+							}
+						NTM_TakeWaypoint(_waypy[i]);
+						NTM_MoveTo(me.areaid, me.x-5, me.y-5);
+						NTM_MakeTP();
+						Say("Portal at " + GetArea(_waypy[i]).name + " for " + _playerx.name);
+
+						Delay(2000);
+						return CH_MyLocation();
+					}
+			}
+
+	return CH_MyLocation();
+}
+
+function CH_Chant(msg)
+{
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	
+	if((_playerx.areaid) != me.areaid)
+		{
+			Say(_playerx.name +" Git YO ASS to " + GetArea(NTConfig_ChantLocation).name + " to get chant")
+			Say("If you dont have waypoint ask for portal eg. wp cat")
+			return;
+		}
+	if (NTC_InTown())
+			{Say("Cant chant in town");return;}
+	
+    var _iEnchant;
+    var _unit;
+
+    _unit = NTC_FindUnit(NTC_UNIT_PLAYER);
+    if (_unit)
+    {
+        do
+        {
+            if (_unit.name != me.name && _unit.name == _playerx.name && GetDistance(me, _unit) < _ENCHANT_RANGE && _unit.mode != 0)
+            {
+				NTP_DoPrecastCTA(true);
+ 				NTC_CastSkill(52, NTC_HAND_RIGHT, _unit);
+
+            }
+        } while (_unit.GetNext());
+    }
+
+    _unit = NTC_FindUnit(NTC_UNIT_MERC);
+    if (_unit)
+    {
+        do
+        {	_parent = _unit.GetParent();
+			if(_parent)
+				{
+				if (GetDistance(me, _unit) < _ENCHANT_RANGE && NTC_InMyParty(_parent.name) && _parent.name != me.name  && _unit.mode != 0)
+                NTC_CastSkill(52, NTC_HAND_RIGHT, _unit);
+				}
+        } while (_unit.GetNext());
+    }
+	busy = false;
+	return;
+}
+
+function CH_DoEnchant()
+{
+	if (NTC_InTown())
+			return;
+	
+	var _iEnchant, _unit, _parent;
+    _unit = NTC_FindUnit(NTC_UNIT_PLAYER);
+    if (_unit)
+    {
+        do
+        {
+            if (_unit.name != me.name && GetDistance(me, _unit) < _ENCHANT_RANGE && NTC_InMyParty(_unit.name) && _unit.mode != 0)
+            {
+ 
+                if (!_unit.GetState(16))
+					{
+					NTP_DoPrecast(true);
+					NTC_CastSkill(52, NTC_HAND_RIGHT, _unit);
+
+					}
+            }
+        } while (_unit.GetNext());
+    }
+
+    _unit = NTC_FindUnit(NTC_UNIT_MERC);
+    if (_unit)
+    {
+        do
+        {	_parent = _unit.GetParent();
+			if(_parent)
+				{
+				if (GetDistance(me, _unit) < _ENCHANT_RANGE && !_unit.GetState(16) && NTC_InMyParty(_parent.name) && _unit.mode != 0)
+                NTC_CastSkill(52, NTC_HAND_RIGHT, _unit);
+				}
+        } while (_unit.GetNext());
+    }
+}
+
+function CH_Time()
+{
+	if(me.maxgametime == 0){
+		Say("Indefinite");
+		Print("Maxgametime set to 0")
+		return;
+	}
+	_countInGame = Math.round(GetTickCount() / 1000) - timex
+	timermin = Math.floor((me.maxgametime - Math.floor((GetTickCount() / 1000)-timex))/60, 0)
+	timersec = (me.maxgametime - Math.floor((GetTickCount() / 1000)-timex))-(timermin*60)
+	timemsg = ("Time left " + timermin + " mins " + timersec + " secs")
+		
+	return timemsg;
+
+}
+
+function CH_QuesterCheck()
+{
+		_player = GetPlayerUnit();
+		while(_player.GetNext()){
+			if(_player.areaid == me.areaid)
+				{return true;}
+				}
+		return false;		
+		
+}
+
+function CH_WaitForQuestor()
+{
+	var timerstart; var timerend
+	timerstart = Math.round(GetTickCount() / 1000);
+	while(!CH_QuesterCheck())
+	{		
+		CH_Guard(20);
+		Delay(350)
+		timerend = Math.round(GetTickCount() / 1000);
+		if(timerend > timerstart + NTConfig_PortalWait){return false;}
+	}
+
+	return true;
+}
+
+function CH_MakeCows(msg)
+{
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+
+	Say("Request to make cow portal accepted - on my way");
+	if(me.areaid == 2){NTTM_CheckAct();NTTM_TownMove("waypoint");}
+	
+	var _wirtbody, _cube, _leg, _portal, _stash, _items, i, _npc, prearea;
+	for (i = 0; i < 10; i++){//need to add a check for leg with me.getitems also
+		_leg = NTC_FindUnit(NTC_UNIT_ITEM, 88);
+		if (_leg)
+		break;
+	}
+	//Checks If you already have the leg
+	_items = me.GetItems();
+	for (i = 0; i < _items.length;i++){
+		if (_items[i].classid == 88) {
+			Print (COLOR_4 + "Already Got Leg");
+			_leg = _items[i];
+		}
+	}
+	if (!_leg){
+		_leg = CH_GetWirtsLeg();
+			if(!_leg){
+				Say(COLOR_1 + "Leg already taken cannot make cows");
+				NTTM_CheckAct();
+				CH_MyLocation();
+				return;
+			}
+		}
+	else{
+		NTM_TakeWaypoint(1);
+	}
+	if(CH_AlreadyTombs()){	
+
+		NTTM_TownMove("akara");
+		for(var i = 0 ; i < 10 ; i++){
+			_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_AKARA);
+			if(_npc)
+			break;
+		}
+		if(_npc){	
+			if(NTT_DoInteract(_npc)){
+				if(NTT_DoTrade(_npc)){
+					_NTR_DoID = NTT_CheckUnids();
+					if(_NTR_DoID)
+					NTTMGR_IDItems(_npc);
+					NTT_FillTome(_npc, 1);
+					NTT_FillTome(_npc, 0);
+					CH_SecondTomeTP(_npc, "tbk", 1);
+					_portal = CH_GetTP();
+					if(!_portal){
+						Say("No extra tome of townportal found.");
+						NTTM_CheckAct();
+						CH_MyLocation();
+						return;
+					}
+				}
+			}
+			me.Cancel(1);
+		}
+	}
+	else
+	_portal = CH_GetTP();
+	NTTM_TownMove("stash");
+	for(var i = 0 ; i < 10 ; i++){
+		_stash = NTC_FindUnit(NTC_UNIT_OBJECT, NTC_UNIT_STASH);
+		if(_stash)
+		break;
+	}
+	if(_stash){
+		if(NTM_GetCloserInt(_stash)){
+			if(NTT_DoInteract(_stash)){
+				_items = me.GetItems(NTC_UNIT_CUBE);
+				_cube = _items[0];
+				if(!_cube){
+					Say("No cube found.");
+					NTTM_CheckAct();
+					CH_MyLocation();
+					return;
+				}
+				if(NTCU_CheckCubeInventoryInt() > 0){	
+					NTCU_OpenCubeInt(_cube)
+					if(NTCU_ClearCubeInt() < 1){
+						Say("Cube cannot be emptied.");
+						NTTM_CheckAct();
+						CH_MyLocation();
+						return;
+					}
+					NTCU_CloseCubeInt();
+				}
+				NTCU_MoveItemToCubeInt(_cube,_leg)
+				NTCU_MoveItemToCubeInt(_cube,_portal)
+				NTCU_OpenCubeInt(_cube);
+				if(Transmute()){ 
+					NTC_PingDelay(NTConfig_CubingDelaysCows);
+					NTCU_CloseCubeInt();
+					NTC_PingDelay(NTConfig_CubingDelaysCows);
+					NTC_CancelMenus();// added this for testing
+					NTC_PingDelay(parseInt((NTConfig_CubingDelaysCows / 2), 10));
+				}
+				else{
+					NTC_PingDelay(NTConfig_CubingDelaysCows);
+					NTCU_CloseCubeInt();
+					NTC_PingDelay(NTConfig_CubingDelaysCows);
+					NTC_CancelMenus();// added this for testing
+					NTC_PingDelay(parseInt((NTConfig_CubingDelaysCows / 2), 10));
+				}
+			}
+		}
+	}
+
+	CH_MyLocation();
+	
+	return;
+}
+
+function CH_GetWirtsLeg()
+{
+		var _wirtbody, _leg;
+		NTM_TakeWaypoint(4);
+		
+		NTP_DoPrecast(true);
+		if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_MONSTER, 737, 10, 10)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
+			return;
+		}
+		
+		if(NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe)){
+				NTTMGR_VisitTown();
+			}
+		if(NTA_KillMonster(GetLocaleString(2872))){	
+				NTA_ClearPosition();
+			}
+
+		if(!NTM_UsePortal("Portal", 38)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_UsePortal()");
+			return;
+		}
+
+		NTM_MoveTo(me.areaid, 25047, 5178);
+		
+		NTA_ClearPosition(10, false);
+		
+		_wirtbody = NTC_FindUnit(NTC_UNIT_OBJECT, 268);
+		if(!_wirtbody){
+			NTC_SendMsgToScript("NTBotGame.ntj", "Wirt's body not found.");
+			NTTM_CheckAct();
+			CH_MyLocation();
+			return;
+		}
+		if(NTM_MoveTo(_wirtbody.areaid, _wirtbody.x+3, _wirtbody.y)){	
+			if(NTC_OpenChest(_wirtbody)){
+				NTC_PingDelay(500);
+				for (i = 0; i < 10; i++){
+					_leg = NTC_FindUnit(NTC_UNIT_ITEM, 88);
+					if (_leg)
+					break;
+				}
+				if(!NTT_CheckSpace(_leg.xsize, _leg.ysize)){
+					_prearea = me.areaid	
+					if(NTTM_CheckAct()){
+						NTTMGR_TownManager(true);
+						NTTM_TownMove("portalspot")
+						NTM_UsePortal("BluePortal", _prearea)
+					}
+				}
+				for (i = 0; i < 20; i++){	
+					if ((i % 5) == 0){
+						if (_leg.mode == 3 || _leg.mode == 5){
+							if (NTC_ClearCursor())
+							NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, _leg);
+						}
+					}
+					NTC_PingDelay(100);
+					if (_leg.mode != 3 && _leg.mode != 5){
+						Print(COLOR_4 + "Got Leg");
+						NTC_PingDelay(200);
+						break;
+					}
+				}
+			}
+		}
+		if(!_leg){
+			Say("Wirts leg has been taken.");
+
+			return;
+		}
+		
+	NTTM_CheckAct();
+
+	return _leg;
+}
+
+function CH_SecondTomeTP(npc, type, amount)
+{
+   var _items;
+   var _counter = 0;
+
+   if(arguments.length < 1)
+      return false;
+   if(arguments.length < 2)
+      type = 0;
+   if(arguments.length < 0)
+      amount = 1;
+   if(amount == 0)
+      return false;
+   if(type)
+      _items = npc.GetItems("tbk");
+   if(_items)
+   {
+      if(_items.length > 0)
+      {
+         for(var i = 0 ; i < amount ; i++)
+         {
+            if(NTT_ShopItem(_items[0], npc, 2))
+               _counter++;
+         }
+      }
+   }
+   return (_counter > 0);
+}
+
+function CH_GetTP()
+{
+	var _portals = me.GetItems("tbk");
+	if (_portals){
+		for (var i = 0; i < _portals.length; i++){
+			if (_portals[i].mode == 0 && (_portals[i].itemloc != 0 || NTConfig_Columns[_portals[i].y][_portals[i].x] > 0)){
+				return _portals[i];
+			}
+		}
+	}
+	return false;
+}
+
+function CH_AlreadyTombs()
+{
+	var portalbook = me.GetItems("tbk");
+	if(portalbook && portalbook.length <= 1)
+		return true;
+
+	return false;
+}
+
+function CH_Guard(range){
+	var posx = me.x, posy = me.y
+	NTA_ClearPosition(range);
+	NTM_MoveTo(me.areaid, posx, posy);
+	return;
+}
+
+function EndingGame(){
+
+	if(me.maxgametime == 0)
+		return;
+
+	if((Math.round(GetTickCount() / 1000) - timex) > me.maxgametime -30 && gameEnding == false){
+		Say("Game ending in 30 seconds");
+		Say("Create next game if you need a Quest, I will attempt to join");
+		gameEnding = true;
+	}
+}
+
+function CH_MonsterRanged(area, monsterid, range)
+{
+	var _monst = GetPresetUnits(area, NTC_UNIT_MONSTER, monsterid);
+	if(_monst.length < 1){Print("Error finding Monster");NTTM_CheckAct();return false;}
+	var posx = _monst[0].roomx*5+_monst[0].x;
+	var posy = _monst[0].roomy*5+_monst[0].y;
+	var dis = GetDistance(me.x, me.y, posx, posy)
+	if(dis < 65 ){NTA_KillMonster(monsterid);NTA_ClearPosition(30, true);return true;}
+	var _pathb = GetPath(area, posx, posy, me.x, me.y, true);
+	if(!_pathb){Print("Error finding Monster");NTTM_CheckAct();return false;}
+			
+	for(i = _pathb.length-1 ; i > -1 ; i--)
+		{
+			var dis = GetDistance(_pathb[i][0], _pathb[i][1], posx, posy)
+			if(dis < 65){Print("Distance = " + dis);break;}
+		}			
+
+	NTP_DoPrecast();
+	NTM_MoveTo(me.areaid, _pathb[i][0], _pathb[i][1]);
+	CH_Guard(20);
+	return true;
+}
+
+function CH_AndarielQuest(msg)
+{
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to kill Andariel accepted - on my way")
+	if(me.areaid == 2){CH_AreaTwo(35);}
+	if(me.areaid != 35){NTM_TakeWaypoint(35);}
+	NTP_DoPrecast(true);
+		
+	for(var i = 0 ; i < 2 ; i++)
+	{
+		if(!NTM_MoveToStair(me.areaid, 36+i))
+		{
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
+			return;
+		}
+
+		if(!NTM_TakeStair(36+i))
+		{
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()");
+			return;
+		}
+	}
+			
+		NTC_PingDelay(100);
+		var xx = me.x; var yy = me.y
+		
+		var _clearpos = [22593, 9639, 22594, 9618, 22594, 9618];
+		
+		for(i = 0; i < _clearpos.length; i+=2)
+		{
+			if(!NTM_MoveTo(me.areaid, _clearpos[i], _clearpos[i+1]))
+			{
+				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveTo()");
+				return;
+			}	
+			NTA_ClearPosition(20, false);
+				NTC_PingDelay(200);
+		}
+
+		NTM_MoveTo(me.areaid, xx, yy);
+					
+		NTM_MakeTP();
+		Say(_playerx.name + " use my TP now for Andariel");
+
+		if(!CH_WaitForQuestor())
+			{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 1, me.name); CH_MyLocation();return;}
+		
+		NTP_DoPrecast(true);
+		
+		NTA_KillMonster(156);
+	
+		Say("Andariel has been killed - returning to chanting");
+		NTM_MoveTo(me.areaid, xx, yy);
+		NTM_UsePortal("BluePortal", 1, me.name);
+		CH_MyLocation();
+	return;
+}
+
+function CH_CubeQuest(msg)
+{
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to get Cube accepted - on my way")
+	
+		NTM_TakeWaypoint(57);
+
+		NTP_DoPrecast();
+	
+		NTM_MoveToStair(me.areaid, 60);
+
+		NTM_TakeStair(60);
+
+		NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 354, -5, -5);
+
+		var posx = me.x
+		var posy = me.y
+
+		NTA_ClearPosition(30, false);
+		NTM_MoveTo(me.areaid, posx, posy);
+		NTM_MakeTP();
+		Say(_playerx.name + " use my TP to get Cube");
+
+		Delay(2000);
+	Say("Returning to chanting")	
+	NTM_UsePortal("BluePortal", 40, me.name);
+	CH_MyLocation();
+	
+	return;
+}
+
+function CH_StaffQuest(msg)
+{
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to get Staff accepted - on my way")
+	if(me.areaid == 2){NTTM_CheckAct();NTTM_TownMove("waypoint");}
+	
+		NTM_TakeWaypoint(43);
+
+		NTP_DoPrecast(true);
+		
+		for(i=0; i<3; i++)
+		{		
+			if(!NTM_MoveToStair(me.areaid, 62+i))
+			{ 
+				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()"); 
+				return; 
+			} 
+
+			if(!NTM_TakeStair(62+i)) 
+			{ 
+				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()"); 
+				return; 
+			} 
+		}
+
+		NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 356);
+
+		NTA_ClearPosition(25, false);
+
+		NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 356, -5, -5);
+
+		Delay(3000);
+
+		NTM_MakeTP();
+		Say(_playerx.name + " use my TP now for staff")
+
+		Delay(2000)
+	Say("Returning to chanting")
+	NTM_UsePortal("BluePortal", 40, me.name);
+	CH_MyLocation();
+	
+	return;
+}
+
+function CH_AmuletQuest(msg)
+{	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to get Amulet accepted - on my way")
+	if(me.areaid == 2){NTTM_CheckAct();NTTM_TownMove("waypoint");}
+	
+		!NTM_TakeWaypoint(44);
+
+		NTP_DoPrecast(true);		
+			
+		NTM_MoveToStair(45, 58);
+
+		NTM_TakeStair(58);
+			
+		NTM_MoveToStair(me.areaid, 61); 
+
+		NTM_TakeStair(61)
+		
+		NTA_ClearLevel();
+		
+		NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 149, +4, -8);
+
+		NTM_MakeTP();
+		Say(_playerx.name + " use my TP now for Amulet")
+
+		Delay(2000);
+
+	Say("Remember to talk to Drognan - returning to chanting")
+	Delay(1000);
+	NTM_UsePortal("BluePortal", 40, me.name);
+	CH_MyLocation();
+	
+	return;
+}
+
+function CH_SumonerQuest(msg)
+{	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to do Sumoner accepted - on my way")
+
+	NTM_TakeWaypoint(74);
+
+	NTP_DoPrecast(true);
+		
+	var _unit = GetPresetUnits(me.areaid, 2);
+		
+	for(i=0;i < _unit.length; i++)
+		{
+		if(_unit[i].id == 357)
+			{
+				var _journalx = _unit[i].roomx*5+_unit[i].x;
+				var	_journaly = _unit[i].roomy*5+_unit[i].y;
+			}
+		}
+
+	if(_journalx < 25300)
+			NTM_MoveTo(me.areaid, _journalx+55, _journaly);
+	if(_journaly < 5300)
+			NTM_MoveTo(me.areaid, _journalx+15, _journaly+55);
+	if(_journalx > 25500)
+			NTM_MoveTo(me.areaid, _journalx-40, _journaly+15);
+	if(_journaly > 5500)
+		NTM_MoveTo(me.areaid, _journalx+15, _journaly-40);
+
+		var posx = me.x
+	var posy = me.y
+
+	for(i=0; i<5; i++){	CH_Guard(20);}
+
+	NTM_MakeTP();
+		
+	Say("Come Now for Sumoner")
+
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 40, me.name); CH_MyLocation();return}
+					
+	NTA_ClearPosition(30, false);	
+		
+	NTM_MoveToPresetUnit(me.areaid, 2, 357, 0, 0, true);
+
+	NTM_MoveToPresetUnit(me.areaid, 2, 357, +10, +10);
+		
+	Say("READ JOURNAL then talk to Cain - returning to chanting");
+	Delay(2000);
+	NTTM_CheckAct();
+	CH_MyLocation();
+	
+	return;
+}
+
+function CH_DurielQuest(msg)
+{	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to kill Duriel accepted - on my way")
+	if(me.areaid == 2){CH_AreaTwo(46);}
+	if(me.areaid != 46){NTM_TakeWaypoint(46);}
+
+	NTP_DoPrecast(true);
+		
+	_tombs = GetRoom();
+
+	if(!_tombs)
+		{
+			NTC_SendMsgToScript("NTBotGame.ntj", "GetRoom()");
+			return;
+		}
+
+	NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_TILE, _tombs.correcttomb-28)
+
+	_tileunit = NTC_FindUnit(NTC_UNIT_TILE, _tombs.correcttomb-28);
+
+	if(!_tileunit)
+		{
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTC_FindUnit()");
+			return;
+		}
+
+	NTM_TakeStair(_tileunit.subareaid)
+
+	NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 152, -2, 2)
+	var xx = me.x; var yy = me.y
+		
+	NTA_ClearPosition(30, false);
+					
+	NTC_Delay(150);
+	NTM_MoveTo(me.areaid, xx, yy);
+		
+	NTM_MakeTP();
+
+	Say(_playerx.name + " bring Completed Staff for Duriel Quest")
+
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 40, me.name); CH_MyLocation();return}
+			
+	timerstart = Math.round(GetTickCount() / 1000);	
+		while(!NTC_FindUnit(NTC_UNIT_OBJECT, 100))
+		{
+			NTA_ClearPosition(20, false);
+			NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 152, -2, 2);
+			NTC_Delay(500);
+			timerend = Math.round(GetTickCount() / 1000);
+				if(timerend >= timerstart + 25){
+					NTM_UsePortal("BluePortal", 40, me.name); CH_MyLocation(); return;}
+		}
+
+	Delay(2000);
+
+	while(me.areaid != 73){
+		NTM_TakeUnit(NTC_UNIT_OBJECT, 100)
+		Delay(200);
+		if(me.areaid == 73) { break;}
+		}
+
+	NTA_KillMonster(211)
+								
+	Say("Go Through and talk to Tyreal - returning to chanting")
+
+	NTTM_CheckAct();
+	CH_MyLocation();
+	return;
+}
+
+
+function CH_TravQuest(msg)
+{	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to do Council Quest accepted - on my way")
+
+	if(me.areaid == 2){NTTM_CheckAct();NTTM_TownMove("waypoint");}
+	
+	NTM_TakeWaypoint(83);
+	_posx = me.x
+	_posy = me.y
+	var trav = [28, 30, 0, 45, 0, 75, 0, 95, 23, 110, 23 ,75 , 23, 90]
+	for(p = 0; p < trav.length; p += 2)
+		{
+			NTM_MoveTo(me.areaid, _posx+trav[p], _posy-trav[p+1], 2);
+			CH_Guard(25);
+		}
+	CH_Guard(30);
+	_posx = me.x
+	_posy = me.y
+	NTM_MakeTP();
+
+	Say(_playerx.name + " use my TP now for Council quest")
+
+	var timerstart; var timerend
+	timerstart = Math.round(GetTickCount() / 1000);
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 75, me.name); CH_MyLocation();return}
+	
+	var travfail = 0;
+	NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 404);
+	if(!NTA_KillMonster(GetLocaleString(2862)))
+		travfail=travfail+1;//Print("Failed on Geleb");
+	if(!NTA_KillMonster(GetLocaleString(2860)))
+		travfail=travfail+1;//Print("Failed on Toorc");
+	if(!NTA_KillMonster(GetLocaleString(2863)))
+		travfail=travfail+1;//Print("Failed on Ismail");
+	
+	NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 404);
+	NTA_ClearPosition(40);
+	
+	NTM_MoveTo(me.areaid, _posx, _posy, 0, true);
+	CH_Guard(20);
+	if(travfail == 3)
+		Say("failed quest Council already killed - returning to chanting")
+	else
+		Say("Council has been killed - returning to chanting")
+		
+	Say("Talk to Cain in Town")
+	Delay(2000);
+
+	NTM_UsePortal("BluePortal", 75, me.name);
+	CH_MyLocation();
+	
+	return;
+}
+
+function CH_MephistoQuest(msg)
+{	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+
+	Say("Request to kill Mephisto accepted - on my way")
+
+	if(me.areaid == 2){CH_AreaTwo(101);}
+	if(me.areaid != 101){NTM_TakeWaypoint(101);}
+	NTP_DoPrecast(true);
+		
+	NTM_MoveToStair(me.areaid, 102)
+
+	NTM_TakeStair(102)
+
+	NTM_MoveTo(me.areaid, 17640, 8068)
+
+	NTA_ClearPosition(40, false);
+
+	NTM_MoveTo(me.areaid, 17589, 8068)
+
+	NTM_MakeTP();
+
+	Say(_playerx.name + " use my TP now for Mephisto")
+
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 75, me.name); CH_MyLocation();return}
+
+	NTA_KillMonster(242)
+		
+	NTA_ClearPosition(25, false);
+
+	Say("Use red Portal to get to Act 4")
+	Delay(500);
+	NTA_ClearPosition(40, false);
+	NTM_MoveTo(me.areaid, 17597, 8068);
+	NTA_ClearPosition(40, false);
+	NTM_MoveTo(me.areaid, 17597, 8068);
+	Delay(2000);
+	Say("Mephisto has been killed - returning to chanting")
+	NTM_TakeUnit(NTC_UNIT_OBJECT, 342);
+	CH_MyLocation();
+	
+	return;
+}
+
+function CH_IzualQuest(msg)
+{	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+
+	Say("Request to kill Izual accepted - on my way")
+	if(me.areaid == 2){CH_AreaTwo(106);}
+	if(me.areaid != 101){NTM_TakeWaypoint(106);}
+	NTP_DoPrecast(true);
+		
+	CH_MonsterRanged(105, 256, 20)			
+	NTM_MakeTP();
+
+	Say(_playerx.name + " use my TP now for Izual")	
+	posx = me.x; posy = me.y
+	
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 103, me.name); CH_MyLocation();return}
+
+				
+	if(!NTA_KillMonster(256))
+		{
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTA_KillMonster()");
+			return;
+		}
+				
+	NTA_ClearPosition(20);
+	NTM_UsePortal("BluePortal", 103, me.name);
+	CH_MyLocation();
+	
+	return;
+}
+
+
+function CH_DiabloQuest(msg){
+
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to kill Diablo accepted - on my way")
+	if(me.areaid == 2){CH_AreaTwo(107);}
+	if(me.areaid != 107){NTM_TakeWaypoint(107);}
+	NTP_DoPrecast(true);
+		
+	var _sanc = [7797, 5600, 7797, 5560, 7771, 5318];
+		
+	for(i = 0; i < _sanc.length; i += 2){
+		if(!NTM_MoveTo(108, _sanc[i], _sanc[i+1])){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveTo()");
+			return;
+		}
+			
+			NTC_PingDelay(100)
+	}
+
+	var _seal = [395, 396, 394, 393, 392];
+	var _sealboss = [2851, 2851, 2852, 2853, 2853];
+	var _clearpath;
+	
+		
+	for(f = 0; f < _seal.length; f++)
+	{
+		if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, _seal[f], 0, 0))
+		{
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
+			return;
+		}
+   
+		CH_OpenSeal(_seal[f])
+		
+		if(f == 1)
+		{
+			if(me.y > 5265 && me.y <= 5275)
+				NTM_MoveTo(me.areaid, 7677, 5287, 3);
+			else
+				NTM_MoveTo(me.areaid, 7675, 5321, 3)
+		}	
+		
+	if(f == 2)
+	{
+		if(me.x > 7810 && me.x <= 7825)
+			NTM_MoveTo(me.areaid, 7777, 5160, 3);
+		else
+			NTM_MoveTo(me.areaid, 7777, 5200, 3);
+	}
+		
+	if(f != 0 && f != 3)
+	{
+		for(n = 0 ; n < 20 ; n++)
+		{
+			NTC_Delay(250);
+			if(NTC_FindUnit(NTC_UNIT_MONSTER, GetLocaleString(_sealboss[f])))
+			break;
+		}
+
+		if(NTA_KillMonster(GetLocaleString(_sealboss[f])))
+		{
+			NTSI_PickItems();
+			if(NTC_PutSkill(124, NTC_HAND_RIGHT))
+			NTC_Delay(1600);
+		}
+	}
+			
+	
+		NTSI_PickItems();
+	}
+
+
+	if(!NTM_MoveTo(me.areaid, 7767, 5253))
+		{
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveTo()");
+			return;
+		}
+
+			
+	NTM_MakeTP();
+	Say(_playerx.name + " use my TP now for Diablo");
+
+
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 103, me.name); CH_MyLocation();return}
+
+	NTP_DoPrecast(true);
+
+
+	if(!NTM_MoveTo(me.areaid, 7788, 5288))
+	{
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveTo()");
+		return;
+	}
+
+	NTT_CleanPotions();
+
+	for(n = 0 ; n < 30 ; n++)
+	{
+		if(NTC_FindUnit(NTC_UNIT_MONSTER, "Diablo"))
+            break;
+		NTC_Delay(500);
+	}
+
+	NTA_KillMonster("Diablo");
+
+	if(!NTM_MoveTo(me.areaid, 7775, 5259))
+	{
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveTo()");
+		return;
+	}
+
+	Delay(2000);
+		
+	Say("Diablo has been killed - returning to chanting")
+
+	NTM_UsePortal("BluePortal", 103, me.name);
+
+	NTTM_CheckAct();
+	CH_MyLocation();
+	return;
+}
+
+
+
+function CH_OpenSeal(sealID)
+{
+	_seal = NTC_FindUnit(NTC_UNIT_OBJECT, sealID);
+	for(var i = 0 ; i < 4 ; i++)
+	{
+		if((i % 2) == 0)
+		{
+			if(GetDistance(me, _seal) > 2)
+			NTM_MoveTo(_seal.areaid, _seal.x+1, _seal.y);
+
+			NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, _seal);
+		}
+
+		NTC_Delay(200);
+
+		if(_seal.mode > 0)
+		return true;
+	}
+ 	return;
+}
+
+function CH_ShenkQuest(msg)
+{
+
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request for Shenk accepted - on my way")
+
+	if(me.areaid == 2){CH_AreaTwo(113);}
+	if(me.areaid != 111){NTM_TakeWaypoint(111);}
+	NTP_DoPrecast(true);
+	NTM_MoveTo(110, 3853, 5147, 2);CH_Guard(20);
+	NTM_MoveTo(110, 3855, 5092, 2);CH_Guard(20);
+	NTM_MoveTo(110, 3843, 5118, 2);CH_Guard(20);
+
+	NTM_MakeTP();
+	Say("Come now for Shenk");
+
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 109, me.name); CH_MyLocation();return}
+
+	NTA_KillMonster("Shenk");
+	Say("Shenk has been killed - Returning to chanting")
+
+	NTM_UsePortal("BluePortal", 109, me.name);
+	CH_MyLocation();
+	return;
+
+}
+
+function CH_Anya(msg)
+{
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to Save Anya accepted - on my way")
+
+	if(me.areaid == 2){CH_AreaTwo(113);}
+	if(me.areaid != 113){NTM_TakeWaypoint(113);}
+	NTP_DoPrecast(true);	
+
+	if(!NTM_MoveToStair(me.areaid, 114))
+	{
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToObject()");
+		return;
+	}
+
+	if(!NTM_TakeStair(114))
+	{
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()");
+		return;
+	}
+
+	if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 460, -8, -8))
+	{
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
+		return;
+	}
+
+	if(NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe)){
+			NTTMGR_VisitTown();
+	}
+		
+	NTA_ClearPosition(40, false);
+				
+	NTSI_PickItems();
+
+	var _Anya;		
+			
+	if(NTM_MoveToPresetUnit(me.areaid, 558))
+	{
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
+		return;
+	}
+				
+	NTA_ClearPosition(25, false);
+				
+	NTSI_PickItems();
+					
+	_Anya = NTC_FindUnit(NTC_UNIT_OBJECT, 558);
+				
+	if(_Anya)
+	{	
+		if(NTM_MoveTo(_Anya.areaid, _Anya.x+3, _Anya.y))
+		{
+			CH_Guard(20);
+			NTSI_PickItems();
+		}
+					
+		NTC_OpenChest(_Anya);
+		NTC_Delay(100);
+		me.Cancel(0);
+		me.Cancel(0);
+	}
+
+	NTM_MakeTP();
+				
+
+	Say(_playerx.name + " use my TP to save Anya");
+
+	CH_WaitForQuestor();
+	
+	Say("Returning to chanting")
+
+	NTM_UsePortal("BluePortal", 109, me.name);
+	CH_MyLocation();
+	return;
+}
+
+function CH_AncientsQuest(msg)
+{
+	_playerx =	CH_GetPlayer(msg);
+	if(!NTC_InMyParty(_playerx.name)){Say("Party up " + _playerx.name); return}
+	Say("Request to kill ancients accepted - on my way")
+	if(me.areaid == 2){CH_AreaTwo(118);}
+	if(me.areaid != 118){NTM_TakeWaypoint(118);}
+	NTP_DoPrecast(true);
+		
+	NTM_MoveToStair(me.areaid, 120);
+
+	NTM_TakeStair(120);
+		
+	NTM_MoveTo(me.areaid, 10057, 12645);
+
+	NTM_MakeTP();
+	Say("Come now for Ancients Quest if level 20+");
+
+	if(!CH_WaitForQuestor())
+		{Say("Your too damn slow - returning to chanting"); NTM_UsePortal("BluePortal", 109, me.name); CH_MyLocation();return}
+			
+	Say("DO NOT TOUCH ALTAR - you may not get quest");
+	Delay(5000);
+
+	NTP_DoPrecast(true);
+
+	var _Altar;	
+		
+	_Altar = NTC_FindUnit(NTC_UNIT_OBJECT, 546);
+			
+	if(_Altar)
+	{
+		NTM_MoveTo(_Altar.areaid, _Altar.x+3, _Altar.y+3)
+		NTC_OpenChest(_Altar);
+	}
+
+	Delay(120)
+	me.Cancel(0);
+	Delay(300)
+	me.Cancel(0);
+				
+	var _Korlic = NTC_FindUnit(NTC_UNIT_OBJECT, 474);
+	var _Talic = NTC_FindUnit(NTC_UNIT_OBJECT, 475);
+	var _Madawc = NTC_FindUnit(NTC_UNIT_OBJECT, 476);
+		
+	while(_Korlic.mode == 4 || _Talic.mode == 4 || _Madawc.mode == 4)
+	{
+		NTA_ClearPosition(40, false);
+		NTC_PingDelay(200);
+	}
+		
+	Say("Ancients have been killed - returning to chanting");
+	NTM_MoveTo(me.areaid, 10057, 12645);
+	NTTM_CheckAct();
+	CH_MyLocation();
+	return;
+}
