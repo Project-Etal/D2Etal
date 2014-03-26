@@ -312,13 +312,6 @@ var Extras =  {
 		var i, n, _teleport, _path, _izzy,
 			_retry = 0;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
-
-		NTTMGR_TownManager();
-
 		if (x == me.x && y == me.y) {
 			return true;
 		}
