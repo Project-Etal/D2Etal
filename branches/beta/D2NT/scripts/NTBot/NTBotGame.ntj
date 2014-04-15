@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "164-BE";
+var Rev = "165-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -196,7 +196,7 @@ function NTMain()
 	}
 
 	if (endtime != null || GetTickCount() < endtime) {
-		Say("!Waiting " + parseInt((endTime - GetTickCount())/1000)  + " seconds before exiting game!");
+		Say("!Waiting " + parseInt((endtime - GetTickCount())/1000)  + " seconds before exiting game!");
 	}
 
 	ExitGame();
@@ -282,26 +282,29 @@ function NT_GameMsgEvents(msg, type)
 				Say("/whois " + WhoDatIs);
 				return WhoDatIs;
 			}
-			else if(msg.indexOf(CloneDiabloString) != -1) {
-				CloneDiabloNotify = true;
-				SoJNotify = false;
+            else if(msg.indexOf(CloneDiabloString) != -1) {
+                CloneDiabloNotify = true;
+                SoJNotify = false;
+                NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_4 + CloneDiabloString);
+                NT_LogDclone();//log event to file
 
-				NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_4 + CloneDiabloString);
-				SetStatusText(COLOR_1 + CloneDiabloString);
-				D2NTStatus("Stop", 0, "Stop"); //This is a fake ID itll just interrupt the current status loop. Simple but effective.
-				D2NTStatus(8, 0, CloneDiabloString);
-				me.maxgametime = 0;
+                if(NTConfig_CheckCloneDiablo){
+                    me.maxgametime = 0;
+                    SetStatusText(COLOR_1 + CloneDiabloString);
+                    D2NTStatus("Stop", 0, "Stop"); //This is a fake ID itll just interrupt the current status loop. Simple but effective.
+                    D2NTStatus(8, 0, CloneDiabloString);
+             
+                    _holdPauseCheck = NTU_GetExitStatus();
+                    while(_holdPauseCheck == "T") {
+                        NTC_Delay(500);
+                        _holdPauseCheck = NTU_GetExitStatus();
+                    }
+                    NTC_StopScript(NTConfig_Script[CurScriptIndex]);
+                    NTC_Delay(500);
 
-				_holdPauseCheck = NTU_GetExitStatus();
-				while(_holdPauseCheck == "T") {
-					NTC_Delay(500);
-					_holdPauseCheck = NTU_GetExitStatus();
-				}
-				NTC_StopScript(NTConfig_Script[CurScriptIndex]);
-				NTC_Delay(500);
-
-				NTTM_CheckAct();
-			}
+                    NTTM_CheckAct();
+                }
+            }
 			else if(msg.indexOf(SoJString) != -1 && !CloneDiabloNotify && NTConfig_SoJWaitTime > 0) { // part of soj addon. !CloneDiabloNotify was added to prevent timer start on oversales after Diablo walks.
 				if(me.diff < 2) {
 					NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_4 + "Not waiting for DClone - not in a hell game");
@@ -544,4 +547,17 @@ function NT_LoadConfigError()
 	Print(COLOR_4 + "Then find the Etal First Time Configuration Guide");
 	Delay(750);
 	Print(COLOR_1 + "READ THE GUIDE VERY CLOSELY BEFORE POSTING ON THE FORUMS");
+}
+
+function NT_LogDclone(){
+    var date = new Date().toLocaleFormat("<%a, %b %d, %H:%M>");
+
+    var LogClone = FileOpen("logs/DClone/"+me.name+"_Dclone.txt", 2);
+    if(!LogClone)
+        var LogClone = FileOpen("logs/DClone/"+me.name+"_Dclone.txt", 1);
+  
+        LogClone.WriteLine("DClone Walks"+ " Server Address " + me.gameserverip + " " + date);
+
+    LogClone.Close();
+    return;
 }
