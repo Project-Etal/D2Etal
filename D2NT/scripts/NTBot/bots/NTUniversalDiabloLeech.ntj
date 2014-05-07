@@ -86,10 +86,10 @@ function NTMain() {
 		else
 			NTM_MoveTo(108, 7796, 5294);
 
-		var _diablo
-		while(!_diablo && !DiabloDead)
-		{
-			_diablo = NTC_FindUnit(NTC_UNIT_MONSTER, 243);
+		for (i = 0; i < 80 && !DiabloDead; i += 1) {
+			if (GetUnit(NTC_UNIT_MONSTER, 243)) {
+				break;
+			}
 			NTCS_DiaSpam();
 		}
 
