@@ -452,7 +452,23 @@ function NT_ThronePreAttackInt(){
 	}
 	else if(me.classid == NTC_CHAR_CLASS_DRUID){
 		if(NTConfig_AttackSkill[3] == 245){
-			return NTC_CastSkill(NTConfig_AttackSkill[3], 2, DruidPreAtt[0], DruidPreAtt[1]);
+			if(!DruidPreAtt[2]){
+				return NTC_CastSkill(NTConfig_AttackSkill[3], 2, DruidPreAtt[0], DruidPreAtt[1]);
+			}
+			else{
+				if(poscount == 1){
+					poscount = 2;
+					return NTC_CastSkill(NTConfig_AttackSkill[3], 2, DruidPreAtt[0], DruidPreAtt[1]);
+				}
+				else if(poscount == 2){
+					poscount = 3;
+					return NTC_CastSkill(NTConfig_AttackSkill[3], 2, (DruidPreAtt[0]+3), DruidPreAtt[1]);
+				}
+				else{
+					poscount = 1;
+					return NTC_CastSkill(NTConfig_AttackSkill[3], 2, (DruidPreAtt[0]+5), DruidPreAtt[1]);
+				}
+			}
 		}
 	}
 	else if(me.classid == NTC_CHAR_CLASS_NECROMANCER){

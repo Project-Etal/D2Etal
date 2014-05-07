@@ -786,7 +786,7 @@ function NT_LoadConfig()
 
 	NTConfig_DiaSpam = 0;								// Skill to spam before Diablo Spawns
 
-	DruidPreAtt =[15092, 5028];							// Pre-Wave attack position. (This only works if NTConfig_AttackSkill[3] is set to nado.)
+	DruidPreAtt = [15092, 5028, 1];						// Pre-Wave attack position (X,Y,On/Off (0 for off, 1 for on)). (This only works if NTConfig_AttackSkill[3] is set to nado.)
 	prewavespot = [15092, 5040];						// Pre-Wave standing (X,Y) coordinates. (For Baal Scripts.)
 
 	NTconfig_HighMaxAttack = false;						// Use HighMaxAttacks? (False = LowMaxAttacks.) High/Low are below.
