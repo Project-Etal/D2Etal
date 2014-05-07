@@ -870,6 +870,13 @@ function NTA_IsValidMonster(monster) {
 	if (_classid >= 258 && _classid <= 263 && monster.mode == 14) // ignore submerged WaterWatchers
 		return false;
 
+    var getTeleSkill = NTC_GetSkillLevel(54);
+
+    if(getTeleSkill){
+        if ((_classid >= 432 && _classid <= 435) || _classid == 524 || _classid == 525) // ignore breakable walls (we can tele!)
+            return false;
+    }
+
 	if (monster.GetState(53) || monster.GetState(96)) // Conversion, Revive
 		return false;
 
