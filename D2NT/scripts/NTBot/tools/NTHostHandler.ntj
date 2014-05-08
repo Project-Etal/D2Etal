@@ -79,6 +79,50 @@ function NTMain()
 function DumbassCity(msg, type)
 {
 	switch(type){
+		case 0:
+			if(msg.length >= 150){
+				Delay(Random(2000,3000));
+				Say("Oh yeah dude?");
+			}
+			break;
+		case 2:
+			var ends = [".com", ".c0m", ".net", ".org", ".0rg"];
+			var DontIgnore = "ProjectEtal.com";
+			var x;
+			for (x in ends && !DontIgnore){
+				if (msg.toLowerCase().indexOf(ends[x]) != -1 && msg.indexOf(!me.charname) != -1){
+					SpamTastic = msg.split(": ")[0];
+					SpamTastic = stripColorCodes(SpamTastic);
+					Say("/ignore " + SpamTastic);
+				}
+			}
+			break;
+		case 3:
+			if(msg.indexOf("BattleNet>: That character is not") != -1){
+				Say("/ignore " + WhoDatIs);
+				return;
+			}
+			else if(msg.indexOf("BattleNet>: ") != -1){
+				HostileAccount = msg.split("(*")[1];
+				if(HostileAccount == undefined){
+					Print(COLOR_1 + "Unable to attain character info!");
+					return;
+				}
+				HostileAccount = HostileAccount.split(")")[0];
+				HostileAccount = stripColorCodes(HostileAccount);
+				if(HostileAccount == undefined) HostileAccount = 'N/A';
+				ScanPlayers();
+				return HostileAccount;
+			}
+			break;
+		case 4:
+			if(msg.indexOf(") joined our world") != -1){
+				WhoDatIs = msg.split("(")[0];
+				WhoDatIs = stripColorCodes(WhoDatIs);
+				Say("/whois " + WhoDatIs);
+				return WhoDatIs;
+			}
+			break;
 		case 8:
 		case 9:
 			if(msg.indexOf("has expressed hostility") != -1 || msg.indexOf("left") != -1){
