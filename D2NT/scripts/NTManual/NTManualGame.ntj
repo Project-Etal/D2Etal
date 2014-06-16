@@ -1,4 +1,4 @@
-var Rev = "1.1";
+var Rev = "1.1.2";
 var warncount;
 var _AreaName;
 var busy = false;
@@ -38,15 +38,15 @@ function NTMain()
 	Delay(Random(100,200));
 	while(1) {	
 		ChickenStuff(); MG_Resists(); MG_AntiIdle();
-		if(_count++ > 10) {
+		if(_count++ > 500) {
 			if(MGConfig_AutoParty) { MG_PartyUp(); }
 			if(MGConfig_CheckStuff) { Town_CheckStuff(MG_CS[0], MG_CS[1], MG_CS[2], MG_CS[3]); }
 			_count = 0;
 		}
-		if(MGConfig_PickAuto) { Delay(200); NTSI_PickItems(); }
+		if(MGConfig_PickAuto) { Delay(1000); NTSI_PickItems(); }
 		_AreaName =	AreaPoi();
-		if(_AreaName.length < 2) { SetStatusText(COLOR_4 + Rev + _AreaName[0]); }
-		else { SetStatusText(COLOR_4 + Rev + _AreaName[0] + COLOR_4 + " or" + _AreaName[1]); } 
+		if(_AreaName.length < 2) { SetStatusText(COLOR_4 + Rev + _AreaName[0]); } //+ " Ping: " + me.ping); }
+		else { SetStatusText(COLOR_4 + Rev + _AreaName[0] + COLOR_4 + " or" + _AreaName[1]); } //+ " Ping: " + me.ping); } 
 		Delay(100);
 	}
 }
@@ -172,6 +172,8 @@ function NT_KeyEvents(keycode)
 			break;
 		case Key_DevTools:
 			NTMG_DevelopementTools();
+			break;
+		case 101:
 			break;
 		default:
 			if(CheckKeyNumber)

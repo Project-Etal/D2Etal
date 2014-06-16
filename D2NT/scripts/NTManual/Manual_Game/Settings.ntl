@@ -6,7 +6,7 @@
 function MG_LoadConfig(MyChar)
 {
 	switch(MyChar){
-		case "TruWind": // USE THIS AS AN EXAMPLE, modify the "TruIce" to your "Char_Name"
+		case "TruWind": // USE THIS AS AN EXAMPLE, modify the "TruWind" to your "Char_Name"
 			MGConfig_LifeChicken = -1; 		// This is your chicken life percent. If you go below this life total, exit game.
 			MGConfig_ManaChicken = -1; 		// This is your chicken mana percent. If you go below this mana total, exit game.
 			MGConfig_ChickenWarn = true; 	// This will warn you to heal before exiting town if you'll chicken
@@ -26,9 +26,9 @@ function MG_LoadConfig(MyChar)
 			MGConfig_ManaChicken = -1; 		// This is your chicken mana percent. If you go below this mana total, exit game.
 			MGConfig_ChickenWarn = false; 	// This will warn you to heal before exiting town if you'll chicken
 
-			MGConfig_LifeThresh = 90;		// Drink a health potion if under this percent of life.
-			MGConfig_LifeRejuvThresh = 35;	// Drink a rejuvenation potion if under this percent of life. (Will not use health potions under this %)
-			MGConfig_ManaThresh = 20;		// Drink a mana potion if under this percent of mana.
+			MGConfig_LifeThresh = 35;		// Drink a health potion if under this percent of life.
+			MGConfig_LifeRejuvThresh = 0;	// Drink a rejuvenation potion if under this percent of life. (Will not use health potions under this %)
+			MGConfig_ManaThresh = 10;		// Drink a mana potion if under this percent of mana.
 			MGConfig_ManaRejuvThresh = 0;	// Drink a rejuvenation potion if under this percent of mana. (Will not use mana potions under this %)
 
 			MGConfig_CheckStuff = false; 	// Gives a warning when low on pots/scrolls
