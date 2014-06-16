@@ -1,16 +1,18 @@
 //	Original HostileCatch done by Young_Love - Original HostileWatch done by kolton
 //	Additional modifications originate from Diabolic - Implemented by Tru
-//	Combined - Edited/Updated by Tru V2.3 (23 Jun 2013)
+//	Combined - Edited/Updated by Tru V2.3b (08 May 2014)
 
 var HH_CampStairs = false;		// Set true to move to Throne of Destruction stairs to wait for hostile to come play
 var HH_CampSpam = -1;			// Set to the skill id for what attack you want to spam at the stairs
+
+//var HH_RangeQuit = true;		// Set to true to quit when a hostile is in a certain range (RunFromHostiles must be true!)
 
 var HostileAccount;
 var Accounts = [];
 var Class = [];
 var Levels = [];
 var Names = [];
-var Ver = "2.3";
+var Ver = "2.3b";
 
 var GetWreckedTaunt = [
 		" is pure weakness!",
@@ -130,6 +132,7 @@ function DumbassCity(msg, type)
 				var Today = new Date().toLocaleFormat("%d %b");
 				var Area = GetArea();
 				var _dumbass = GetPlayerUnit();
+				var _dummass = GetPlayerUnit();
 				if(_dumbass){
 					do{
 						if(GetPlayerFlag(me.gid, _dumbass.gid, 9)){
@@ -157,7 +160,19 @@ function DumbassCity(msg, type)
 								HostileOOG += COLOR_8 + "Hostile Chicken Activated" + "\n";
 								HostileOOG += COLOR_1 + "----------------------------------";
 								NTC_SendLogToOOG(NTC_LOG_COMMON, HostileOOG); Delay(200);
+
+								/* while(HH_RangeQuit){
+									Delay(5000);
+									_distance = GetDistance(me, _dummass);
+									Print(_distance);
+									Print(me.areaid + " / " + _dummass.name);
+									if(_distance < 60 && me.areaid == _dummass.areaid){
+										Print("Variable change!!");
+										HH_RangeQuit = false;
+									}
+								} */
 								CloseD2();
+								//Print("CloseD2();");
 							}
 							else{
 								HostileOOG += COLOR_1 + "----------------------------------";
@@ -237,9 +252,9 @@ function MyTime()
 	var SS = NW.getSeconds();
 	var DT;
 
-	if (HR > 12){ HR = HR - 12; }
 	if (HR < 12){ DT = "AM"; }
 	if (HR > 11){ DT = "PM"; }
+	if (HR > 12){ HR = HR - 12; }
 	if (HR == 0){ HR = 12; }
 	if (HR < 10){ HR = "0" + HR; }
 	if (MM < 10){ MM = "0" + MM; }
