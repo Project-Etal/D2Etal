@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "172-BE";
+var Rev = "173-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -29,6 +29,7 @@ function NTMain()
 
 	NT_LoadConfig();
 	NTE_InitializeStats();
+	Print(NTConfig_FreeSpace);
 
 	if (NTConfig_MinIngameTime > 0) {
 		endtime = GetTickCount() + 1000 * 60 * NTConfig_MinIngameTime;
@@ -71,8 +72,8 @@ function NTMain()
 		NTU_DeathLog(Corpses, InitLife);
 	if(NTConfig_Script.length > 0)
 	{
+		NTT_FreeSpace();
 		NTCU_InitCubing();
-		NTB_FreeSpace();
 		NTT_ClearInventory();
 		NTT_ClearBelt();
 
@@ -525,33 +526,4 @@ function NT_LogDclone(){
 
     LogClone.Close();
     return;
-}
-
-function NTB_FreeSpace()
-{
-	var freeArray = [];
-	for (var i = 0; i <= 9; i++) { //Build freeArray
-		for (var j = 0; j <= 3; j++) {
-			if (!NTConfig_Columns[j][i])
-				break;
-		}
-		if(j >= 3)
-			freeArray[i] = 1;
-		else
-			freeArray[i] = 0;
-	}
-	var sequentialFree = 0;
-	var winnar = 0;
-	for (var i = 0; i < freeArray.length; i++) {
-		if (freeArray[i]){
-			winnar++;
-			if(sequentialFree < winnar)
-				sequentialFree = winnar;
-		}
-		else
-			winnar = 0;
-	}
-	NTConfig_FreeSpace = sequentialFree;
-	return NTConfig_FreeSpace;
-
 }
