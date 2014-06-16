@@ -388,6 +388,7 @@ function NT_LoadConfig()
 	// Inventory settings
 	//------------------------------------------------------------------------------
 	NTConfig_FreeSpaceBeforeBoss = 2;					// If # of free columns is less than this, will town before killing bosses.
+	NTConfig_FreeSpace = 4;								// Number of free columns. If bot has less than this amount after id'ing, it will go to stash.
 
 	// These numbers correspond to your inventory. Set 0 to keep whatever is there, 1 to have the bot manage the slot.
 	NTConfig_Columns[0] = [0,0,0,0,0,0,0,0,0,0];
