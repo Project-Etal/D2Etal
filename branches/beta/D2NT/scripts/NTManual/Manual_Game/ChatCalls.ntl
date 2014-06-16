@@ -3,6 +3,20 @@ function MG_GameMsgEvent(msg, type)
 	   if(msg.indexOf(me.name) != -1 && type == 0) {
 			// Main Commands
 			switch(true){
+				case (msg.toLowerCase().indexOf(".dropstash") != -1):
+						MG_DropStash();
+					break;
+				case (msg.toLowerCase().indexOf(".dropcube") != -1):
+						MG_DropCube();
+					break;
+				case (msg.toLowerCase().indexOf(".dropinv") != -1):
+						MG_DropInv();
+					break;
+				case (msg.toLowerCase().indexOf(".dropall") != -1):
+						MG_DropCube();
+						MG_DropStash();
+						MG_DropInv();
+					break;
 				case (msg.toLowerCase().indexOf(".toggles")!= -1):
 					Print(COLOR_2 + ".showenemy " + COLOR_4 + "- show/hide enemy on automap");
 					Print(COLOR_2 + ".showmissile " + COLOR_4 + "- show/hide missiles on automap");
@@ -11,6 +25,10 @@ function MG_GameMsgEvent(msg, type)
 					Print(COLOR_2 + ".ChatR " + COLOR_4 + "- load/stop ChatR");
 					Print(COLOR_2 + ".ItemInfo " + COLOR_4 + "- enable Item Info abilities");
 					Print(COLOR_2 + ".reload " + COLOR_4 + "- reload your config if modifications were made!");
+					Print(COLOR_2 + ".dropstash " + COLOR_4 + "- drop items in your stash");
+					Print(COLOR_2 + ".dropcube " + COLOR_4 + "- drop items in your cube");
+					Print(COLOR_2 + ".dropinv " + COLOR_4 + "- drop items in your inventory");
+					Print(COLOR_2 + ".dropall " + COLOR_4 + "- drop items in stash/inv/cube");
 					break;
 				case (msg.toLowerCase().indexOf(".showenemy")!= -1):
 					if(MGConfig_ShowEnemy) {
@@ -1729,4 +1747,76 @@ function PrintOrSay(msg)
 	if(Private){ Print(msg); }
 	else{ Say(msg); }
 	return;
+}
+
+function MG_DropStash(){
+	var _stash;
+
+	NTTM_TownMove("stash");
+
+	_stash = NTC_FindUnit(NTC_UNIT_OBJECT, NTC_UNIT_STASH, 5);
+
+	if(_stash) {
+		NTT_DoInteract(_stash);
+	}
+	
+	var _items = me.GetItems();
+
+	if(!_items)
+		return false;
+
+	for(var i = 0 ; i < _items.length ; i++) {
+		if(_items[i].mode == 0 && _items[i].itemloc == 4 && _items[i].classid != 549) {
+			NTT_DropItem(_items[i]);		
+         	}
+	}
+	me.Cancel(1);
+} 
+
+function MG_DropCube(){
+	var _stash;
+
+	NTTM_TownMove("stash");
+
+	_stash = NTC_FindUnit(NTC_UNIT_OBJECT, NTC_UNIT_STASH, 5);
+
+	var _cube = me.GetItems(NTC_UNIT_CUBE);
+	
+	NTCU_OpenCubeInt(_cube[0]);
+	
+	var _items = me.GetItems();
+
+	if(!_items)
+		return false;
+
+	for(var i = 0 ; i < _items.length ; i++) {
+		if(_items[i].mode == 0 && _items[i].itemloc == 3 && _items[i].classid != 549) {
+			NTT_DropItem(_items[i]);		
+         	}
+	}
+	me.Cancel(1);
+}
+
+function MG_DropInv(){
+	var _stash;
+	
+	NTTM_TownMove("stash");
+	
+	_stash = NTC_FindUnit(NTC_UNIT_OBJECT, NTC_UNIT_STASH, 5);
+
+	if(_stash) {
+		NTT_DoInteract(_stash);
+	}
+	
+	var _items = me.GetItems();
+
+	if(!_items)
+		return false;
+
+	for(var i = 0 ; i < _items.length ; i++) {
+		if(_items[i].mode == 0 && _items[i].itemloc == 0 && _items[i].classid != 549 && _items[i].classid !=  518 && _items[i].classid !=  519 && _items[i].classid !=  603 && _items[i].classid !=  604 && _items[i].classid !=  605 && _items[i].classid !=  543) {
+			NTT_DropItem(_items[i]);		
+         	}
+	}
+	me.Cancel(1);
 }
