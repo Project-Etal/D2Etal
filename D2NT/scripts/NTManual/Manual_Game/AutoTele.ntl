@@ -35,7 +35,7 @@ function AreaPoi()// returns POI display info
 		case 104:
 		case 105:
 		case 106: return [COLOR_8 + " Izual"];
-		case 107: return [COLOR_8 + " Forge"];
+		case 107: return [COLOR_8 + " 1 Forge", COLOR_8 + " 2 Chaos"];
 		case 111: return [COLOR_8 + " Abaddon"];
 		case 112: return [COLOR_8 + " Acheron"];
 		case 113:
@@ -131,7 +131,7 @@ function TelePoi()// move to POI's
 		case 105:		
 		case 106:if(!MG_Izual())  return ErrorHandler();
 			break;
-		case 107:if(!NTM_KoMoveToPresetUnit(107, NTC_UNIT_OBJECT, 376, 2, -4))  return ErrorHandler();
+		case 107: (_Teleport == 0) ? MG_Forge() : MG_Chaos();
 			break;
 		case 111:if(!NTM_KoMoveToPresetUnit(111, NTC_UNIT_OBJECT, 60)) return ErrorHandler();
 			if(!NTM_TakeUnit(NTC_UNIT_OBJECT, 60)) return ErrorHandler();
@@ -303,11 +303,27 @@ function MG_Izual()
 		var dis = GetDistance(_pathb[i][0], _pathb[i][1], posx, posy)
 		if(dis < 65)
 			break;
-	}			
+	}
 
 	NTP_DoPrecast();
 	if(!NTM_MoveTo(me.areaid, _pathb[i][0], _pathb[i][1])) return false;
 	return true;
+}
+
+function MG_Forge()
+{
+	SetStatusText(COLOR_4 + Rev + COLOR_8 + " Forge");
+	if(!NTM_KoMoveToPresetUnit(107, NTC_UNIT_OBJECT, 376, 2, -4)){
+		return ErrorHandler();
+	}
+}
+
+function MG_Chaos()
+{
+	SetStatusText(COLOR_4 + Rev + COLOR_8 + " Chaos");
+	if(!NTM_MoveTo(108, 7794, 5557)){
+		return ErrorHandler();
+	}
 }
 
 function MG_WaypointUp()
