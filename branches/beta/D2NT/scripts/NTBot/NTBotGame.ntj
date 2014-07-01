@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "177-BE";
+var Rev = "178-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -72,7 +72,6 @@ function NTMain()
 		NTU_DeathLog(Corpses, InitLife);
 	if(NTConfig_Script.length > 0)
 	{
-		NTT_FreeSpace();
 		NTCU_InitCubing();
 		NTT_ClearInventory();
 		NTT_ClearBelt();
