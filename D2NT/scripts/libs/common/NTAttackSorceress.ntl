@@ -71,6 +71,11 @@ function NTA_SorceressAttackInt(target, firstorder) {
 			if (!NTTMGR_VisitTown()) { return 0; }
 		}
 	}
+
+	//Check if we have needed arrows or bolts
+	if(_NTA_Ranged){
+		NTA_HaveArrows();
+	}
 	
 	if (NTC_GetSkillLevel(58) && me.GetState(30) == 0) { // check for ES recast
 		NTC_CastSkill(58, NTC_HAND_RIGHT);

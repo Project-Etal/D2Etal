@@ -1785,16 +1785,30 @@ function NTT_TossAmmo() {
 	NTC_SwapWeapons(0);
 
 	var ammo = me.GetItems();
+	var toss;
 
 	if(ammo) {
 		for(var i = 0 ; i < ammo.length ; i++) {
 			if(ammo[i].classid == 526 || ammo[i].classid == 528) {
-				if(ammo[i].GetStat(70) <= 350 && ammo[i].mode == 1 && (ammo[i].itemloc == 4 || ammo[i].itemloc == 5)) {
-					// if we have full ammo we don't need to drop it so set _NTTMGR_BuyArrows false
-					if(ammo[i].GetStat(70) == 350) {
+				toss = true;
+				if(ammo[i].classid == 526){
+					if(ammo[i].GetStat(70) == 350 && ammo[i].mode == 1 && (ammo[i].itemloc == 4 || ammo[i].itemloc == 5)) {
+						// if we have full ammo we don't need to drop it so set _NTTMGR_BuyArrows false
 						_NTTMGR_BuyArrows = false;
-						break;
+						toss = false;
 					}
+				}
+				else if(ammo[i].classid == 528){
+					if(ammo[i].GetStat(70) == 250 && ammo[i].mode == 1 && (ammo[i].itemloc == 4 || ammo[i].itemloc == 5)) {
+						// if we have full ammo we don't need to drop it so set _NTTMGR_BuyArrows false
+						_NTTMGR_BuyArrows = false;
+						toss = false;
+					}
+				}
+				else{
+					Print("Something went horribly wrong with the NTTown.ntl and dealing with arrows and bolts if your seeing this");
+				}
+				if(toss){
 					SetUIState(0x01, true);
 					NTC_PingDelay(200);
 					NTC_ItemToCursor(ammo[i]);
@@ -1802,7 +1816,6 @@ function NTT_TossAmmo() {
 					NTC_ClearCursor();
 					NTC_PingDelay(200);
 					me.Cancel(1);
-					break;   
 				}
 			}         
 		}

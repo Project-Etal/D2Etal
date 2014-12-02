@@ -50,6 +50,11 @@ function NTA_DruidAttackInt(target, firstorder) {
 		}
 	}
 
+	//Check if we have needed arrows or bolts
+	if(_NTA_Ranged){
+		NTA_HaveArrows();
+	}
+
 	if (firstorder && NTConfig_AttackSkill[0] > -1 && NTA_GetResistance(target, _NTA_SkillDamage[0]) < 100) {
 
 

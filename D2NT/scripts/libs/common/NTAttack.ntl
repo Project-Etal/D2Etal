@@ -11,6 +11,8 @@ var _NTA_SkillDamage = [];
 var _NTA_SkillRange = [];
 var _NTA_CurseState = [];
 
+var _NTA_Ranged = false;
+
 var _NTA_NovaTick;
 var _sorcattack = 0;
 var skippedImmuneBoss = false;
@@ -33,6 +35,10 @@ function NTA_Initialize() {
 			Delay(500);
 		}
 	}
+	
+	//Check if we use a bow or crossbow;
+	_NTA_Ranged = NTA_RangedNormal();
+	
 	for (var i = 0; i < NTConfig_AttackSkill.length; i++) {
 		if (NTConfig_AttackSkill[i] > -1) {
 			_NTA_SkillHand[i] = GetBaseStat("skills.txt", NTConfig_AttackSkill[i], 166) ? 2 : NTC_HAND_RIGHT;
@@ -40,7 +46,7 @@ function NTA_Initialize() {
 
 			switch (NTConfig_AttackSkill[i]) {
 			case 0: //Normal Attack
-				if (NTA_RangedNormal()) { _NTA_SkillRange[i] = 20; } 
+				if (_NTA_Ranged) { _NTA_SkillRange[i] = 20; } 
 				else { _NTA_SkillRange[i] = 2; }
 				break;
 			case 1: //Kicks
@@ -1080,6 +1086,7 @@ function NTA_GetResistance(enemy, type) {
 	return 0;
 }
 
+//Is this even used I can't find a call for it
 function NTA_IsWeaponBroken() {
 	var _weapon;
 	_weapon = me.GetItems();
@@ -1633,7 +1640,7 @@ function NTA_HaveArrows() {
 			if ((_weapon[i].classid == 526 || _weapon[i].classid == 528) && (_weapon[i].itemloc == 4 || _weapon[i].itemloc == 5)) {
 				if (_weapon[i].GetStat(70) < 10) {
 					Print(COLOR_8 + "I'm low on " + _weapon[i].name + ", I am going to town to buy more.")
-					NTTMGR_VisitTown();
+					NTTMGR_VisitTown(true);
 				}
 				_haveAmmo = true;
 				break;
@@ -1643,7 +1650,7 @@ function NTA_HaveArrows() {
 
 	if (!_haveAmmo) {
 		Print(COLOR_8 + "I have no ammo, I am going to town to buy some.")
-		NTTMGR_VisitTown();
+		NTTMGR_VisitTown(true);
 	}
 }
 

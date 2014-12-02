@@ -79,11 +79,11 @@ function NTA_AmazonAttackInt(target, firstorder) {
 		}
 	}
 
-
-	if (me.GetSkill(12, false) > 1) NTA_HaveArrows();
-	else NTA_IsWeaponBroken();
-
-
+	//Check if we have needed arrows or bolts
+	if(_NTA_Ranged){
+		NTA_HaveArrows();
+	}
+	
 	if (firstorder && NTConfig_AttackSkill[0] > -1 && NTA_GetResistance(target, _NTA_SkillDamage[0]) < 100) {
 		if (GetDistance(me, target) > _NTA_SkillRange[0] || !CheckCollision(me, target, 4)) {
 			var _pos = me.GetOptimalAttackPos(target.areaid, target.x, target.y, _NTA_SkillRange[0], 4);

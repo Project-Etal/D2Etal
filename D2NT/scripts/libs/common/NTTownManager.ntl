@@ -13,7 +13,7 @@ var ammyreq = Math.abs(Math.floor(me.GetStat(12) / 2)-90) * 2;
 var muleScripts = ("AutoMulingSystem1.2.ntj", "AutoMulingSystemLeecher1.2.ntj");
 var MuleAccount = "";
 
-function NTTMGR_TownManager(simple)
+function NTTMGR_TownManager(simple, ranged)
 {
 	while(me.areaid == 0){
 		NTC_Delay(200);
@@ -21,6 +21,9 @@ function NTTMGR_TownManager(simple)
 	NTC_SwapWeapons(0);
 	var _cubing;
 
+	if(arguments.length < 2)
+		ranged = false;		
+		
 	if(arguments.length < 1)
 		simple = false;		
 	
@@ -39,7 +42,7 @@ function NTTMGR_TownManager(simple)
 	_NTTMGR_DoRevive = NTT_CheckMerc();
 	_NTTMGR_RemoveCurse = NTTMGR_CheckCurse(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe);
 	_NTTMGR_Simple = simple;
-	_NTTMGR_BuyArrows = NTTMGR_CheckBow();
+	_NTTMGR_BuyArrows = ranged;
 
 	NTCU_InitCubing();
 	
@@ -310,14 +313,18 @@ function NTTMGR_FreeGold()
 	}
 }
 
-function NTTMGR_VisitTown()
+function NTTMGR_VisitTown(ranged)
 {
+	
+	if(arguments.length < 1)
+		ranged = false;		
+	
 	var _prearea = me.areaid;
 
 	if(!NTTM_CheckAct())
 		return false;
 
-	NTTMGR_TownManager(true);
+	NTTMGR_TownManager(true, ranged);
 
 	if(!NTTM_TownMove("portalspot", true))
 		return false;
@@ -921,7 +928,7 @@ function NTTMGR_CheckKeys()
 
 	return 0;
 }
-
+//depreciated now I believe
 function NTTMGR_CheckBow() {
 
 	NTC_SwapWeapons(0);
