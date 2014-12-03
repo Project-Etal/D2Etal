@@ -19,22 +19,38 @@ function NTMain(){
 	_LifeMax = me.hpmax;
 	_ManaMax = me.mpmax;
 
-	/*if(NTConfig_LifeChicken > 0) {
-		me.chickenhp = parseInt((_LifeMax*NTConfig_LifeChicken)/100);
+	if(NTConfig_EtalLifeChicken > 0) {
+		me.chickenhp = parseInt((_LifeMax*NTConfig_EtalLifeChicken, 10)/100);
 	} else {
 		me.chickenhp = 0;}
 
-	if(NTConfig_ManaChicken > 0) {
-		me.chickenmp = parseInt((_ManaMax*NTConfig_ManaChicken)/100);
+	if(NTConfig_EtalManaChicken > 0) {
+		me.chickenmp = parseInt((_ManaMax*NTConfig_EtalManaChicken, 10)/100);
 	} else {
-		me.chickenmp = 0;}*/
+		me.chickenmp = 0;}
 
 	for(var i = 0 ; i < 5 ; i++)
 		_NTLW_timerLastDrink[i] = 0;
 
 	while(1){
 		if(!NTC_InTown()){
-			// ** start etal chicken code
+			if(_LifeMax != me.hpmax){
+				_LifeMax = me.hpmax;
+
+				if(NTConfig_EtalLifeChicken > 0) {
+					me.chickenhp = parseInt((_LifeMax*NTConfig_EtalLifeChicken, 10)/100);
+				} else {
+					me.chickenhp = 0;}
+			}
+			if(_ManaMax != me.mpmax){
+				_ManaMax = me.mpmax;
+
+				if(NTConfig_EtalManaChicken > 0) {
+					me.chickenmp = parseInt((_ManaMax*NTConfig_EtalManaChicken, 10)/100);
+				} else {
+					me.chickenmp = 0;}
+			}
+
 			if (me.hp < parseInt(_LifeMax * NTConfig_EtalLifeChicken,10) / 100) {
 				NTU_ChickenLog("EtalLifeChicken");
 				if(NTConfig_ChickenStyle == 0){
