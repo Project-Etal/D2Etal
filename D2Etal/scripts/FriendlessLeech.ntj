@@ -15,6 +15,7 @@ var gamepasswords 	= ["ExAmPlePasswOrd"];  	 			// Password for that game (case 
 
 var extrafilters	= ["New game ", " started by"];	// The 2nd filter should be whatever the bot manager says right after the game name
 													// If the 2nd filter is empty, the rest of the line is used as the game name
+var hasDash		= true;								// set this to false if the game you want to join doesn't have a dash in the name
 var joinChannelInChat   = "op Etal";				// leave blank to not join a private channel
 
 // =============================================================================
@@ -286,7 +287,13 @@ function locationAction(location)
 										if (index > -1)
 										{
 											var gamenumber = "";
-											var regexp = /^.*\-(\d+).*$/g;
+											var regexp;
+											if(hasDash){
+												regexp = /^.*\-(\d+).*$/g;
+											}
+											else{
+												regexp = /^.*?-*(\d+).*$/g;
+											}
 											//if (linewithname.substring(index).match(regexp)) {
 											gamenumber = linewithname.substring(index).replace(regexp,"$1");
 
