@@ -127,6 +127,9 @@ function NT_LoadConfig()
 		NTConfig_ClearCathedral = -1;					// 0 : Boneash Only, 1 : Clear All, 2 : Clear While Skipping Regular Monsters, -1 : Disable
 		NTConfig_ClearAllCatacombs = 0;					// 0 : Andy only, 1 : Clear All, 2 : Clear While Skipping Regular Monsters
 		NTConfig_ClearAndarielThrone = false;			// Set to true to clear the throne room after Andy, false if not
+	//NTConfig_Script.push("NTCatacombs.ntj");
+		NTConfig_ClearAllCatacombs = 0;					// 0 : Andy only, 1 : Clear All, 2 : Clear While Skipping Regular Monsters
+		NTConfig_ClearAndarielThrone = false;			// Set to true to clear the throne room after Andy, false if not
 
 	//NTConfig_Script.push("NTMooMooFarm.ntj");			// There are currently NO options for this script, still working on it
 		NTConfig_CowKingChicken = 95;  				// percentage of king's hp if below this the bot will close d2.  Set to 0 to dissable.  Note that this has a limited range will NOT help in pubs
