@@ -645,20 +645,18 @@ function UCL_Chat(msg, type)
 			trigger = true;return;
 		}
 	
-	if(type == 0 && (msg.indexOf("Vizier dead.") != -1) && (msg.indexOf(NTConfig_Leader) != -1))
+	if(type == 0 && (msg.indexOf("Vizier dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1))
 		{SealBoss1 = true; return;}
 		
-	if(type == 0 && (msg.indexOf("De Seis dead.") != -1) && (msg.indexOf(NTConfig_Leader) != -1))
+	if(type == 0 && (msg.indexOf("De Seis dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1))
 		{	SealBoss2 = true; return;}
 	
-	if(type == 0 && (msg.indexOf("Infector dead.") != -1) && (msg.indexOf(NTConfig_Leader) != -1))
+	if(type == 0 && (msg.indexOf("Infector dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1))
 		{	SealBoss3 = true; return;}
 	
-	if(type == 0 && (msg.indexOf("Diablo Dead.") != -1) && (msg.indexOf(NTConfig_Leader) != -1))
-		{	DiabloDead = true;
-			//if(me.areaid == 103){NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");}
-			//return;
-		}
+	if(type == 0 && (msg.indexOf("Diablo Dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1)) {	
+		NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+	}
 		
 	return;
 }
@@ -703,13 +701,8 @@ function UCL_ChaosChat(msg, type)
 			}
 		}
 	if(type == 0 && msg.indexOf("Diablo Dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1) {
-			if(me.areaid == 108)
-				{Delay(500);
-				NTM_MoveTo(me.areaid, 7769, 5284);
-				NTM_UsePortal("BluePortal", 103, NTConfig_Leader);
-				_portalleech = false;
-				}
-		}
+		NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+	}
 		
 	return;
 }
