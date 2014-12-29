@@ -18,8 +18,10 @@ function NTMain(){
 
 	checknext = false;	
 	NTConfig_Shrines = [];
-	
-	NTTMGR_TownManager();
+
+	if (NTC_InTown()) {
+		NTTMGR_TownManager();
+	}
 	
 	NTV_GetWPs();
 }
