@@ -80,6 +80,10 @@ function NT_Shoping(){
 		num = 0;
 		npcCount = shop_npcNumber.length;
 		do{
+			if( shopRush == 0 ) {
+				NTP_DoPrecast( );
+			}
+			
 			if( shopRush++ > 30 ){
 				RunGC();
 				shopRush = 0;
@@ -191,7 +195,7 @@ function NT_Shoping_InOutTown(num, count){
 		if( autoClear ){
 			killUndear = true;
 			NTP_DoPrecast();
-			// ?ì????î?TP????????......
+			// ?‚Äú????‚Äù?TP????????......
 			if( NTC_GetSkillLevel( 124 ) && NTC_GetSkillLevel( 54 ) ){
 				if( !NTM_MoveTo( me.areaid, 10069, 13293 ) )
 				return false;
