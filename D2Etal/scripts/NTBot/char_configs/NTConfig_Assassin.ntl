@@ -61,7 +61,7 @@ function NT_LoadConfig()
 	//NTConfig_Script.push("NTUniversalDiabloLeech.ntj");	// (NTConfig_Leader must be configured above).
 		NTConfig_LeechChaos = 0;						// 0 = Portal Leecher, 1 = Leech follow, 2 = Leech Fighter  (leech portals).
 		NTConfig_followDelay = 8000;					// Delay in milliseconds to enter follow portal
-		ChaosLocx = 7763; ChaosLocy = 5267;				//  Hide location for Passive leecher alternate = ChaosLocx = 7767; ChaosLocy = 5263;
+		NTConfig_Chaosleechpos = [7763, 5267];			//  Hide location for Passive leecher alternate [7767, 5263];
 		NTConfig_TakeTpDiablo = "config me";			// Message from leader signifying you to take portal. (Must be different than Baal & Trav tp messages.)
 		NTConfig_UseChatCommandPortal = true;			// Use portal after TakeTpDiablo message? (False will attempt taking first TP made by leader, ignores TakeTpDiablo.)
 

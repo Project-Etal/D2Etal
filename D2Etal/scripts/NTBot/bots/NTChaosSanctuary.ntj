@@ -14,13 +14,18 @@ function NTMain() {
 		return;
 	}
 	NTTMGR_TownManager();
+	
 	if(!NTTM_TownMove("waypoint")){
 		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
 		return;
 	}
 	if(!NTM_TakeWaypoint(107)){
-		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
-		return;
+		NTTM_TownMove("portalspot");
+		NTTM_TownMove("waypoint");
+		if(!NTM_TakeWaypoint(107)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
+			return;
+		}
 	}
 	NTP_DoPrecast(true);
 	if (!NTM_MoveTo(108, 7790, 5544)) {
@@ -35,6 +40,8 @@ function NTMain() {
 	if (!NTConfig_FastChaos) {
 
 		if (NTConfig_Entrance) {
+			NTCS_ClearPosition(15, EntranceSort);
+			NTM_MoveTo(108, 7790, 5544);
 			PubTP();	PubSay(NTConfig_CS_HotTP);
 			NTCS_ClearPosition(30, EntranceSort);
 			NTM_MoveTo(108, 7790, 5544);
@@ -51,8 +58,8 @@ function NTMain() {
 		
 		NTM_MoveTo(108, 7775, 5311);
 		PubTP();
-		if (!NTConfig_Entrance)
-			PubSay(NTConfig_CS_HotTP);
+		PubSay(NTConfig_CS_HotTP);
+		
 		for (i = 0; i < 2; i += 1) {			
 			NTCS_ClearPosition(30, SealSort);
 			NTC_PingDelay(i < 1 ? 1000 : 10);
@@ -73,11 +80,11 @@ function NTMain() {
 	}
 	PubSay("Diablo.");
 	if (NTConfig_LeechSupport) {
-		NTM_MoveTo(108, 7760, 5267);
+		NTM_MoveTo(108, 7756, 5267);
 		PubTP();
 		PubSay("Diablo TP up.");
 	}
-	NTM_MoveTo(108, 7792, 5291);
+	NTM_MoveTo(108, 7795, 5295);
 
 	for (i = 0; i < 80; i += 1) {
 		if (GetUnit(NTC_UNIT_MONSTER, 243)) {
@@ -91,6 +98,7 @@ function NTMain() {
 	}
 	NTSI_PickItems();
 	PubSay("Diablo Dead.");
+	Delay(500);
 	if (NTConfig_CS_NextGame != "") PubSay(NTConfig_CS_NextGame + NTC_GetNextGame());
 	 
 	NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
@@ -123,7 +131,7 @@ function NT_OpenSealsInt() {
 		return false;
 	}
 	if (!NTConfig_FastChaos) {
-		PubTP();
+		//PubTP();
 		BO_Party();
 		NTCS_ClearPosition(40, SealSortB);
 	}
@@ -441,6 +449,8 @@ function NTCS_Preattack(name) {
 					NTC_PutSkill(NTConfig_AttackSkill[2], NTC_HAND_RIGHT);
 					for (n = 0; n < 8; n += 1) {
 						NTC_CastSkill(NTConfig_AttackSkill[1], 2);
+						target = NTC_FindUnit(1, name, 10);
+						if(target){break;}
 					}
 					break;
 				}

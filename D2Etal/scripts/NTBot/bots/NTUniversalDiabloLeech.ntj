@@ -16,25 +16,26 @@ function NTMain() {
 
 	NTA_Initialize();
 	
+	RegisterEvent(EVENT_GAMEMSG, UCL_Chat);
+	
 	if(!NTTM_CheckAct(4)){
 		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_CheckAct()");
 		return;
 	}
 
 	NTTMGR_TownManager();
-	NTTM_TownMove("portalspot");
+	NTTM_TownMove("portalspot");	
 	
 	if(NTConfig_LeechChaos >= 1)
 	{
-		RegisterEvent(EVENT_GAMEMSG, UCL_Chat);
 		if(NTConfig_UseChatCommandPortal){
 			while(!NT_DiabloLeechMessageHandler() && !DiabloDead){				
 				Delay(500);
 			}
-			for(var i = 0 ; i < 100 && me.areaid == 103 ; i++){
+			if(NTConfig_LeechChaos == 1){Delay(NTConfig_followDelay);}
+			for(var i = 0 ; i < 10 && me.areaid == 103 ; i++){
 				if(DiabloDead == true){break;}
 				NTM_UsePortal("BluePortal", 108, NTConfig_Leader);
-				Delay(500);
 			}
 		}
 		else
@@ -103,7 +104,6 @@ function NTMain() {
 	
 	if(NTConfig_LeechChaos == 0)
 	{
-		RegisterEvent(EVENT_GAMEMSG, UCL_ChaosChat);
 		while(_portalleech) {NTC_Delay(250);}
 	}
 	
@@ -279,7 +279,7 @@ function NT_OpenSealInt(classid) {
 	}
 	var i, seal;
 	for (i = 0; i < 5; i += 1) {
-		NTM_MoveToPresetUnit(108, 2, classid, classid === 394 ? 5 : 2, classid === 394 ? -5 : 0);
+		NTM_MoveToPresetUnit(108, 2, classid, 0, -7);
 		seal = NTC_FindUnit(NTC_UNIT_OBJECT, classid);
 		if (!seal) {
 			return false;
@@ -357,6 +357,8 @@ function NTCS_Preattack(name) {
 					NTC_PutSkill(NTConfig_AttackSkill[2], NTC_HAND_RIGHT);
 					for (n = 0; n < 8; n += 1) {
 						NTC_CastSkill(NTConfig_AttackSkill[1], 2);
+						target = NTC_FindUnit(1, name, 10);
+						if(target){break;}
 					}
 					break;
 				}
@@ -626,89 +628,64 @@ function NT_DiabloLeechMessageHandler(){/////
 
 function UCL_Chat(msg, type)
 {
-	if(type == 0 && (msg.indexOf(NTConfig_TakeTpDiablo) != -1) && (msg.indexOf(NTConfig_Leader) != -1))
-	{
-		if(me.areaid == 103)
-		{
-			if(NTConfig_LeechChaos == 1){Delay(NTConfig_followDelay);}
-			while(me.areaid != 108)
-			{
-				NTM_UsePortal("BluePortal", 108, NTConfig_Leader);
-				Delay(500);
-			}
+	if(type != 0 && msg.indexOf(NTConfig_Leader) == -1)
 		return;
-		}
-	}
-	
-	if(type == 0 && !trigger && (msg.indexOf(NTConfig_CS_SafeTP) != -1) && (msg.indexOf(NTConfig_Leader) != -1) && me.areaid == 108 && me.y > 5405)
-		{
-			trigger = true;return;
-		}
-	
-	if(type == 0 && (msg.indexOf("Vizier dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1))
-		{SealBoss1 = true; return;}
-		
-	if(type == 0 && (msg.indexOf("De Seis dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1))
-		{	SealBoss2 = true; return;}
-	
-	if(type == 0 && (msg.indexOf("Infector dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1))
-		{	SealBoss3 = true; return;}
-	
-	if(type == 0 && (msg.indexOf("Diablo Dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1)) {	
-		NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
-	}
-		
-	return;
-}
 
-function UCL_ChaosChat(msg, type)
-{
-	if(type == 0) {
-		var _split = msg.split(":");
-		if(_split.length >= 1 && _split[1] != undefined) {
-			var _sender = _split[0].substring(3, _split[0].length - 3);
-			var _msg = _split[1].substring(1);
-			if(_sender == NTConfig_Leader) {
-				switch(_msg) {
-					case "Leech TP up.":
-							NTC_Delay(100);
-							if(me.areaid == 103){
-								NTM_UsePortal("BluePortal", 108, NTConfig_Leader);
-								NTP_DoPrecast(true);
-							}
-							break;
-					case "Vizier dead.":
-					case "De Seis dead.":
-					case "Infector dead.":					
-							NTC_Delay(100);
-							if(me.areaid == 108){
-								NTM_UsePortal("BluePortal", 103, NTConfig_Leader);
-								if(me.areaid != 103){NTTM_CheckAct();}
-								NTTM_TownMove("portalspot");
-							}
-							break;						
-					case "Diablo TP up.":
-							NTC_Delay(100);
-							if(me.areaid == 103){
-								NTM_UsePortal("BluePortal", 108, NTConfig_Leader);
-								Delay(500);
-								NTM_MoveTo(me.areaid, ChaosLocx, ChaosLocy);
-								NTP_DoPrecast(true);
-							}
-							break;
-					}
-				}
-			}
+	if(!trigger && (msg.indexOf(NTConfig_CS_SafeTP) != -1) && me.areaid == 108 && me.y > 5405){
+		trigger = true;return;
+	}
+	
+	if(msg.indexOf("Vizier dead.") != -1){
+		if(NTConfig_LeechChaos == 0 && me.areaid == 108){
+			NTM_UsePortal("BluePortal", 103, NTConfig_Leader);
+			if(me.areaid != 103){NTTM_CheckAct();}
 		}
-	if(type == 0 && msg.indexOf("Diablo Dead.") != -1 && msg.indexOf(NTConfig_Leader) != -1) {
-		NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+		SealBoss1 = true; return;
 	}
 		
+	if(msg.indexOf("De Seis dead.") != -1){
+		if(NTConfig_LeechChaos == 0 && me.areaid == 108){
+			NTM_UsePortal("BluePortal", 103, NTConfig_Leader);
+			if(me.areaid != 103){NTTM_CheckAct();}
+		}	
+		SealBoss2 = true;
+		return;
+	}
+	
+	if(msg.indexOf("Infector dead.") != -1){
+		if(NTConfig_LeechChaos == 0 && me.areaid == 108){
+			NTM_UsePortal("BluePortal", 103, NTConfig_Leader);
+			if(me.areaid != 103){NTTM_CheckAct();}
+		}
+		SealBoss3 = true;
+		return;
+	}
+	
+	if(msg.indexOf("Diablo Dead.") != -1){
+		if(NTConfig_LeechChaos < 2 && me.areaid == 108){
+			Delay(3000);
+			NTM_MoveTo(me.areaid, 7769, 5284);
+			NTM_UsePortal("BluePortal", 103, NTConfig_Leader);
+		}
+		DiabloDead = true; _portalleech = false;
+		return;
+	}
+	
+	if(NTConfig_LeechChaos == 0 && me.areaid == 103 && msg.indexOf("Leech TP up.") != -1){
+		NTM_UsePortal("BluePortal", 108, NTConfig_Leader);
+		NTP_DoPrecast(true);	
+	}
+	
+	if(NTConfig_LeechChaos == 0 && me.areaid == 103 && msg.indexOf("Diablo TP up.") != -1){
+		NTM_UsePortal("BluePortal", 108, NTConfig_Leader);
+		NTM_MoveTo(108, NTConfig_Chaosleechpos[0], NTConfig_Chaosleechpos[1]);
+		NTP_DoPrecast(true);	
+	}
 	return;
 }
 
 var chaosentrance = [7791, 5571,7793, 5553, 7793, 5535, 7793, 5520, 7793, 5505, 7776, 5490, 7769, 5475,  7769, 5460, 7769, 5445, 7769, 5430, 7776, 5415, 7776, 5400, 7769, 5385, 7769, 5370, 7776, 5355, 7776, 5340, 7776, 5325]
-var chaosfollow = [7776, 5340, 7776, 5325, 7768, 5314, 7752, 5314, 7730, 5314, 7709 , 5291];
+var chaosfollow = [7776, 5325, 7768, 5314, 7752, 5314, 7730, 5314, 7709 , 5291];//7776, 5340, 
 var chaosfollow1 =[7725, 5276, 7750, 5273, 7770, 5271, 7774, 5260, 7777, 5250, 7785, 5241, 7800, 5232, 7814, 5229];
 var chaosfollow2 =[7814, 5232, 7814, 5229, 7814, 5245, 7814, 5262, 7821, 5280, 7835, 5280, 7845, 5280, 7855, 5290, 7874, 5293];
 
@@ -790,7 +767,7 @@ function ChaosLeechFollow()
 	while(!SealBoss3){Delay(200);}
 
 	NTM_MoveTo(108, 7821, 5280, 2);
-	NTM_MoveTo(108, ChaosLocx, ChaosLocy, 2);
+	NTM_MoveTo(108, NTConfig_Chaosleechpos[0], NTConfig_Chaosleechpos[1]);
 	NTP_DoPrecast(true, NTConfig_LeechBo);
 	while(!DiabloDead)
 			Delay(300)
@@ -810,14 +787,15 @@ function My_Safetoadvance()
 	{
 		if(_enemy.hp > 0 && _enemy.IsAttackable())
 		{
+
 			if(_enemy.x < 7765 && _enemy.y > 5321)
 				continue;
 			if(_enemy.x < 7767 && _enemy.y < 5268)
-				continue
+				continue;
 			if(_enemy.x < 7787 && _enemy.y > 5510)
-				continue
+				continue;
 			if(_enemy.x > 7821 && me.y < 5250)
-				continue
+				continue;
 			if(GetDistance(me, _enemy) <= 30)
 			{	Say("!Danger!!!!");
 				leechwarn = true;
@@ -842,7 +820,7 @@ function sealbosswaitloc(classid)
 	var _leechseal = GetPresetUnits(108, NTC_UNIT_OBJECT, classid);
 	
 	locx = (_leechseal[0].roomx * 5 + _leechseal[0].x);
-	locy = (_leechseal[0].roomy * 5 + _leechseal[0].y)
+	locy = (_leechseal[0].roomy * 5 + _leechseal[0].y);
 
 	if (locx == 7655 && locy == 5275)
 		{chaosfollow.push(7709, 5273);return;}
