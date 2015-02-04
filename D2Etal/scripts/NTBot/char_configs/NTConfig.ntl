@@ -357,6 +357,7 @@ var NTConfig_Script = [];
 	var NTConfig_GoWestFromLut;
 	var NTConfig_MinPots;
 	var NTConfig_CheckPotsTown;
+	var NTConfig_PickupFreeGold;
 	var NTConfig_AutoMule;
 	var NTConfig_FinishRun;
 	var NTConfig_MuleStash;

@@ -271,7 +271,7 @@ function NTTMGR_TownManager(simple, ranged)
 		while(true){Say("! ");Delay(300);Say("!Inventory & Stash Full");Delay(1200);}
 	}
 	
-	NTTMGR_FreeGold();
+	if(NTConfig_PickupFreeGold){NTTMGR_FreeGold();}
 }
 
 function NTTMGR_FreeGold()
