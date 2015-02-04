@@ -187,16 +187,5 @@
 //[Name] == RejuvenationPotion
 [Name] == FullRejuvenationPotion
 
-// ##### Keys ##########################
-//[Name] == KeyOfTerror
-//[Name] == KeyOfHate
-//[Name] == KeyOfDestruction
-
-// ##### Organs ########################
-//[Name] == mephisto'sbrain
-//[Name] == baal'seye
-//[Name] == diablo'shorn
-
-
 // ##### Gold ##########################
 [Type] == gold # [Gold] >= 1000

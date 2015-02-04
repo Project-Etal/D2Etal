@@ -160,18 +160,5 @@
 //[Name] == RejuvenationPotion
 [Name] == FullRejuvenationPotion
 
-// ##### Keys ##########################
-[Name] == KeyOfTerror
-[Name] == KeyOfHate
-[Name] == KeyOfDestruction
-
-// ##### Essences ######################
-//[Name] == TwistedEssenceOfSuffering
-//[Name] == ChargedEssenceOfHatred
-//[Name] == BurningEssenceOfTerror
-//[Name] == FesteringEssenceOfDestruction
-
-[Name] == TokenOfAbsolution
-
 // ##### Gold ##########################
 [Type] == gold # [Gold] >= 1000
