@@ -153,6 +153,7 @@ function NT_LoadConfig()
 	NTConfig_CheckPassword = false; 					// Check for game password, quit if none.
 	NTConfig_GoWestFromLut = false;						// If new game starts in act 2, use Warriv to return to act 1?
 	NTConfig_MinPots = 1;								// If less then this many (Health or Mana) potions, will return to town on checkselfsafe 0x01 is calls.
+	NTConfig_PickupFreeGold = false;		 			// set to true to pickup gold dropped near vendors
 	NTConfig_CheckPotsTown = 0;							// If less then this many (Health or Mana) potions, will shop them in normal town functions.  Set 0 to always shop them	
 	NTConfig_AutoMule = false;  							// Set to true to enable muling. Requires NTMule entry point.
 	NTConfig_FinishRun = false; 						// true will finish current game. Good for if running the leecher entry or if running main as leader.

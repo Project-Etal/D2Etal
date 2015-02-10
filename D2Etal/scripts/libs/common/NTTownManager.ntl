@@ -272,6 +272,7 @@ function NTTMGR_TownManager(simple, ranged)
 	}
 	
 	if(NTConfig_PickupFreeGold){NTTMGR_FreeGold();}
+	else { Delay(10); }
 }
 
 function NTTMGR_FreeGold()
