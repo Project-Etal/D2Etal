@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "79-BE";
+var Rev = "80-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -251,9 +251,9 @@ function NT_GameMsgEvents(msg, type)
                 SoJNotify = false;
                 NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_4 + CloneDiabloString);
                 NT_LogDclone();//log event to file
-
-                if(NTConfig_CheckCloneDiablo){
-					if(NTConfig_ExitonDclone){ExitGame();}
+				if(NTConfig_ExitonDclone){ExitGame();}
+				
+                if(NTConfig_CheckCloneDiablo){					
                     me.maxgametime = 0;
                     SetStatusText(COLOR_1 + CloneDiabloString);
                     D2NTStatus("Stop", 0, "Stop"); //This is a fake ID itll just interrupt the current status loop. Simple but effective.

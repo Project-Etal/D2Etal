@@ -27,7 +27,8 @@ function NTTMGR_TownManager(simple, ranged)
 	if(arguments.length < 1)
 		simple = false;		
 	
-	NTC_ClearCursor();
+	NTT_ClearBelt();
+	NT_CheckInventorypots();
 	NTT_CleanPotions();
 	_NTTMGR_BuyPotsInt = NTT_CheckBelt();
 	_NTTMGR_BuyPots = NTConfig_CheckPotsTown ? NTT_NeedPots(true) : NTT_CheckBelt();

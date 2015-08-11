@@ -2556,3 +2556,114 @@ function NTT_CheckFreeStashSpace(PrintToScreen) { // this actually should be a f
 	}
 	return totalFreeSpace;
 }
+
+function NT_CheckInventorypots(){
+	var bsize = NTC_GetBeltSize();
+	NT_BeltInit();
+	var a = BeltRow1[0] +BeltRow1[1] +BeltRow1[2] +BeltRow1[3];
+	if(a < bsize){	NT_MoveInvPots(a,bsize,0);}
+
+	var c = BeltRow3[0] +BeltRow3[1] +BeltRow3[2] +BeltRow3[3];
+	if(c < bsize){	NT_MoveInvPots(c,bsize,2);}
+
+	var d = BeltRow4[0] +BeltRow4[1] +BeltRow4[2] +BeltRow4[3];
+		if(d < bsize){	NT_MoveInvPots(d,bsize,3);}
+
+	var b = BeltRow2[0] +BeltRow2[1] +BeltRow2[2] +BeltRow2[3];
+	if(b < bsize){	NT_MoveInvPots(b,bsize,1);}
+
+	me.Cancel(1);
+	return;
+
+}
+
+function NT_MoveInvPots(amount,bsize,xcol){
+	var potType;
+	var _items = me.GetItems();
+	if(!_items)
+		return;
+	if(NTConfig_BeltColType[xcol] == "hp")(potType = 76)
+	if(NTConfig_BeltColType[xcol] == "mp")(potType = 77)
+	if(NTConfig_BeltColType[xcol] == "rv")(potType = 78)
+
+	for(var i = amount ; i < bsize ; i++){
+		for(var j = 0 ; j < _items.length ; j++){
+			if(_items[j].mode == 0 && _items[j].itemloc == 0 && _items[j].itemtype == potType){
+				if(!GetUIState(0x01)){SetUIState(0x01, true);}
+				if(!GetUIState(0x1F)){SetUIState(0x1F, true);}
+				Delay(200);
+				NTC_ItemToCursor(_items[j]);
+				Delay(200);
+				switch(amount){
+					case 0: me.ClickItem(0, xcol, 0, 5);
+							break;
+					case 1: me.ClickItem(0, xcol, 1, 5);
+							break;
+					case 2: me.ClickItem(0, xcol, 2, 5);
+							break;
+					case 3: me.ClickItem(0, xcol, 3, 5);
+							break;
+				}
+				NTC_PingDelay(200);
+				amount++;
+				for(var k = 0 ; k < 15 ; k++){					
+					Delay(300);
+					if(!me.itemoncursor)
+						break;
+				}
+				if(amount == bsize){return;}
+				}
+			}
+				if(me.itemoncursor)
+					NTC_ClearCursor();
+		}
+
+	return;
+}
+
+function NT_BeltInit(){
+	var _items = me.GetItems();
+	for(var i = 0 ; i < _items.length ; i++){
+		if(_items[i].mode == 2 && (_items[i].itemtype == 76 || _items[i].itemtype == 77 || _items[i].itemtype == 78)){
+			switch(_items[i].x){
+			case 0: BeltRow1[0] = 1;
+						break;
+			case 1: BeltRow2[0] = 1;
+						break;
+			case 2: BeltRow3[0] = 1;
+						break;
+			case 3: BeltRow4[0] = 1;
+						break;
+			case 4: BeltRow1[1] = 1;
+						break;
+			case 5: BeltRow2[1] = 1;
+						break;
+			case 6: BeltRow3[1] = 1;
+						break;
+			case 7: BeltRow4[1] = 1;
+						break;
+			case 8: BeltRow1[2] = 1;
+						break;
+			case 9: BeltRow2[2] = 1;
+						break;
+			case 10: BeltRow3[2] = 1;
+						break;
+			case 11: BeltRow4[2] = 1;
+						break;
+			case 12: BeltRow1[3] = 1;
+						break;
+			case 13: BeltRow2[3] = 1;
+						break;
+			case 14: BeltRow3[3] = 1;
+						break;
+			case 15: BeltRow4[3] = 1;
+						break;
+			}
+		}
+	}
+	// this for loop will be removed its just used as a debug print
+	//for(var i=3 ; i>-1; i--){
+	//	Print(BeltRow1[i]+" "+BeltRow2[i]+" "+BeltRow3[i]+" "+BeltRow4[i]);
+	//}
+	return;
+}
