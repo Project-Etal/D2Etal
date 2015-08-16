@@ -184,6 +184,10 @@ var NTConfig_RushScript = [];
 
 // Belt
 	var NTConfig_BeltColType = new Array(4);
+	var BeltRow1 = [0,0,0,0];
+	var BeltRow2 = [0,0,0,0];
+	var BeltRow3 = [0,0,0,0];
+	var BeltRow4 = [0,0,0,0];
 
 // Pickit
 	var NTConfig_SnagRange;
