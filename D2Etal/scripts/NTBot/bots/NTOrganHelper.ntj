@@ -167,19 +167,3 @@ function NTC_FindMonster(classid, spectype){
 	}
 	return null;
 }
-
-function NTOF_PreBuffFade(){
-	if(NTTM_TownMove("waypoint")){
-		if(NTM_TakeWaypoint(107)){
-			NTP_DoPrecast(true);
-			NTM_MoveTo(me.areaid, 7811, 5872);
-			Print(COLOR_11  +  "Getting Buffed");
-			while(true){
-				if(me.GetStat(181) > 0)
-				break;
-				NTC_Delay(200);
-			}
-		}
-	}
-	Print(COLOR_11  +  "There's Our Fade");
-}

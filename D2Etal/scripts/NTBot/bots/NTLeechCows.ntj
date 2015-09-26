@@ -46,58 +46,6 @@ function NTMain(){
 }
 
 // Internal functions
-function NTR_GetTP(){
-	var _portals = me.GetItems("tbk");
-	if (_portals){
-		for (var i = 0; i < _portals.length; i++){
-			if (_portals[i].mode == 0 && (_portals[i].itemloc != 0 || NTConfig_Columns[_portals[i].y][_portals[i].x] > 0)){
-				return _portals[i];
-			}
-		}
-	}
-	return false;
-}
-
-function abs(integer){
-	if(integer < 0){
-		integer = -integer;
-	}
-	return integer;
-}
-
-function NTR_TakeCowPortal(range){
-	var _portal = NTC_FindUnit(NTC_UNIT_OBJECT, _NTR_STRING_PORTAL);
-	if (_portal){
-		var _isClick;
-		var _preAreaId = me.areaid;
-		do{
-			if (GetDistance(me, _portal) < range && _portal.mode == 2){
-				for (var i = 0; i < 40; i++){
-					if ((i % 10) == 0){
-						if(NTM_GetCloserInt(_portal))
-						_isClick = NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, _portal);
-					}
-					if (_isClick){
-						NTC_Delay(200);
-						break;
-					}
-				}
-				NTC_PingDelay(1000);
-				var j = 0;
-				var check = true;
-				do{
-					if (me.areaid != _preAreaId){
-						NTC_PingDelay(500);
-						return true;
-						check = false;
-					}
-					j++;
-				} while(j < 40 && check == true);
-			}
-		} while (_portal.GetNext());
-	}
-	return false;
-}
 
 function NTR_ClearPosition(range, pickitem, safelevel, failed){
 	var _orgx, _orgy;
@@ -378,30 +326,6 @@ function NTR_ClearRooms(){
 	return true;
 }
 
-function NTT_SecondTomeTP(npc, type, amount){
-	var _items;
-	var _counter = 0;
-	if(arguments.length < 1)
-	return false;
-	if(arguments.length < 2)
-	type = 0;
-	if(arguments.length < 0)
-	amount = 1;
-	if(amount == 0)
-	return false;
-	if(type)
-	_items = npc.GetItems("tbk");
-	if(_items){
-		if(_items.length > 0){
-			for(var i = 0 ; i < amount ; i++){
-				if(NTT_ShopItem(_items[0], npc, 2))
-				_counter++;
-			}
-		}
-	}
-	return (_counter > 0);
-}
-
 function NTR_GetChest(){
 	var _chest;
 	_chest = NTC_FindUnit(NTC_UNIT_OBJECT, "chest");
@@ -458,8 +382,3 @@ function NT_TakeCowPortal(){
 	}
 	return (me.areaid == 39);
 }
-
-// need to make it check for an already open cow portal before getting leg
-// need to add the 2nd config option for id field in
-// add a quest check into cow script if king has been killed then message and skip
-// ^^^ pretty sure it is me.GetQuest(4, 10) for cow king dead

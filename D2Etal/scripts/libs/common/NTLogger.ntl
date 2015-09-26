@@ -133,14 +133,3 @@ function NTLG_TimeStamp(ticks) {
 		timeString = hour +	':' +  minute + ':' + second + '.' + millisecond;
 	return timeString;
 }
-
-function InitLog(filename, time) {
-	file = FileOpen(filename, 2);
-	if (file.size > NTConfig_maxLogSize) {
-		file.Close();
-		SendCopyData("D2NT Manager", null, 9<<16, COLOR_1 + "NTLogHandler: Log Initialized: " + filename);
-		file = FileOpen(filename, 1);
-		file.WriteLine(time + ": " + "Initialized");	
-	}
-	file.Close();
-}

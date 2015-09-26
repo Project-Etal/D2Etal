@@ -103,17 +103,7 @@ function NT_RaiseNecroArmy(Num, Type, Skill) { // Type: 363 = skellies, 364 = ma
 			}
 		} while (_corpse.GetNext());
 	}
-/*
-	if (_corpse) { // this one is slower
-		do {
-			if (NTA_IsValidCorpse(_corpse)) {
-				if (NTC_CastSkill(Skill, NTC_HAND_RIGHT, _corpse)) { _skeletoncount++; }
-				if (_skeletoncount >= Num) { return false; }
-				//Print(Num + " " + Type + " " + Skill);
-			}
-		} while (_corpse.GetNext());
-	}
-*/	
+
 	return true;
 }
 

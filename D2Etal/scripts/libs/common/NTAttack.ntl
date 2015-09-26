@@ -19,7 +19,6 @@ var skippedImmuneBoss = false;
 
 function NTA_Initialize() {
 	if (NTConfig_AttackSkill[1] == -1 || NTConfig_AttackSkill[3] == -1) {
-		//NTA_DetectAttackPattern(); // the onld detection method disabling unless someone updates the list for the default attacks
 		switch (me.classid) {
 		case NTC_CHAR_CLASS_AMAZON: Print("No attacks where set in your NTConfig_Amazon_" + me.charname + ".ntl file!"); break;
 		case NTC_CHAR_CLASS_SORCERESS: Print("No attacks where set in your NTConfig_Sorceress_" + me.charname + ".ntl file!"); break;
@@ -574,16 +573,6 @@ function NTA_ClearPosition(range, pickitem, safelevel) {
 		} // id in field add
 	}
 
-/*
-	switch (safelevel) {
-	case 1:
-		return NTTMGR_CheckSafe(NTConfig_CheckMercSafe);
-	case 2:
-		return NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe);
-	default:
-		break;
-	}
-*/
 	if(NTTMGR_CheckCurse(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe, true)) {
 		NTTMGR_VisitTown();
 	} else if( NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe, true)) {
@@ -1086,25 +1075,6 @@ function NTA_GetResistance(enemy, type) {
 	return 0;
 }
 
-//Is this even used I can't find a call for it
-function NTA_IsWeaponBroken() {
-	var _weapon;
-	_weapon = me.GetItems();
-
-	if (_weapon) {
-		for (var i = 0; i < _weapon.length; i++) {
-			if (_weapon[i].itemflag & 0x100) {
-				if (_weapon[i].mode == 1 && _weapon[i].itemloc == 4 || _weapon[i].itemloc == 5) {
-					Print(COLOR_8 + "My weapon broke, I am going to town to repair it.");
-					NTTMGR_VisitTown();
-					break;
-
-				}
-			}
-		}
-	}
-}
-
 function NTA_GetAttackType(target, startIndex, resistMaxPrimary, resistMaxSecondary, resistMaxTertiary) {
 
 	var _currIndex;
@@ -1172,119 +1142,6 @@ function NTA_HighMaxAttackAreas() {
 		}
 	}
 	return false;
-}
-
-function NTA_ClearPositionGoodMonsters(range, pickitem, safelevel) {
-	var _orgx, _orgy;
-	var _spectype = [0x0A];
-	var _skiplist;
-	var _attackcount = 0;
-	var _target;
-	var _distance, _mingid, _mindistance;
-	var _result;
-
-	if (NTConfig_AttackSkill[1] < 0 || NTConfig_AttackSkill[3] < 0) return false;
-
-	switch (arguments.length) {
-	case 0:
-		range = 20;
-	case 1:
-		pickitem = false;
-	case 2:
-		safelevel = 0;
-	default:
-		if (NTConfig_CheckSelfSafe.length < 1 && NTConfig_CheckMercSafe.length < 1) safelevel = 0;
-		break;
-	}
-
-	_orgx = me.x;
-	_orgy = me.y;
-
-	for (var i = 0; i < _spectype.length; i++) {
-		_skiplist = new Array();
-
-		while (_attackcount < (i + 1) * 100) {
-			_mindistance = 100000;
-
-			_target = NTC_FindUnit(NTC_UNIT_MONSTER);
-
-			if (_target) {
-				do {
-					if (_skiplist.indexOf(_target.gid) < 0) {
-						if (_target.IsAttackable() && (_target.spectype & _spectype[i])) {
-							if (GetDistance(_orgx, _orgy, _target.x, _target.y) <= range && NTA_IsValidMonster(_target)) {
-								_distance = GetDistance(me, _target);
-
-								if (_distance < _mindistance) {
-									_mingid = _target.gid;
-									_mindistance = _distance;
-								}
-							}
-						} else _skiplist.push(_target.gid);
-					}
-				} while (_target.GetNext());
-			}
-
-			if (_mindistance < 100000) {
-				_target = NTC_FindUnit(NTC_UNIT_MONSTER, _mingid);
-
-				if (_target) {
-					_result = NTA_Attack(_target, (_attackcount % 30) == 0);
-
-					switch (_result) {
-					case 1:
-						_skiplist.push(_mingid);
-						break;
-					case 2:
-					case 3:
-						_attackcount++;
-						_sorcattack++;
-						if (_target.mode === 0 || _target.mode === 12) {
-							NTSI_FastPick();
-						}
-						break;
-					default:
-						return false;
-					}
-				}
-			} else break;
-		}
-	}
-
-	if (me.classid == NTC_CHAR_CLASS_PALADIN) {
-		if (_attackcount > 2 && (parseInt(me.hp * 100 / me.hpmax) < NTConfig_UseRedemptionHP || parseInt(me.mp * 100 / me.mpmax) < NTConfig_UseRedemptionMP)) {
-			if (NTC_PutSkill(124, NTC_HAND_RIGHT)) NTC_PingDelay(1000);
-		}
-	} else if (me.classid == NTC_CHAR_CLASS_NECROMANCER) {
-		NTA_SkeletonArmy(NTConfig_SkeletonArmy);
-		NTA_MageArmy(NTConfig_MageArmy);
-		NTA_ReviveArmy(NTConfig_ReviveArmy);
-	} else if (me.classid == NTC_CHAR_CLASS_BARBARIAN) {
-		if (NTConfig_UseFindItem && _attackcount > 2) {
-			if (!NTA_CheckForCloseMonsters(10)) {
-				//Print(COLOR_25 + "No Monsters close - looting");
-				NTA_FindItem(NTConfig_FindItemRange);
-			}
-		}
-	}
-
-	if (NTConfig_OpenChest) {
-		_target = NTC_GetSpecialChest();
-
-		if (_target && GetDistance(_orgx, _orgy, _target.x, _target.y) <= range && NTC_OpenChest(_target)) _attackcount++;
-		_sorcattack++;
-	}
-
-	if (pickitem && _attackcount > 0) NTSI_PickItems();
-
-	switch (safelevel) {
-	case 1:
-		return NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe);
-	case 2:
-		return NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe);
-	}
-
-	return true;
 }
 
 function NTA_CheckMercInfinity() {
@@ -1653,19 +1510,3 @@ function NTA_HaveArrows() {
 		NTTMGR_VisitTown(true);
 	}
 }
-
-/*function NTA_CheckForCTA() {
-	var _weapon = me.GetItems();
-	var haveCTA = false;
-	if (_weapon ) {
-		for(var i = 0 ; i < _weapon.length ; i++){
-			if(_weapon[i].mode == 1 && (_weapon[i].itemflag&0x4000000) && _weapon[i].itemprefix == 0x5027){
-				haveCTA = true;
-				break;
-			}
-		}
-	}
-	return haveCTA;
-}*/
-
-

@@ -520,45 +520,6 @@ function getRandomString(_length)
 
 	return _retString;
 }
-function getGameName(lastGameString)
-{
-   if(!lastGameString)
-      return "";
-   else
-      return (lastGameString.split("-")[0] + "-");
-}
-
-function getGameCounter(lastGameString, simple)
-{
-   var myCount;
-   if(!lastGameString)
-      return "-1";
-   else
-   {
-      switch(lastGameString.split("-")[1])
-      {
-         case "08":
-            myCount = 9;
-            break;
-         case "09":
-            myCount = 10;
-            break;
-		case "99":
-			myCount = 00;
-			break;
-         default:
-            myCount = parseInt(lastGameString.split("-")[1]) + 1;
-            break;
-      }
-      if(!simple)
-      {
-         if(myCount <= 9)
-            return ('0' + myCount);
-      }
-      return myCount;
-   }
-}
-
 function My_ExitGame_Check()
 {
     for (var i = 0; i < 40; i++)

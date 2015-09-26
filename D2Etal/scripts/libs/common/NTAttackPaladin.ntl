@@ -1,54 +1,5 @@
-function NTA_DetectAttackPattern() {
-	return NTA_PaladinAttackPatternInt();
-}
-
 function NTA_Attack(target, firstorder) {
 	return NTA_PaladinAttackInt(target, firstorder);
-}
-
-function NTA_PaladinAttackPatternInt() {
-	var _maxindex, _maxskill;
-	var _avgskilllevel = new Array();
-
-	_avgskilllevel[0] = parseInt((me.GetSkill(112, false) + me.GetSkill(108, false) + me.GetSkill(115, false)) / 3);
-	_avgskilllevel[1] = parseInt((me.GetSkill(106, false) + me.GetSkill(96, false)) / 2);
-	_avgskilllevel[2] = parseInt((me.GetSkill(121, false) + me.GetSkill(101, false) + me.GetSkill(118, false)) / 3);
-
-	_maxindex = -1;
-	_maxskill = 0;
-
-	for (var i = 0; i < _avgskilllevel.length; i++) {
-		if (_avgskilllevel[i] > _maxskill) {
-			_maxindex = i;
-			_maxskill = _avgskilllevel[i];
-		}
-	}
-
-	switch (_maxindex) {
-	case 0:
-		// Blessed Hammer
-		NTConfig_AttackSkill[1] = 112;
-		NTConfig_AttackSkill[2] = 113;
-		NTConfig_AttackSkill[3] = 112;
-		NTConfig_AttackSkill[4] = 113;
-		break;
-	case 1:
-		// Zeal
-		NTConfig_AttackSkill[1] = 106;
-		NTConfig_AttackSkill[2] = 122;
-		NTConfig_AttackSkill[3] = 106;
-		NTConfig_AttackSkill[4] = 122;
-		break;
-	case 2:
-		// Fist of the Heavens
-		NTConfig_AttackSkill[1] = 121;
-		NTConfig_AttackSkill[2] = 123;
-		NTConfig_AttackSkill[3] = 121;
-		NTConfig_AttackSkill[4] = 123;
-		break;
-	}
-
-	return (NTConfig_AttackSkill[1] && NTConfig_AttackSkill[3]);
 }
 
 function NTA_PaladinAttackInt(target, firstorder) {

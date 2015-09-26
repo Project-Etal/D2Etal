@@ -484,19 +484,6 @@ function timeoutDelay(time, location)
 	}
 }
 
-function getRandomString(_length)
-{
-	_retString = "";
-	_charSet = "0123456789abcdefghijklmnopqrstuvwxyz";
-
-	while(_length--)
-	{
-		_retString += _charSet.charAt(Random(0, _charSet.length-1));
-		Delay(1);
-	}
-
-	return _retString;
-}
 function getGameName(lastGameString)
 {
    if(!lastGameString)

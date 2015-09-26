@@ -1,68 +1,6 @@
-function NTA_DetectAttackPattern() {
-	return NTA_AmazonAttackPatternInt();
-}
 
 function NTA_Attack(target, firstorder) {
 	return NTA_AmazonAttackInt(target, firstorder);
-}
-
-function NTA_AmazonAttackPatternInt() {
-
-	var _maxindex, _maxskill;
-	var _avgskilllevel = new Array();
-
-	_avgskilllevel[0] = me.GetSkill(35, false);
-	_avgskilllevel[1] = parseInt((me.GetSkill(31, false) + me.GetSkill(11, false) + me.GetSkill(21, false)) / 3);
-	_avgskilllevel[2] = me.GetSkill(26, false);
-
-
-	_maxindex = -1;
-	_maxskill = 0;
-
-	for (var i = 0; i < _avgskilllevel.length; i++) {
-		if (_avgskilllevel[i] > _maxskill) {
-			_maxindex = i;
-			_maxskill = _avgskilllevel[i];
-		}
-	}
-
-	switch (_maxindex) {
-	case 0:
-		// Lightning Fury for Javazon
-		NTConfig_AttackSkill[1] = 35;
-		NTConfig_AttackSkill[2] = 35;
-		NTConfig_AttackSkill[3] = 35;
-		NTConfig_AttackSkill[4] = 35;
-		NTConfig_AttackSkill[5] = 35;
-		NTConfig_AttackSkill[6] = 35;
-		NTConfig_AttackSkill[7] = 24;
-		break;
-
-	case 1:
-		// Freezing Arrow for Bowzon
-		NTConfig_AttackSkill[1] = 31;
-		NTConfig_AttackSkill[2] = 31;
-		NTConfig_AttackSkill[3] = 31;
-		NTConfig_AttackSkill[4] = 31;
-		NTConfig_AttackSkill[5] = 31;
-		NTConfig_AttackSkill[6] = 31;
-		NTConfig_AttackSkill[7] = 31;
-		break;
-
-	case 2:
-		// Cold Arrow + Strafe for Bowzon
-		NTConfig_AttackSkill[0] = 11;
-		NTConfig_AttackSkill[1] = 26;
-		NTConfig_AttackSkill[2] = 26;
-		NTConfig_AttackSkill[3] = 26;
-		NTConfig_AttackSkill[4] = 26;
-		NTConfig_AttackSkill[5] = 26;
-		NTConfig_AttackSkill[6] = 26;
-		NTConfig_AttackSkill[7] = 22;
-		break;
-	}
-
-	return (NTConfig_AttackSkill[1] && NTConfig_AttackSkill[3]);
 }
 
 function NTA_AmazonAttackInt(target, firstorder) {

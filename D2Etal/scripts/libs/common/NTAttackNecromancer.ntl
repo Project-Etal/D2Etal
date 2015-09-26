@@ -1,13 +1,5 @@
-function NTA_DetectAttackPattern() {
-	return NTA_NecromancerAttackPatternInt();
-}
-
 function NTA_Attack(target, firstorder) {
 	return NTA_NecromancerAttackInt(target, firstorder);
-}
-
-function NTA_NecromancerAttackPatternInt() {
-	return false;
 }
 
 function NTA_NecromancerAttackInt(target, firstorder) {

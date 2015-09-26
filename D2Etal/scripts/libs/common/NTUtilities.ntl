@@ -1619,21 +1619,3 @@ function NTU_GetNearbyMonsters(_range) {
 	}
 	return _nearbyMonsters;
 }
-
-/*function NTU_LogPrintSimple(filepath, mesg, printareaid){ // will eventually conbine the log print functions, but for now.....
-
-	if(arguments.length < 3 || printareaid)
-		var _Myarea = GetArea();
-	else if(!printareaid)
-		var _Myarea = "";
-	var _filepath = filepath;
-	var _mesg = mesg;
-	
-	var date = new Date().toLocaleFormat("<%a, %b %d, %H:%M>");
-	var logfile = FileOpen(_filepath, 2); // opens file 
-	if(!logfile)
-		var logfile = FileOpen(_filepath, 1); // if file not there then creates it
-
-	logfile.WriteLine(date + " " + _mesg + "Area[" + _Myarea.name + "]");
-	logfile.Close();
-}*/

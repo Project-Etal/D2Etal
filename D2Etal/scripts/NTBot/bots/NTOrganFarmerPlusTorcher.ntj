@@ -992,10 +992,6 @@ function NT_DoUbers(){
 
 ////////////////////////// test functions start ////////////////////////////////////////////
 
-function CheckPrintNewPortals(returnportal){
-	Print(COLOR_8 + "CheckPrintNewPortals " + returnportal); // + "  " +  returnportal.name + " " + returnportal.subareaid);
-}
-
 function CheckPrintPortals(){
 	Print(COLOR_2 + "portals in existingPortal array are");
 	for(var i = 0 ; i < existingPortal.length ; i++){
@@ -1076,25 +1072,3 @@ function NT_CountPortalsForReturn(){
 	}	
 	return thisManyMinis;
 }
-
-function NT_CheckMonstersClose(range, number){ // add number of monsters close before moving this should actually be based on item to be picked or tp to be taken.  This is not being used, but leaving it here for later maybe
-    if(arguments.length < 1){
-        range == 5;
-	}
-    var _monstercount = 0;    
-    var _checkMonster = NTC_FindUnit(NTC_UNIT_MONSTER);
-    if(_checkMonster){
-        do{
-            if(_checkMonster.IsAttackable() && NTA_IsValidMonster(_checkMonster) && GetDistance(me.x, me.y, _checkMonster.x, _checkMonster.y) < range){
-				_monstercount++;
-            }
-        } while(_checkMonster.GetNext());
-    }
-	if(_monstercount >= number){
-		return true;
-	}
- 	if(_monstercount <= number){
-		return false;
-	}   
-}
-

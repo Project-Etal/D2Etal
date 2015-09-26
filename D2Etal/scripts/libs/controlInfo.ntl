@@ -845,21 +845,4 @@ function controlInfo() {
 		return 0;	// no valid location found
 	
 	}
-	
-	// returns the current location, see locations array for listing
-	this.getLocationQuick = function( ) {	
-		for(_i=0; _i<this.locations.length; _i++) {
-			found = true;
-			for(_j=0; _j<this.locations[_i].location.length; _j++) {
-				if( !(control = this.get( this.locations[_i].location[_j] )) ||
-					( this.locations[_i].checkNullText && control.text==null ) ) {
-					found = false;
-					break;
-				}
-			}
-			if(found) return this.locations[_i];
-		}
-	
-		return 0;	// no valid location found
-	}
 }

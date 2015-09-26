@@ -269,16 +269,3 @@ function nextMulePos(pos)
 			}
 		}
 }
-
-function tryItemsAgain()
-{
-	var _item = NTC_FindUnit(NTC_UNIT_ITEM);
-	for(var i = 0; i < _item.length; i++) {
-		if(_item.mode == 3 || _item.mode == 5) {
-			if(!NTSI_IsIgnoredItemInt(_item.classid) && _item.classid != 529 && _item.classid != 530) {
-				NTSI_PickUpItemInt(_item);
-			}
-		}
-	}
-	return;
-}

@@ -1,37 +1,5 @@
-function NTA_DetectAttackPattern() {
-	return NTA_BarbarianAttackPatternInt();
-}
-
 function NTA_Attack(target, firstorder) {
 	return NTA_BarbarianAttackInt(target, firstorder);
-}
-
-function NTA_BarbarianAttackPatternInt() {
-	var _maxindex, _maxskill;
-	var _avgskilllevel = new Array();
-
-	_avgskilllevel[0] = me.GetSkill(151, false);
-
-	_maxindex = -1;
-	_maxskill = 0;
-
-	for (var i = 0; i < _avgskilllevel.length; i++) {
-		if (_avgskilllevel[i] > _maxskill) {
-			_maxindex = i;
-			_maxskill = _avgskilllevel[i];
-		}
-	}
-
-	switch (_maxindex) {
-	case 0:
-		// Whirlwind
-		NTConfig_AttackSkill[1] = 151;
-		NTConfig_AttackSkill[3] = 151;
-		NTConfig_AttackSkill[5] = 152;
-		break;
-	}
-
-	return (NTConfig_AttackSkill[1] && NTConfig_AttackSkill[3]);
 }
 
 function NTA_BarbarianAttackInt(target, firstorder) {
@@ -76,29 +44,6 @@ function NTA_BarbarianAttackInt(target, firstorder) {
 		return 3;
 	}
 
-/*
-	if(NTA_GetResistance(target, _NTA_SkillDamage[_primaryindex]) < 100)
-	{
-		if((_NTA_SkillRange[_primaryindex] < 4 || NTConfig_AttackSkill[_primaryindex] == 151) && !CheckCollision(target.areaid, target.x, target.y, 1))
-			return 1;
-
-		if(!NTA_BarbarianCastSkillInt(_primaryindex, target))
-			return 2;
-
-		return 3;
-	}
-
-	if(NTConfig_AttackSkill[5] > -1 && NTA_GetResistance(target, _NTA_SkillDamage[5]) < 100)
-	{
-		if((_NTA_SkillRange[5] < 4 || NTConfig_AttackSkill[5] == 151) && !CheckCollision(target.areaid, target.x, target.y, 1))
-			return 1;
-
-		if(!NTA_BarbarianCastSkillInt(5, target))
-			return 2;
-
-		return 3;
-	}
-	*/
 	return 1;
 }
 

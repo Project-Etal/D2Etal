@@ -762,15 +762,6 @@ function NT_File(path, mode, msg, delay) {
 
     return _msg;
 }
-		
-function SetForNextGame()
-{
-	var gametime = GetTickCount() + 1000 * 60 * 3 + 1000 * 15;
-	var timeTilStart = gametime - GetTickCount();
-	locationTimeout(timeTilStart, location);
-	chatActionsDone = false;
-	inGameAt = 0;
-}
 
 function NT_CheckNameLength(prefix, totallength)
 {
@@ -786,18 +777,6 @@ function NT_LogMuleAccount(newaccount)
 		var muleaccountlist = FileOpen("AMS/MuleLogs/" + me.account + "_muleaccount.txt", 1);  
 
 	muleaccountlist.WriteLine(_newAccount + "/" + muleAccountPassword);
-	muleaccountlist.Close();
-	return;
-}
-
-function LogMuleAccountStatus(newaccount)
-{
-	var _newAccount = newaccount;
-	var muleaccountlist = FileOpen("AMS/MuleStatus/" + me.account + "_muleaccount.txt", 2); 
-	if(!muleaccountlist)
-		var muleaccountlist = FileOpen("AMS/MuleStatus/" + me.account + "_muleaccount.txt", 1);  
-
-	muleaccountlist.WriteLine(_newAccount);
 	muleaccountlist.Close();
 	return;
 }

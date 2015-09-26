@@ -51,17 +51,6 @@ function NTMain(){
 	NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 }
 
-function NTKBL_CheckPlayer(leader){
-	var _player = GetPlayerUnit();	
-	while(_player.GetNext()){
-		if(_player.name == leader){
-			NTConfig_Leaderareaid = _player.areaid;
-			return true;
-		}
-	}
-	return false;
-}
-
 function NT_TravLeechMessageHandler(){
 	var _msg = NT_File("logs/messagecomands/"+me.charname+"-trav.txt", 0);
 	if (_msg && _msg != Trav_PreMessage){ 

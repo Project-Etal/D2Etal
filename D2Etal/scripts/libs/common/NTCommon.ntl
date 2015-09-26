@@ -459,16 +459,6 @@ function NTC_GetSkillLevel(skillid)
 	return 0;
 }
 
-function NTC_GetCastDelay(skillid)
-{
-	var _delay = GetBaseStat("skills.txt", skillid, 165);
-
-	if(_delay)
-		return (_delay*NTC_DELAY_FRAME);
-
-	return 0;
-}
-
 function NTC_SwapWeapons(switchto)
 {
 	if(arguments.length > 0 && me.weaponstab == switchto)
@@ -845,9 +835,6 @@ function NTC_SendLogToOOG(type, logString)
 	return SendCopyData("D2NT Manager", null, 9<<16|type, logString);
 }
 
-/////////////////////////////////////////////////////
-///// Jinay item log start///////////////////////////
-/////////////////////////////////////////////////////
 
 function NTC_LogCurScript(script)
 {
@@ -891,15 +878,6 @@ function NTC_GetScript(index)
 
    return _script;
 }
-/////////////////////////////////////////////////////
-///// Jinay item log start///////////////////////////
-/////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////
-///// Bobtite's openall chest in area start /////////////////
-/////////////////////////////////////////////////////////////
-///// credit for print chest id's goes to ringelblume1 //////
-/////////////////////////////////////////////////////////////
 
 function OpenChestsInArea() {
 	//var ChestIds = [104, 105, 106, 107, 5,6,87,92,143,140,141,144,146,147,148, 176, 177, 181, 183, 198, 240 , 241 , 242 , 243, 329, 330, 331,332, 333, 334 , 335, 336, 354, 355, 356, 371 ,387 , 389, 390, 391, 397 , 405 , 406 , 407 , 413 , 420 , 424 , 425 , 430 , 431 , 432 , 433 , 454 , 455 , 501 , 502 ,504 , 505, 580, 581]
@@ -943,27 +921,6 @@ function SortRoomInt(a, b) {
 
    return 1;
 }
-/////////////////////////////////////////////////////////////
-///// Bobtite's openall chest in area stop /////////////////
-/////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-/// Added by petrus2, it should make it easier to see huge numbers///
-/// intended to work with NTExp.ntl but it will work anywhere////////
-/////////////////////////////////////////////////////////////////////
-
-function add_commas(nStr)
-{
-	nStr += '';
-	x = nStr.split('.');
-	x1 = x[0];
-	x2 = x.length > 1 ? '.' + x[1] : '';
-	var rgx = /(d+)(d{3})/;
-	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	}
-	return x1 + x2;
-}
 
 function addSeparatorsNF(nStr, inD, outD, sep)
 {
@@ -980,9 +937,6 @@ function addSeparatorsNF(nStr, inD, outD, sep)
 	}
 	return nStr + nStrEnd;
 }
-//////////////////////////////////////////////////
-///End of petrus2 editing/////////////////////////
-//////////////////////////////////////////////////
 
 function NTC_RemoveLag(target, delay, count)
 {
@@ -1499,50 +1453,11 @@ function NTC_PrintRandomColor(){
 	return randomColor;
 }
 
-function NTC_ShowPossibleColors(){ // this will print out all possible colors
-	var possibleColors =
-	[
-	 COLOR_0,
-	 COLOR_1,
-	 COLOR_2,
-	 COLOR_3,
-	 COLOR_4,
-	 COLOR_5,
-	 COLOR_6,
-	 COLOR_7,
-	 COLOR_8,
-	 COLOR_9,
-	 COLOR_10,
-	 COLOR_11,
-	 COLOR_12,
-	 COLOR_13,
-	 COLOR_14,
-	 COLOR_15,
-	 COLOR_16,
-	 COLOR_17,
-	 COLOR_18,
-	 COLOR_19,
-	 COLOR_20,
-	 COLOR_21,
-	 COLOR_22,
-	 COLOR_23,
-	 COLOR_24,
-	 COLOR_25
-	]
-	for(var i = 0 ; i < possibleColors.length ; i++){
-		Print(possibleColors[i] + "This is COLOR_" + i)
-		Delay(1000);
-	}
-}
-
 function NTC_RandomSelect(varArray){ // this uses the array as an arguement to make it universal for other uses
 	var randomReturn = varArray[Math.floor(Math.random() * varArray.length)];
 	return randomReturn;
 }
 
-function NTC_IsLastScript(scriptName) {
-	return NTConfig_Script[NTConfig_Script.length - 1] === scriptName;
-}
 
 function NTC_TPGuard(radius)
 {
@@ -1666,23 +1581,6 @@ function NTC_GetNextGame() {
 	return result;
 }
 
-function NTC_IsItemLooted(itemcode)
-{
-	var _item;
-	
-	_item = NTC_FindUnit(NTC_UNIT_ITEM);
-
-	if(_item)
-	{
-		do
-		{
-			if(_item.code == itemcode)
-				return false;
-				
-		} while(_item.GetNext());	
-	}
-	return true;
-}
 
 // this is a simple info storage that returns the areaid from a wp id
 var NTC_WPIdToAreaId = [];

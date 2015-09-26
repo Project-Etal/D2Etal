@@ -23,10 +23,6 @@ function NTE_InitializeStats() {
 	_startGold = (me.GetStat(14) + me.GetStat(15));
 }
 
-function NTE_GetStats() {
-    Print(_startLvl);
-}
-
 function NTE_ComputeStats(chickenFlag) {
     var _endLvl = me.GetStat(12);
     var _lvlsGained = _endLvl - _startLvl;

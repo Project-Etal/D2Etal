@@ -1,39 +1,5 @@
-function NTA_DetectAttackPattern() {
-	return NTA_DruidAttackPatternInt();
-}
-
 function NTA_Attack(target, firstorder) {
 	return NTA_DruidAttackInt(target, firstorder);
-}
-
-function NTA_DruidAttackPatternInt() {
-	var _maxindex, _maxskill;
-	var _avgskilllevel = new Array();
-
-	_avgskilllevel[0] = me.GetSkill(245, false);
-	_maxindex = -1;
-	_maxskill = 0;
-
-	for (var i = 0; i < _avgskilllevel.length; i++) {
-		if (_avgskilllevel[i] > _maxskill) {
-			_maxindex = i;
-			_maxskill = _avgskilllevel[i];
-		}
-	}
-
-	switch (_maxindex) {
-	case 0:
-		//
-		NTConfig_AttackSkill[1] = 245;
-		NTConfig_AttackSkill[2] = 245;
-		NTConfig_AttackSkill[3] = 245;
-		NTConfig_AttackSkill[4] = 245;
-		NTConfig_AttackSkill[5] = 245;
-		NTConfig_AttackSkill[6] = 245;
-		break;
-	}
-
-	return (NTConfig_AttackSkill[1] && NTConfig_AttackSkill[3]);
 }
 
 function NTA_DruidAttackInt(target, firstorder) {
@@ -87,24 +53,6 @@ function NTA_DruidAttackInt(target, firstorder) {
 
 		return 3;
 	}
-
-/*
-   if(NTA_GetResistance(target, _NTA_SkillDamage[_primaryindex]) <= 90)
-   {
-      if(!NTA_DruidCastSkillInt(_primaryindex, target))
-         return 2;
-
-      return 3;
-   }
-
-   if(NTConfig_AttackSkill[5] > -1 && NTA_GetResistance(target, _NTA_SkillDamage[5]) <= 80)
-   {
-      if(!NTA_DruidCastSkillInt(5, target))
-         return 2;
-
-      return 3;
-   }
-	*/
 
 	if (NTA_GetResistance(target, _NTA_SkillDamage[index]) < 100 || (_primaryindex == 1 && NTC_GetMerc())) {
 		if (!NTA_DruidCastSkillInt(_primaryindex, target)) return 2;

@@ -501,18 +501,6 @@ function NTC_PrintPossibleLeaders()
 	return false;
 }
 
-function NT_LoadConfigError()
-{
-	Print(COLOR_4 + "You have an error in your character configuration file");
-	Delay(750);
-	Print(COLOR_4 + "You MUST fix it before the bot will run");
-	Delay(750);
-	Print(COLOR_2 + "Go to http://wiki.projectetal.com/");
-	Delay(750);
-	Print(COLOR_4 + "Then find the Etal First Time Configuration Guide");
-	Delay(750);
-	Print(COLOR_1 + "READ THE GUIDE VERY CLOSELY BEFORE POSTING ON THE FORUMS");
-}
 
 function NT_LogDclone(){
     var date = new Date().toLocaleFormat("<%a, %b %d, %H:%M>");

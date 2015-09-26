@@ -1,13 +1,5 @@
-function NTA_DetectAttackPattern() {
-	return NTA_AssassinAttackPatternInt();
-}
-
 function NTA_Attack(target, firstorder) {
 	return NTA_AssassinAttackInt(target, firstorder);
-}
-
-function NTA_AssassinAttackPatternInt() {
-	return false;
 }
 
 function NTA_AssassinAttackInt(target, firstorder) {

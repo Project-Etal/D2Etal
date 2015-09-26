@@ -560,12 +560,3 @@ var ignoredClassids = [
 ];
 
 var ignoredGids = [];
-
-function NTSI_CheckKurastChest() {
-	for(var i = 0 ; i < NTConfig_Script.length; i++) {
-		if(NTConfig_Script[i].toLowerCase().indexOf("chest") != -1) {
-			return true;
-		}
-	}
-	return false;
-}
