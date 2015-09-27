@@ -195,6 +195,11 @@ function _classid(i)
 	}
 }
 
+function MG_Resists()
+{
+	Resi = [(me.GetStat(39) + DiffMod), (me.GetStat(43) + DiffMod), (me.GetStat(41) + DiffMod), (me.GetStat(45) + DiffMod)];
+}
+
 var _NTLW_timerLastDrink = new Array(5);
 
 function ChickenStuff()
