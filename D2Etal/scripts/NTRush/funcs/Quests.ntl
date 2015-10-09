@@ -294,12 +294,11 @@ var Quests =  {
 			Common.LogError("NTM_TakeStair()");
 			return false;
 		}
-		
-		NTM_MoveTo(me.areaid,15022,14041,0,true);
-		NTM_MoveTo(me.areaid,15022,14061,0,true);
-		NTM_MoveTo(me.areaid,15040,14069,0,true);
-		NTM_MoveTo(me.areaid,15058,14065,0,true);
-		NTM_MoveTo(me.areaid,15063,14052,0,true);
+		var _temple =[15022,14041,15022,14061,15040,14069,15058,14065,15063,14052];
+		for( var t = 0; t < _temple.length; t+=2){
+			NTM_MoveTo(me.areaid,_temple[t],_temple[t+1]);
+			NTA_ClearPosition(15);
+		}
 
 		NTA_ClearLevel(true);	
 			
