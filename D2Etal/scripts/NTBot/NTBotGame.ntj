@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "85-BE";
+var Rev = "86-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -195,11 +195,17 @@ function NTMain()
 		Delay(1000); // change this to 1 second
 	}
 
-	if (endtime != null || GetTickCount() < endtime) {
-		Say("!Waiting " + parseInt((endtime - GetTickCount())/1000)  + " seconds before exiting game!");
-	}
+    if (endtime != null || NTConfig_MinIngameTime > 0 && GetTickCount() < endtime) {
+		NTTM_CheckAct();
+        var gameidle = parseInt((endtime - GetTickCount())/1000);        
+        for(var i = 0 ; i < gameidle ; i++) {
+			SetStatusText("Waiting " + (gameidle-i) + " seconds to exit game!");
+            Delay(1000);
+        }
+    }
 
 	ExitGame();
+	Delay(3000);// testing to avoid repetive stats sent to manager log
 }
 var WhoDatIs; // Needed for spam catcher addition, DO NOT remove
 
