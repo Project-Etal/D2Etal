@@ -32,6 +32,7 @@ function NTMain()
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTA_KillMonster()");
 			return;
 		}
+		NTSI_PickItems();
 	}
 	if(NTConfig_ArreatEvilUrn){
 		if(NTConfig_ClearArreatPlateau != 0){
