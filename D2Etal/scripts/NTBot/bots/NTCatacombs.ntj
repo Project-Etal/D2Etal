@@ -24,9 +24,6 @@ function NTMain(){
 			return;
 		}
 		NTP_DoPrecast(true);
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
-		}
 		if(!NTM_MoveToPresetUnit(33, NTC_UNIT_TILE, 15)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
 			return;
@@ -51,9 +48,6 @@ function NTMain(){
 					NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 				}
 			}
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 		if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_TILE, 18)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
@@ -80,9 +74,6 @@ function NTMain(){
 				}
 			}
 		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
-		}
 		if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_TILE, 18)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
 			return;
@@ -107,9 +98,6 @@ function NTMain(){
 					NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 				}
 			}
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 		if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_TILE, 18)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
@@ -144,9 +132,6 @@ function NTMain(){
 				NTSI_PickItems();
 			}
 			NTT_CleanPotions();
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 		if(NTConfig_ClearAllCatacombs > 0){
 			if(NTConfig_ClearAllCatacombs == 1){
@@ -209,9 +194,6 @@ function NTMain(){
 				NTSI_PickItems();
 			}
 			NTT_CleanPotions();
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 	}
 	NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
