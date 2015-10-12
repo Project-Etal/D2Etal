@@ -552,13 +552,15 @@ function NTA_ClearPosition(range, pickitem, safelevel) {
 
 	if (NTConfig_OpenSpecialChests) {
 		_target = NTC_GetSpecialChest();
-
-		if (_target && GetDistance(_orgx, _orgy, _target.x, _target.y) <= range && NTC_OpenChest(_target)) { _attackcount++; _sorcattack++; }
+		if (_target && GetDistance(_orgx, _orgy, _target.x, _target.y) <= range && NTC_OpenChest(_target)) {
+			NTSI_PickItems();
+			_attackcount++;
+			_sorcattack++;
+		}
 	}
 	
-	if (NTC_ShouldClearChests()) {
+	if (NTC_ShouldClearChests())
 		NTC_OpenChestsInAreaNear(_orgx, _orgy, range);
-	}
 
 	if(NTConfig_IdInField){
 		if (!NTT_CheckSpace(NTConfig_FreeSpaceXY[0], NTConfig_FreeSpaceXY[1])) { 
@@ -819,9 +821,10 @@ function NTA_ClearRoom(pickitem, safelevel) {
 
 	if (NTConfig_OpenSpecialChests) {
 		_target = NTC_GetSpecialChest();
-
-		if (_target && _room.UnitInRoom(_target) && NTC_OpenChest(_target)) _attackcount++;
-		_sorcattack++;
+		if (_target && _room.UnitInRoom(_target) && NTC_OpenChest(_target)){
+			_attackcount++;
+			_sorcattack++;
+		}
 	}
 
 	if (NTC_ShouldClearChests()) {
