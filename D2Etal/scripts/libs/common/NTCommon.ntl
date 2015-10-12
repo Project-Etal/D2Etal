@@ -631,6 +631,11 @@ function NTC_GetSpecialChest()
 	return null;
 }
 
+function NTC_ShouldClearChests()
+{
+	return NTConfig_OpenChests && NTConfig_DontOpenChestAreas.indexOf(me.areaid) == -1);
+}
+
 function NTC_OpenChest(chest)
 {
 	if(!chest || chest.mode > 0)
@@ -638,8 +643,8 @@ function NTC_OpenChest(chest)
 		
 	for(var i = 0 ; i < 2 ; i++)
 	{
-		if(GetDistance(me, chest) < 2 || (i != 1 && NTC_GetSkillLevel(43) && GetDistance(me, chest) < 18) || NTM_MoveTo(chest.areaid, chest.x+1, chest.y))
-			if((NTC_GetSkillLevel(43) && i < 1 && NTC_CastSkill(43, NTC_HAND_RIGHT, chest)) || NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, chest)){
+		if(GetDistance(me, chest) < 2 || (i != 1 && NTConfig_TelekinesisChests && NTC_GetSkillLevel(43) && GetDistance(me, chest) < 18) || NTM_MoveTo(chest.areaid, chest.x+1, chest.y))
+			if((i < 1 && NTConfig_TelekinesisChests && NTC_GetSkillLevel(43) && NTC_CastSkill(43, NTC_HAND_RIGHT, chest)) || NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, chest)){
 				NTC_Delay(100);
 				if(chest.mode > 0){
 					if(NTConfig_CheckChestid)
@@ -649,6 +654,167 @@ function NTC_OpenChest(chest)
 			}
 	}		
 	return false;			
+}
+
+function Lootable(x, y, gid)
+{
+	this.gid = gid;
+	this.x = x;
+	this.y = y;
+	this.looted = false;
+}
+
+function NTC_OpenChestsInAreaNear (_orgx, _orgy, range) // credit for original function to muddy waters modded by stairbuilder
+{
+	var _chest, _dist, _mindist, _minIndex;
+	_chest = NTC_FindUnit(NTC_UNIT_OBJECT);
+	_lootableChests = [];
+	if(_chest)
+	{
+		do
+		{
+			if(_chest.mode == 0 && GetDistance(_orgx, _orgy, _chest.x, _chest.y) < range  && (NTConfig_Chestids.indexOf(_chest.classid) > -1) &&_chest.name != GetLocaleString(5386))
+				_lootableChests.push(new Lootable(_chest.x, _chest.y, _chest.gid));
+		} while(_chest.GetNext());
+
+		for(var i = 0; i < _lootableChests.length; i++)
+		{
+			_mindist = 1E3;
+			_minIndex = -1;
+
+			for(var j = 0; j < _lootableChests.length; j++)
+			{
+				if(!_lootableChests[j].looted)
+				{
+					_dist = GetDistance(me.x, me.y, _lootableChests[j].x, _lootableChests[j].y);
+
+					if(_dist < _mindist)
+					{
+						_mindist = _dist;
+						_minIndex = j;
+					}
+				}
+			}
+
+			if(_minIndex > -1)
+			{
+				_chest = NTC_FindUnit(NTC_UNIT_OBJECT, _lootableChests[_minIndex].gid);
+
+				if(_chest)
+				{
+					if(NTC_OpenChest(_chest))
+						NTSI_PickItems();
+				}
+
+				_lootableChests[_minIndex].looted = true;
+			}
+			else
+				break;
+		}
+		return true;
+	}
+
+	return false;
+}
+
+function OpenSpecialChestsInArea() {
+	var ChestIds = [354,355, 356, 397, 405, 406, 407, 455]
+	var ChestLocs =[];
+	var ChestIdstest = [];
+	var unit = GetPresetUnits(me.areaid);
+		if(unit){
+			for (var j = 0; j < unit.length; j++){
+				for (var c = 0; c < ChestIds.length; c++){
+					if (ChestIds[c] == unit[j].id){
+						ChestLocs.push([unit[j].roomx*5+unit[j].x,unit[j].roomy*5+unit[j].y]);
+						ChestIdstest.push(unit[j].id);
+					}
+				}
+			}
+		}
+
+	while(ChestLocs.length > 0){
+		ChestLocs.sort(SortRoomInt);
+		var _room = ChestLocs.shift();
+		var _id = ChestIdstest.shift();
+		NTM_MoveTo(me.areaid, _room[0], _room[1]);
+		var chest = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(3260));
+		if(chest){
+			do{
+				if(GetDistance(me.x,me.y,chest.x,chest.y)<3 && NTC_OpenChest(chest))
+					NTSI_PickItems();
+			}while(chest.GetNext());
+		}
+	}
+}
+
+function OpenChestsInArea() {
+	var ChestLocs =[];
+	var ChestIdstest = [];
+		var unit = GetPresetUnits(me.areaid);
+		if(unit){
+			for (var j = 0; j < unit.length; j++){
+				for (var c = 0; c < NTConfig_Chestids.length; c++){
+					if (NTConfig_Chestids[c] == unit[j].id){
+						ChestLocs.push([unit[j].roomx*5+unit[j].x,unit[j].roomy*5+unit[j].y])
+						ChestIdstest.push(unit[j].id)
+					}
+				}
+			}
+		}
+
+	while(ChestLocs.length > 0){
+		ChestLocs.sort(SortRoomInt);
+		var _room = ChestLocs.shift();
+		var _id = ChestIdstest.shift();
+		NTM_MoveTo(me.areaid, _room[0], _room[1]);
+		var chest = NTC_FindUnit(NTC_UNIT_OBJECT);
+		if(chest){
+			do{
+				if(GetDistance(me.x,me.y,chest.x,chest.y)<3 && NTC_OpenChest(chest)){
+					NTSI_PickItems();
+				}
+			}while(chest.GetNext());
+		}
+	}
+}
+
+function SortRoomInt(a, b) {
+   if(GetDistance(me.x, me.y, a[0], a[1]) < GetDistance(me.x, me.y, b[0], b[1]))
+      return -1;
+
+   return 1;
+}
+
+function OpenSpecialChestsInArea() {
+	var ChestIds = [354,355, 356, 397, 405, 406, 407, 455]
+	var ChestLocs =[];
+	var ChestIdstest = [];
+	var unit = GetPresetUnits(me.areaid);
+		if(unit){
+			for (var j = 0; j < unit.length; j++){
+				for (var c = 0; c < ChestIds.length; c++){
+					if (ChestIds[c] == unit[j].id){
+						ChestLocs.push([unit[j].roomx*5+unit[j].x,unit[j].roomy*5+unit[j].y]);
+						ChestIdstest.push(unit[j].id);
+					}
+				}
+			}
+		}
+
+	while(ChestLocs.length > 0){
+		ChestLocs.sort(SortRoomInt);
+		var _room = ChestLocs.shift();
+		var _id = ChestIdstest.shift();
+		NTM_MoveTo(me.areaid, _room[0], _room[1]);
+		var chest = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(3260));
+		if(chest){
+			do{
+				if(GetDistance(me.x,me.y,chest.x,chest.y)<3 && NTC_OpenChest(chest))
+					NTSI_PickItems();
+			}while(chest.GetNext());
+		}
+	}
 }
 
 function NTC_Delay(amount, random)
@@ -828,7 +994,6 @@ function NTC_SendLogToOOG(type, logString)
 	return SendCopyData("D2NT Manager", null, 9<<16|type, logString);
 }
 
-
 function NTC_LogCurScript(script)
 {
    var _file = new Array();
@@ -872,45 +1037,6 @@ function NTC_GetScript(index)
    return _script;
 }
 
-function OpenChestsInArea() {
-	//var ChestIds = [104, 105, 106, 107, 5,6,87,92,143,140,141,144,146,147,148, 176, 177, 181, 183, 198, 240 , 241 , 242 , 243, 329, 330, 331,332, 333, 334 , 335, 336, 354, 355, 356, 371 ,387 , 389, 390, 391, 397 , 405 , 406 , 407 , 413 , 420 , 424 , 425 , 430 , 431 , 432 , 433 , 454 , 455 , 501 , 502 ,504 , 505, 580, 581]
-	var ChestLocs =[];
-	var ChestIdstest = [];
-		var unit = GetPresetUnits(me.areaid);
-		if(unit){
-			for (var j = 0; j < unit.length; j++){
-				for (var c = 0; c < NTConfig_Chestids.length; c++){
-					if (NTConfig_Chestids[c] == unit[j].id){
-						ChestLocs.push([unit[j].roomx*5+unit[j].x,unit[j].roomy*5+unit[j].y])
-						ChestIdstest.push(unit[j].id)
-					}
-				}
-			}
-		}
-
-	while(ChestLocs.length > 0){
-		ChestLocs.sort(SortRoomInt);
-		var _room = ChestLocs.shift();
-		var _id = ChestIdstest.shift();
-		NTM_MoveTo(me.areaid, _room[0], _room[1]);
-		var chest = NTC_FindUnit(NTC_UNIT_OBJECT);
-		if(chest){
-			do{
-				if(GetDistance(me.x,me.y,chest.x,chest.y)<3 && NTC_OpenChest(chest)){
-					NTSI_PickItems();
-				}
-			}while(chest.GetNext());
-		}
-	}
-}
-
-function SortRoomInt(a, b) {
-   if(GetDistance(me.x, me.y, a[0], a[1]) < GetDistance(me.x, me.y, b[0], b[1]))
-      return -1;
-
-   return 1;
-}
-
 function addSeparatorsNF(nStr, inD, outD, sep)
 {
 	nStr += '';
@@ -943,98 +1069,6 @@ function NTC_RemoveLag(target, delay, count)
     Delay(delay);
 
     me.Cancel(1);
-}
-
-function OpenSpecialChestsInArea() {
-	var ChestIds = [354,355, 356, 397, 405, 406, 407, 455]
-	var ChestLocs =[];
-	var ChestIdstest = [];
-	var unit = GetPresetUnits(me.areaid);
-		if(unit){
-			for (var j = 0; j < unit.length; j++){
-				for (var c = 0; c < ChestIds.length; c++){
-					if (ChestIds[c] == unit[j].id){
-						ChestLocs.push([unit[j].roomx*5+unit[j].x,unit[j].roomy*5+unit[j].y]);
-						ChestIdstest.push(unit[j].id);
-					}
-				}
-			}
-		}
-
-	while(ChestLocs.length > 0){
-		ChestLocs.sort(SortRoomInt);
-		var _room = ChestLocs.shift();
-		var _id = ChestIdstest.shift();
-		NTM_MoveTo(me.areaid, _room[0], _room[1]);
-		var chest = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(3260));
-		if(chest){
-			do{
-				if(GetDistance(me.x,me.y,chest.x,chest.y)<3 && NTC_OpenChest(chest))
-					NTSI_PickItems();
-			}while(chest.GetNext());
-		}
-	}
-}
-
-function NTC_OpenChestsInAreaNear (_orgx, _orgy, range) // credit for original function to muddy waters modded by stairbuilder
-{
-	var _chest, _dist, _mindist, _minIndex;
-	_chest = NTC_FindUnit(NTC_UNIT_OBJECT);
-	_lootableChests = [];
-	if(_chest)
-	{
-		do
-		{
-			if(_chest.mode == 0 && GetDistance(_orgx, _orgy, _chest.x, _chest.y) < range  && (NTConfig_Chestids.indexOf(_chest.classid) > -1) &&_chest.name != GetLocaleString(5386))
-				_lootableChests.push(new Lootable(_chest.x, _chest.y, _chest.gid));
-		} while(_chest.GetNext());
-
-		for(var i = 0; i < _lootableChests.length; i++)
-		{
-			_mindist = 1E3;
-			_minIndex = -1;
-
-			for(var j = 0; j < _lootableChests.length; j++)
-			{
-				if(!_lootableChests[j].looted)
-				{
-					_dist = GetDistance(me.x, me.y, _lootableChests[j].x, _lootableChests[j].y);
-
-					if(_dist < _mindist)
-					{
-						_mindist = _dist;
-						_minIndex = j;
-					}
-				}
-			}
-
-			if(_minIndex > -1)
-			{
-				_chest = NTC_FindUnit(NTC_UNIT_OBJECT, _lootableChests[_minIndex].gid);
-
-				if(_chest)
-				{
-					if(NTC_OpenChest(_chest))
-						NTSI_PickItems();
-				}
-
-				_lootableChests[_minIndex].looted = true;
-			}
-			else
-				break;
-		}
-		return true;
-	}
-
-	return false;
-}
-
-function Lootable(x, y, gid)
-{
-	this.gid = gid;
-	this.x = x;
-	this.y = y;
-	this.looted = false;
 }
 
 function GoWestFromLutGholein(){
