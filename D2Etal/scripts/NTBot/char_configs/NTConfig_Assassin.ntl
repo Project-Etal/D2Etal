@@ -755,10 +755,10 @@ function NT_LoadConfig()
 	//Open chest configs configs.
 	//		* Chest ID's can be added to NTConfig_Chestids. Look for ID's in "Chest ID's.txt".
 	//----------------------------------------------------------------------------------
-	NTConfig_OpenChest = false;							// Open most super unique chests at the end of runs. (Chest ID settings below do not effect this.)
-	NTConfig_CheckChestid = false;						// Print chest ID's to screen as they're opened?
-	NTConfig_OpenChestsInAreaClearing = false;			// Open chests while using clear functions? (Uses NTConfig_Chestids.)
-
+	NTConfig_OpenSpecialChests = false;						// Open most super unique chests at the end of runs. (Chest ID settings below do not effect this.)
+	NTConfig_OpenChests = false;								// Open chests while using clear functions? (Uses NTConfig_Chestids.)
+	NTConfig_CheckChestid = false;							// Print chest ID's to screen as they're opened?	
+	
 	// Remove area / chest ID's in the arrays below to open (all chests within removed area) / (specific chest).
 	//		* Current area ID can be displayed ingame by pressing Num Pad "*".
 	//		* Nearby chest ID's can be displayed ingame by pressing Num Pad "2".
@@ -766,10 +766,19 @@ function NT_LoadConfig()
 
 	NTConfig_DontOpenChestAreas = [];			// Enter areas to not open chests while clearing. (Areas seperated by commas.)  Area ids can be found at D2Etal\sdk\areas.txt
 	
-	NTConfig_Chestids = [104, 105, 106, 107, 5, 6, 87, 143, 140, 141, 144, 146, 147, 148, 174, 175, 176, 177, 181, 183, 198,
-						240, 241, 242, 243, 329, 330, 331, 332, 333, 334, 335, 336, 354, 355, 356, 371, 387, 389, 390,
-	 					391, 397, 405, 406, 407, 413, 420, 424, 425, 430, 431, 454, 455, 501, 502, 504, 505,
-						580, 581, 1, 3, 50, 51, 53, 79, 54, 55, 56, 57, 58, 20, 55, 139, 155, 159];
+	// Chests Ids by Pumpkin_King
+	NTConfig_Chestids = [1,3,4,5,6,7,9,11,28,46,50,52,53,54,55,56,57,58,79,87,
+						88,89,94,95,104,105,106,107,125,126,127,128,139,140,141,
+						142,143,144,146,147,148,154,155,158,169,171,174,175,176,
+						177,178,179,180,181,183,185,186,187,188,198,203,204,205,
+						208,209,222,223,224,225,239,240,241,242,243,244,246,247,
+						248,266,268,270,271,272,284,289,314,315,316,317,326,329,
+						330,331,332,333,334,335,336,354,355,356,362,363,365,372,
+						380,381,383,384,387,388,389,390,391,397,405,406,407,413,
+						416,418,419,420,424,425,430,431,432,433,443,444,445,448,
+						454,455,463,466,467,468,469,470,471,477,485,486,487,500,
+						501,502,504,505,516,517,524,525,526,529,530,531,532,533,
+						534,540,541,544,545,548,549,550,551,556];
 
 	//------------------------------------------------------------------------------
 	// Shrine Grabber Settings
