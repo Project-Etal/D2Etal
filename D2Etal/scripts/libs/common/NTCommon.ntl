@@ -954,8 +954,8 @@ function OpenSpecialChestsInArea() {
 			for (var j = 0; j < unit.length; j++){
 				for (var c = 0; c < ChestIds.length; c++){
 					if (ChestIds[c] == unit[j].id){
-						ChestLocs.push([unit[j].roomx*5+unit[j].x,unit[j].roomy*5+unit[j].y])
-						ChestIdstest.push(unit[j].id)
+						ChestLocs.push([unit[j].roomx*5+unit[j].x,unit[j].roomy*5+unit[j].y]);
+						ChestIdstest.push(unit[j].id);
 					}
 				}
 			}
@@ -966,7 +966,7 @@ function OpenSpecialChestsInArea() {
 		var _room = ChestLocs.shift();
 		var _id = ChestIdstest.shift();
 		NTM_MoveTo(me.areaid, _room[0], _room[1]);
-		var chest = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(3260))
+		var chest = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(3260));
 		if(chest){
 			do{
 				if(GetDistance(me.x,me.y,chest.x,chest.y)<3 && NTC_OpenChest(chest))
