@@ -637,7 +637,7 @@ function NTC_ShouldClearChests()
 }
 
 function NTC_OpenChest(chest)
-{
+{	
 	if(!chest || chest.mode > 0)
 		return false;
 		
@@ -652,7 +652,9 @@ function NTC_OpenChest(chest)
 					return true;
 				}
 			}
-	}		
+	}
+	if(NTConfig_CheckChestid)
+		Print("Failed to Loot Chest: " + chest.name + "(" + chest.classid + ") @ " + GetArea().name+ "(" + me.areaid + ")");
 	return false;			
 }
 
@@ -700,11 +702,8 @@ function NTC_OpenChestsInAreaNear (_orgx, _orgy, range) // credit for original f
 			{
 				_chest = NTC_FindUnit(NTC_UNIT_OBJECT, _lootableChests[_minIndex].gid);
 
-				if(_chest)
-				{
-					if(NTC_OpenChest(_chest))
-						NTSI_PickItems();
-				}
+				if(NTC_OpenChest(_chest))
+					NTSI_PickItems();
 
 				_lootableChests[_minIndex].looted = true;
 			}
