@@ -755,7 +755,7 @@ function NT_LoadConfig()
 	//		* Nearby chest ID's can be displayed ingame by pressing Num Pad "2".
 	// 		* A partial list of chest id's can be found in your D2NT\scripts\NTBot\char_configs\Chest ID's.txt.  NOTE some of these are wrong.
 
-	NTConfig_DontOpenChestAreas = [];			// Enter areas to not open chests while clearing. (Areas seperated by commas.)  Area ids can be found at D2NT\sdk\areas.txt. 
+	NTConfig_DontOpenChestAreas = [];			// Enter areas to not open chests while clearing. (Areas seperated by commas.)  Area ids can be found at D2Etal\sdk\areas.txt
 	
 	NTConfig_Chestids = [104, 105, 106, 107, 5, 6, 87, 143, 140, 141, 144, 146, 147, 148, 174, 175, 176, 177, 181, 183, 198,
 						240, 241, 242, 243, 329, 330, 331, 332, 333, 334, 335, 336, 354, 355, 356, 371, 387, 389, 390,
