@@ -66,7 +66,7 @@ function NTTMGR_TownManager(simple, ranged)
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
 		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
-		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
+		_NTTMGR_BuyKey = ((NTConfig_OpenChests || NTConfig_OpenSpecialChests || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyPots || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey) {
 			NTTMGR_VisitAkara();
@@ -106,7 +106,7 @@ function NTTMGR_TownManager(simple, ranged)
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
 		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
-		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
+		_NTTMGR_BuyKey = ((NTConfig_OpenSpecialchests || NTConfig_OpenChests || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoRepair || _NTTMGR_BuyArrows)
 			NTTMGR_VisitFara();
@@ -145,7 +145,7 @@ function NTTMGR_TownManager(simple, ranged)
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
 		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
-		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
+		_NTTMGR_BuyKey = ((NTConfig_OpenSpecialchests || NTConfig_OpenChests || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyPots)
 			NTTMGR_VisitOrmus();
@@ -182,7 +182,7 @@ function NTTMGR_TownManager(simple, ranged)
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
 		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
-		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
+		_NTTMGR_BuyKey = ((NTConfig_OpenSpecialchests || NTConfig_OpenChests || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey || _NTTMGR_BuyPots)
 			NTTMGR_VisitJamella(false);
@@ -219,7 +219,7 @@ function NTTMGR_TownManager(simple, ranged)
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
 		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
-		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
+		_NTTMGR_BuyKey = ((NTConfig_OpenSpecialchests || NTConfig_OpenChests || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey || _NTTMGR_BuyPots)
 			NTTMGR_VisitMalah();
@@ -1050,7 +1050,7 @@ function NTTMGR_IDItems(npc)
 			break;
 		}
 	}
-	if(NTConfig_UseKeysForPlaceHolder || NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests){
+	if(NTConfig_UseKeysForPlaceHolder || NTConfig_OpenSpecialchests || NTConfig_OpenChests || NTConfig_OpenHallsSuperChests){
 		_npckeys = npc.GetItems(543);
 		_keys = me.GetItems(543);
 		if(_keys.length < 1 && _npckeys.length > 0) { 
