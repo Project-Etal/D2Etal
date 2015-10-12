@@ -1014,10 +1014,8 @@ function NTC_OpenChestsInAreaNear (_orgx, _orgy, range) // credit for original f
 
 				if(_chest)
 				{
-					if(NTC_OpenChest(_chest)){
+					if(NTC_OpenChest(_chest))
 						NTSI_PickItems();
-					}
-					_NTL_ChestSkipList.push(_chest.gid);
 				}
 
 				_lootableChests[_minIndex].looted = true;
