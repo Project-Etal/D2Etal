@@ -633,7 +633,7 @@ function NTC_GetSpecialChest()
 
 function NTC_ShouldClearChests()
 {
-	return NTConfig_OpenChests && NTConfig_DontOpenChestAreas.indexOf(me.areaid) == -1);
+	return NTConfig_OpenChests && NTConfig_DontOpenChestAreas.indexOf(me.areaid) == -1;
 }
 
 function NTC_OpenChest(chest)
@@ -1427,7 +1427,6 @@ function NTC_PickUpItemIntSpecial(snagitem){
 	return false;
 }
 
-
 function NTC_PrintRandomColor(){
 	var possibleColors =
 	[
@@ -1467,14 +1466,12 @@ function NTC_RandomSelect(varArray){ // this uses the array as an arguement to m
 	return randomReturn;
 }
 
-
 function NTC_TPGuard(radius)
 {
 		NTA_ClearPosition(radius)
 		NTM_GetCloserInt(NTM_FindCorrectPortalInt(true, me.name))
 		NTC_Delay(500);
 }
-
 
 function NTC_IsQuesterIn(area, name)
 {
