@@ -36,7 +36,7 @@ function NTTMGR_TownManager(simple, ranged)
 	_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 	
 	_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
-	_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
+	_NTTMGR_BuyKey = ((NTConfig_OpenChests || NTConfig_OpenSpecialChests || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 	_NTTMGR_DoHeal = NTT_CheckHeal();
 	_NTTMGR_DoID = NTT_CheckUnids();
 	_NTTMGR_DoRepair = NTT_CheckRepair(NTConfig_Repair);
