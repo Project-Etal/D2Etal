@@ -828,7 +828,7 @@ function NTA_ClearRoom(pickitem, safelevel) {
 	}
 
 	if (NTC_ShouldClearChests()) {
-		NTC_OpenChestsInAreaNear(me.x, me.y, 20);
+		NTC_OpenChestsInAreaNear(me.x,me.y,25);
 	}
 	
 	if(NTConfig_IdInField){
