@@ -104,7 +104,7 @@ function NTMain(){
 		if(NTConfig_ClearPosition)
 			NTA_ClearPosition();
 		NTSI_PickItems();
-		if(NTConfig_OpenChest){
+		if(NTConfig_OpenSpecialChests){
 			var _chest;
 		if(NTM_MoveTo(me.areaid, 17520, 8063))
 			NTA_ClearPosition(30, true);
@@ -118,9 +118,6 @@ function NTMain(){
 					}
 				} 	while(_chest.GetNext());
 			}
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 	}
 	if(NTConfig_RedPortal){
