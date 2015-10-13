@@ -488,26 +488,6 @@ function PubSay(string) {
 	}
 }
 
-function OpenStashes(range) {
-	var i, unit,
-		objects = [GetLocaleString(3274)],
-		orgx = me.x,
-		orgy = me.y;
-
-	for (i = 0; i < objects.length; i += 1) {
-		unit = NTC_FindUnit(NTC_UNIT_OBJECT, objects[i]);
-		if (unit) {
-			do {
-				if (GetDistance(orgx, orgy, unit.x, unit.y) <= range) {
-					if (NTC_OpenChest(unit)) {
-						NTSI_PickItems();
-					}
-				}
-			} while (unit.GetNext());
-		}
-	}
-}
-
 function NTT_CheckPotionSafe() {
 	var i, items, hpCheck, mpCheck;
 	items = me.GetItems();
@@ -695,8 +675,8 @@ function NTCS_ClearPosition(range, sortFunc, spectype, classid) {
 	if (attackcount > 0) {
 		NTSI_PickItems();
 	}
-	if (NTConfig_OpenChest) {
-		OpenStashes(range);
+	if (NTC_ShouldClearChests()) {
+		NTC_OpenChestsInAreaNear(orgx,orgy,range);
 	}
 	if (NTT_CheckMerc()) {
 		NTTMGR_VisitTown();
