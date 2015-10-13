@@ -198,7 +198,8 @@ var NTConfig_Script = [];
 		var NTConfig_ClearTravincal;
 		var NTConfig_KillMeph;
 		var NTConfig_KillDuryCouncil;
-		var NTConfig_ClearDury;
+		var NTConfig_ClearDurance1;
+		var NTConfig_ClearDurance2;
 		var NTConfig_RedPortal;
 		var NTConfig_MoatTrick = [];
 	// Act 4

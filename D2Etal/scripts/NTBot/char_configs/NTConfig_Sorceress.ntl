@@ -215,7 +215,8 @@ function NT_LoadConfig()
 		NTConfig_ClearDisusedReliquary = 1;				// 0 : Don't Clear, 1 : Clear All, 2 : Clear While Skipping Regular Monsters
 		NTConfig_ClearTravincal = 0;					// 0 : Council Only, 1 : Clear All, 2 : Clear While Skipping Regular Monsters, -1 : Disable
 	//NTConfig_Script.push("NTDuranceOfHate.ntj");
-		NTConfig_ClearDury = 0;							// 0 : Don't Clear, 1 : Clear All, 2 : Clear While Skipping Regular Monsters
+		NTConfig_ClearDurance1 = 0;						// 0 : Don't Clear, 1 : Clear All, 2 : Clear While Skipping Regular Monsters
+		NTConfig_ClearDurance2 = 0;						// 0 : Don't Clear, 1 : Clear All, 2 : Clear While Skipping Regular Monsters
 		NTConfig_KillDuryCouncil = false;				// Set to true to kill Council, false if not
 		NTConfig_KillMeph = false;						// Set to true to kill Mephisto, false if not
 		NTConfig_MoatTrick = [true, false];				// [enable/disbale moat trick, enable/disable untimed skill]
