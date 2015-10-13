@@ -9,32 +9,30 @@ function NTMain(){
 
 	NTA_Initialize();
 	
-	//Go to town and take proper wp if not set to clear durance 1 and in travincal still.
-	if(NTConfig_ClearDurance1 == 0 || me.areaid != 83){
-		if(!NTTM_CheckAct()){
-			NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_CheckAct()");
+	
+	if(!NTTM_CheckAct()){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_CheckAct()");
+		return;
+	}
+	NTTMGR_TownManager();
+	if(!NTTM_TownMove("waypoint")){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+		return;
+	}
+	if(NTConfig_ClearDurance1 > 0){
+		if(!NTM_TakeWaypoint(83)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
 			return;
 		}
-		NTTMGR_TownManager();
-		if(!NTTM_TownMove("waypoint")){
-			NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+	}else{
+		if(!NTM_TakeWaypoint(101)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
 			return;
-		}
-		if(NTConfig_ClearDurance1 > 0){
-			if(!NTM_TakeWaypoint(83)){
-				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
-				return;
 			}
-		}else{
-			if(!NTM_TakeWaypoint(101)){
-				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
-				return;
-			}
-		}
-	}	
+	}
+	NTP_DoPrecast(true);
 	//If clearing durance 1 will start at trav take stairs then clear durance level 1
 	if(NTConfig_ClearDurance1 > 0){
-		NTP_DoPrecast(true);
 		if(!NTM_MoveToStair(me.areaid, 100)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
 			return;
