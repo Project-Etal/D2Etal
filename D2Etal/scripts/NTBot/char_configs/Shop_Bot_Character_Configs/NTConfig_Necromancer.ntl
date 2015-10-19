@@ -51,6 +51,7 @@ var errorGoQuitGame = true;
 function NT_LoadConfig()
 {
 	NTConfig_Script.push("NTShopbot.ntj"); //shop bot 
+	NTConfig_StatPrint = 100; // Every x runs print to common log some stats about the shop bot
 
 	//-----------------------------------------------------------------------------------
 	// SnagIt configuration

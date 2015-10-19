@@ -86,7 +86,7 @@ function NT_Shoping(){
 		num = 0;
 		npcCount = shop_npcNumber.length;
 		do{
-			if( totalRuns % 100 == 0 ) {
+			if( totalRuns % NTConfig_StatPrint == 0 ) {
 				var totalTime = Math.floor( ( GetTickCount( ) - startTime ) / 1000 / 60 );
 
 				var stats = COLOR_1 + 'Shop runs: ' + totalRuns + ';';
