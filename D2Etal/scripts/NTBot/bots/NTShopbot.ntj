@@ -72,6 +72,12 @@ function NT_Shoping(){
 	var buyItems = new Array();
 	var showItems = new Array();
 	var resultArray = new Array();
+	
+	// statistic
+	var totalRuns = 0;
+	var boughtItems = 0;
+	var startTime = GetTickCount( );
+	
 	if( shop_npcNumber.length <= 0 ){
 		NT_Shoping_Msg( "have not npc list for shoping, plz check it!" );
 		return;
@@ -80,6 +86,25 @@ function NT_Shoping(){
 		num = 0;
 		npcCount = shop_npcNumber.length;
 		do{
+			if( totalRuns % 100 == 0 ) {
+				var totalTime = Math.floor( ( GetTickCount( ) - startTime ) / 1000 / 60 );
+
+				var stats = COLOR_1 + 'Shop runs: ' + totalRuns + ';';
+				stats += COLOR_2 + 'Total runs: ' + COLOR_4 + totalRuns + "\n";
+				stats += COLOR_2 + 'Total time: ' + COLOR_4 + totalTime + " minutes \n";
+				stats += COLOR_2 + 'Runs per minute: ' + COLOR_4 + ( Math.floor( totalRuns / totalTime * 100 ) / 100 ) + "\n";
+				stats += COLOR_2 + 'Bought items: ' + COLOR_4 + boughtItems + "\n";
+				stats += COLOR_2 + 'Items per hour: ' + COLOR_4 + ( boughtItems / totalTime * 60 ) + "\n";
+
+				NTC_SendLogToOOG(NTC_LOG_COMMON, stats );
+			}
+
+			totalRuns++;
+		
+			if( shopRush == 0 ) {
+				NTP_DoPrecast( );
+			}
+			
 			if( shopRush++ > 30 ){
 				RunGC();
 				shopRush = 0;
@@ -151,6 +176,8 @@ function NT_Shoping(){
 								NT_Shoping_Loop( "have an item can not buy it." );
 							}
 						} // end else
+						
+						boughtItems++;
 						NTC_SendLogToOOG( NTC_LOG_ITEM, "Buy " + NTC_ItemQualityToMGRColor[showItems[j].quality] + "[" + showItems[j].name + "] " + ";"  + showItems[j].itemdesc + 
 						" [" + npcName[shop_npcNumber[num] - 1].charAt( 0 ).toUpperCase() + 
 						npcName[shop_npcNumber[num] - 1].substring( 1 ) + "]" );
@@ -191,7 +218,7 @@ function NT_Shoping_InOutTown(num, count){
 		if( autoClear ){
 			killUndear = true;
 			NTP_DoPrecast();
-			// ?ì????î?TP????????......
+			// ?‚Äú????‚Äù?TP????????......
 			if( NTC_GetSkillLevel( 124 ) && NTC_GetSkillLevel( 54 ) ){
 				if( !NTM_MoveTo( me.areaid, 10069, 13293 ) )
 				return false;
