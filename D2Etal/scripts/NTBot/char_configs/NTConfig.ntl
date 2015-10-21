@@ -77,6 +77,7 @@ var NTConfig_Script = [];
 	// Sorceress
 		var NTConfig_ChainLightOnLightImmunes;
 		var NTConfig_Telekinesis;
+		var NTConfig_TelekinesisChests;
 		var NTConfig_DancingSorc;
 		var NTConfig_AttackJump;
 		var NTConfig_BounceRange;
@@ -197,7 +198,8 @@ var NTConfig_Script = [];
 		var NTConfig_ClearTravincal;
 		var NTConfig_KillMeph;
 		var NTConfig_KillDuryCouncil;
-		var NTConfig_ClearDury;
+		var NTConfig_ClearDurance1;
+		var NTConfig_ClearDurance2;
 		var NTConfig_RedPortal;
 		var NTConfig_MoatTrick = [];
 	// Act 4
@@ -409,14 +411,11 @@ var NTConfig_Script = [];
 	var DPSDisplayRate;
 	var DPSScanHist;
 // Open Chest
-	var NTConfig_OpenChest;
+	var NTConfig_OpenSpecialChests;
 	var NTConfig_OpenChests;
 	var NTConfig_CheckChestid;
-	var NTConfig_OpenChestsInAreaClearing;
-	var NTConfig_AreasToOpenChestClearing = [];
 	var NTConfig_DontOpenChestAreas = [];
 	var NTConfig_Chestids = [];
-	var NTConfig_OpenChestsInArea;
 // Shrine Grabber
 	var NTConfig_ShareExpShrine;
 	var NTConfig_Shrines = [];

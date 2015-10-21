@@ -1,153 +1,206 @@
-credit for this list goes to hash_pipe.  
+NTConfig_Chestids = [
+1,3,4,5,6,7,9,11,28,46,50,52,53,54,55,56,
+57,58,79,87,88,89,94,95,104,105,106,107,
+125,126,127,128,139,140,141,142,143,144,
+146,147,148,154,155,158,169,171,174,175,
+176,177,178,179,180,181,183,185,186,187,
+188,198,203,204,205,208,209,222,223,224,
+225,239,240,241,242,243,244,246,247,248,
+266,268,270,271,272,284,289,314,315,316,
+317,326,329,330,331,332,333,334,335,336,
+354,355,356,362,363,365,372,380,381,383,
+384,387,388,389,390,391,397,405,406,407,
+413,416,418,419,420,424,425,430,431,432,
+433,443,444,445,448,454,455,463,466,467,
+468,469,470,471,477,485,486,487,500,501,
+502,504,505,516,517,524,525,526,529,530,
+531,532,533,534,540,541,544,545,548,549,
+550,551,556,51,80,90,159,163,182,233,
+274,360,518,535,553];
 
-id #-------item name
 
- 1---------- casket #5
- 3---------- casket #6
- 4---------- Urn #1
- 5---------- large chest Right
- 6---------- large chest Left
- 7---------- barrel 7
- 8---------- tower tome
- 9---------- Urn #2
- 11---------- exploding barrel
- 46---------- Crate
- 50---------- CasketR
- 51---------- CasketL
- 52---------- urn #3
- 53---------- Casket
- 54---------- Rogue corpse 1
- 55---------- Rogue corpse 2
- 56---------- rolling rogue corpse
- 57---------- rogue on a stick 1
- 58---------- rogue on a stick 2
- 79---------- casket #3
- 80---------- obelisk
- 81---------- forest altar
- 87---------- tombchest 1, largechestL
- 88---------- tombchest 2 largechestR
- 89---------- mummy coffinL, tomb
- 92---------- tomb door right
- 94---------- Urn #4
- 95---------- Urn #5
- 104---------- Armor Stand 1R
- 105---------- Armor Stand 2L
- 106---------- Weapon Rack 1R
- 107---------- Weapon Rack 2L
- 126---------- skullpile inner hell
- 127---------- ihobject5 inner hell
- 139---------- chestrlarge act 1
- 140---------- chestrtallskinney act 1
- 141---------- chestrmed act 1
- 142---------- jug1 act 2, desert
- 143---------- jug2 act 2, desert
- 144---------- Lchest1 act 1
- 146---------- dchest2R act 2, desert, tomb, chestrmed
- 147---------- dchestr act 2, desert, tomb, chest r large
- 148---------- dchestL act 2, desert, tomb chest l large
- 154---------- guard corpse
- 155---------- rock act 1 wilderness
- 158---------- corpse
- 159---------- rockb act 1 wilderness
- 169---------- log
- 171---------- corpseb
- 174---------- rockc act 1 wilderness
- 175---------- rockd act 1 wilderness
- 176---------- chestLmed
- 177---------- chestLlarge
- 178---------- guard on a stick, desert, tomb, harom
- 179---------- bookshelf1
- 180---------- bookshelf2
- 181---------- jungle chest act 3
- 182---------- tombcoffin
- 183---------- chestLmed, jungle
- 198---------- chestLtallskinney, general chest r?
- 208---------- basket 1
- 209---------- basket 2
- 223---------- cacoon
- 224---------- cacoon 2
- 240---------- gchest1L general
- 241---------- gchest2R general
- 242---------- gchest3R general
- 243---------- glchest3L general
- 244---------- ratnest sewers
- 246---------- ratnest sewers
- 247---------- bed act 1
- 248---------- bed act 1
- 266---------- goo pile for sand maggot lair
- 268---------- wirt's body
- 274---------- tiny pixel shaped thingie
- 284---------- anubis coffin, act2, tomb
- 329---------- mafistochestlargeLeft
- 330---------- mafistochestlargeright
- 331---------- mafistochestmedleft
- 332---------- mafistochestmedright
- 333---------- spiderlairchestlargeLeft
- 334---------- spiderlairchesttallLeft
- 335---------- spiderlairchestmedright
- 336---------- spiderlairchesttallright
- 339---------- trophy 
- 354---------- horadric cube chest
- 355---------- horadric scroll chest
- 356---------- staff of kings chest
- 360---------- RockPile dungeon
- 362---------- baske dungeon
- 365---------- casket for Act 3 dungeon
- 371---------- LargeChestR
- 372---------- innerhellbonepile
- 380---------- Burning guy for outer hell
- 381---------- Burning guy for outer hell
- 383---------- guy stuck in hell
- 384---------- guy stuck in hell
- 387---------- arcanesanctuarybigchestLeft
- 388---------- arcanesanctuarycasket
- 389---------- arcanesanctuarybigchestRight
- 390---------- arcanesanctuarychestsmallLeft
- 391---------- arcanesanctuarychestsmallRight
- 397---------- sparklychest
- 405---------- khalim chest
- 406---------- khalim chest
- 407---------- khalim chest
- 413---------- chestR
- 416---------- hiddenstash
- 418---------- barrel wilderness
- 419---------- barrel wilderness
- 420---------- woodchestL
- 424---------- burialchestL
- 425---------- burialchestR
- 430---------- ChestL
- 431---------- woodchestR
- 432---------- ChestSL
- 433---------- ChestSR
- 443---------- jar1
- 444---------- jar2
- 445---------- jar3
- 446---------- swingingheads
- 447---------- pole
- 448---------- animated skulland rockpile
- 450---------- pileofskullsandrocks
- 454---------- explodingchest
- 455---------- specialchest
- 456---------- deathpole
- 457---------- Ldeathpole
- 463---------- hidden stash icecave
- 464---------- healthshrine icecave
- 466---------- evilurn icecave
- 467---------- icecavejar1
- 468---------- icecavejar2
- 469---------- icecavejar3
- 470---------- icecavejar4
- 471---------- icecavejar4
- 501---------- woodchestL snowy
- 502---------- woodchestR snowy
- 504---------- woodchest2L snowy
- 505---------- woodchest2R snowy
- 540---------- deadperson
- 545---------- deadperson2
- 548---------- eweaponrackR
- 549---------- eweaponrackL
- 550---------- earmorstandR
- 551---------- earmorstandL
- 553---------- funeralpire
- 556---------- deadperson2
+ID | NAME | DESCRIPTION | ACCURACY
 
+1	Casket	Casket #5	CONFIRMED
+3	Casket	Casket #6	CONFIRMED
+4	LargeUrn	Urn #1	CONFIRMED
+5	chest	LargeChestR	CONFIRMED
+6	chest	LargeChestL	CONFIRMED
+7	Barrel	Barrel	CONFIRMED
+9	Urn	Urn #2	CONFIRMED
+11	Barrel	BarrelExploding	CONFIRMED
+28	Undefiled Grave	Hole in Ground	CONFIRMED
+46	Crate	Crate	CONFIRMED
+50	Casket	CasketR	CONFIRMED
+52	Urn	Urn #3	CONFIRMED
+53	Casket	Casket	CONFIRMED
+54	RogueCorpse	Rogue corpse 1	CONFIRMED
+55	RogueCorpse	Rogue corpse 2	CONFIRMED
+56	RogueCorpse	rolling rogue corpse	CONFIRMED
+57	CorpseOnStick	rogue on a stick 1	CONFIRMED
+58	CorpseOnStick	rogue on a stick 2	CONFIRMED
+79	Casket	casket #3	CONFIRMED
+87	Chest3	tombchest 1, largechestL	CONFIRMED
+88	Chest3	tombchest 2 largechestR	CONFIRMED
+89	Sarcophagus	mummy coffinL, tomb	CONFIRMED
+94	LargeUrn	Urn #4	CONFIRMED
+95	LargeUrn	Urn #5	CONFIRMED
+104	ArmorStand	Armor Stand 1R	CONFIRMED
+105	ArmorStand	Armor Stand 2L	CONFIRMED
+106	WeaponRack	Weapon Rack 1R	CONFIRMED
+107	WeaponRack	Weapon Rack 2L	CONFIRMED
+125	hidden stash	ihobject3 inner hell	CONFIRMED
+126	skull pile	skullpile inner hell	CONFIRMED
+127	hidden stash	ihobject5 inner hell	CONFIRMED
+128	hidden stash	hobject4 inner hell	CONFIRMED
+139	chest	chest-r-large act 1	CONFIRMED
+140	chest	chest-r-tallskinney act 1	CONFIRMED
+141	chest	chest-r-med act 1	CONFIRMED
+142	jug	jug1 act 2, desert	CONFIRMED
+143	jug	jug2 act 2, desert	CONFIRMED
+144	chest	Lchest1 act 1	CONFIRMED
+146	chest	dchest2R act 2, desert, tomb, chest-r-med	CONFIRMED
+147	chest	dchestr act 2, desert, tomb, chest -r large	CONFIRMED
+148	chest	dchestL act 2, desert, tomb chest l large	CONFIRMED
+154	corpse	guard corpse	CONFIRMED
+155	hidden stash	rock act 1 wilderness	CONFIRMED
+158	skeleton	corpse	CONFIRMED
+169	hollow log	log	CONFIRMED
+171	skeleton	corpseb	CONFIRMED
+174	loose rock	rockc act 1 wilderness	CONFIRMED
+175	loose boulder	rockd act 1 wilderness	CONFIRMED
+176	chest	chest-L-med	CONFIRMED
+177	chest	chest-L-large	CONFIRMED
+178	GuardCorpse	guard on a stick, desert, tomb, harom	CONFIRMED
+179	bookshelf	bookshelf1	CONFIRMED
+180	bookshelf	bookshelf2	CONFIRMED
+181	chest	jungle chest act 3	CONFIRMED
+183	chest	chest-L-med, jungle	CONFIRMED
+185	stash	jungle object` act3	CONFIRMED
+186	stash	jungle object` act3	CONFIRMED
+187	stash	jungle object` act3	CONFIRMED
+188	stash	jungle object` act3	CONFIRMED
+198	chest	chest-L-tallskinney, general chest r?	CONFIRMED
+203	stash	mafistolair	CONFIRMED
+204	stash	box	CONFIRMED
+205	stash	altar	CONFIRMED
+208	Basket	basket 1	CONFIRMED
+209	Basket	basket 2	CONFIRMED
+222	pillar	hobject1	CONFIRMED
+223	cocoon	cacoon	CONFIRMED
+224	cocoon	cacoon 2	CONFIRMED
+225	skullpile	hobject1	CONFIRMED
+239	body	burning town	CONFIRMED
+240	chest	gchest1L general	CONFIRMED
+241	chest	gchest2R general	CONFIRMED
+242	chest	gchest3R general	CONFIRMED
+243	chest	glchest3L general	CONFIRMED
+244	ratnest	sewers	CONFIRMED
+246	ratnest	sewers	CONFIRMED
+247	bed	bed act 1	CONFIRMED
+248	bed	bed act 1	CONFIRMED
+266	goo pile	goo pile for sand maggot lair	CONFIRMED
+268	wirt's body	wirt's body	CONFIRMED
+270	corpse	guard corpse 2	CONFIRMED
+271	corpse	dead villager 1	CONFIRMED
+272	corpse	dead villager 2	CONFIRMED
+284	sarcophagus	anubis coffin, act2, tomb	CONFIRMED
+289	bed	bed for harum	CONFIRMED
+314	dead guard	harem guard 1	CONFIRMED
+315	dead guard	harem guard 2	CONFIRMED
+316	dead guard	harem guard 3	CONFIRMED
+317	dead guard	harem guard 4	CONFIRMED
+326	dead body	act3, sewer	CONFIRMED
+329	chest	mafistochestlargeLeft	CONFIRMED
+330	chest	mafistochestlargeright	CONFIRMED
+331	chest	mafistochestmedleft	CONFIRMED
+332	chest	mafistochestmedright	CONFIRMED
+333	chest	spiderlairchestlargeLeft	CONFIRMED
+334	chest	spiderlairchesttallLeft	CONFIRMED
+335	chest	spiderlairchestmedright	CONFIRMED
+336	chest	spiderlairchesttallright	CONFIRMED
+354	chest	horadric cube chest	CONFIRMED
+355	chest	horadric scroll chest	CONFIRMED
+356	chest	staff of kings chest	CONFIRMED
+362	basket	dungeon	CONFIRMED
+363	HungSkeleton	outerhell skeleton	CONFIRMED
+365	casket	casket for Act 3 dungeon	CONFIRMED
+372	BoneChest	innerhellbonepile	CONFIRMED
+380	TrappedSoul	Burning guy for outer hell	CONFIRMED
+381	TrappedSoul	Burning guy for outer hell	CONFIRMED
+383	TrappedSoul	guy stuck in hell	CONFIRMED
+384	TrappedSoul	guy stuck in hell	CONFIRMED
+387	chest	arcanesanctuarybigchestLeft	CONFIRMED
+388	casket	arcanesanctuarycasket	CONFIRMED
+389	chest	arcanesanctuarybigchestRight	CONFIRMED
+390	chest	arcanesanctuarychestsmallLeft	CONFIRMED
+391	chest	arcanesanctuarychestsmallRight	CONFIRMED
+397	chest	sparklychest	CONFIRMED
+405	chest	khalim chest	CONFIRMED
+406	chest	khalim chest	CONFIRMED
+407	chest	khalim chest	CONFIRMED
+413	chestR	expansion no snow	CONFIRMED
+416	hiddenstash	expansion no snow	CONFIRMED
+418	barrel wilderness	expansion no snow	CONFIRMED
+419	barrel wilderness	wilderness/siege	CONFIRMED
+420	woodchestL	expansion no snow	CONFIRMED
+424	burialchestL	expansion no snow	CONFIRMED
+425	burialchestR	expansion no snow	CONFIRMED
+430	ChestL	expansion no snow	CONFIRMED
+431	woodchestR	expansion no snow	CONFIRMED
+432	ChestSL	expansion no snow	CONFIRMED
+433	ChestSR	expansion no snow	CONFIRMED
+443	jar1	wilderness/siege	CONFIRMED
+444	jar2	wilderness/siege	CONFIRMED
+445	jar3	wilderness/siege	CONFIRMED
+448	animated skulland rockpile	expansion no snow	CONFIRMED
+454	explodingchest	wilderness/siege	CONFIRMED
+455	chest	specialchest	CONFIRMED
+463	hidden stash	icecave_	CONFIRMED
+466	evilurn	icecave_	CONFIRMED
+467	icecavejar1	icecave_	CONFIRMED
+468	icecavejar2	icecave_	CONFIRMED
+469	icecavejar3	icecave_	CONFIRMED
+470	icecavejar4	icecave_	CONFIRMED
+471	icecavejar4	icecave_	CONFIRMED
+477	deadbarbarian	seige/wilderness	CONFIRMED
+485	tomb1	baal's lair	CONFIRMED
+486	tomb2	baal's lair	CONFIRMED
+487	tomb3	baal's lair	CONFIRMED
+500	hidden stash	snowy	CONFIRMED
+501	woodchestL	snowy	CONFIRMED
+502	woodchestR	snowy	CONFIRMED
+504	woodchest2L	snowy	CONFIRMED
+505	woodchest2R	snowy	CONFIRMED
+516	object1	temple	CONFIRMED
+517	object2	temple	CONFIRMED
+524	tomb1L	baal's lair	CONFIRMED
+525	tomb2L	baal's lair	CONFIRMED
+526	tomb3L	baal's lair	CONFIRMED
+529	tomb1	redbaal's lair	CONFIRMED
+530	tomb1L	redbaal's lair	CONFIRMED
+531	tomb2	redbaal's lair	CONFIRMED
+532	tomb2L	redbaal's lair	CONFIRMED
+533	tomb3	redbaal's lair	CONFIRMED
+534	tomb3L	redbaal's lair	CONFIRMED
+540	deadperson	everywhere	CONFIRMED
+541	groundtomb	temple	CONFIRMED
+544	groundtombL	temple	CONFIRMED
+545	deadperson2	everywhere	CONFIRMED
+548	eweaponrackR	everywhere	CONFIRMED
+549	eweaponrackL	everywhere	CONFIRMED
+550	earmorstandR	everywhere	CONFIRMED
+551	earmorstandL	everywhere	CONFIRMED
+556	deadperson2	everywhere	CONFIRMED
+51	Casket	CasketL	UNDISCOVERED
+80	Obelisk	obelisk	UNDISCOVERED
+90	Obelisk	desert obelisk	UNDISCOVERED
+159	hidden stash	rockb act 1 wilderness	UNDISCOVERED
+163	hiding spot	cliff act 1 wilderness	UNDISCOVERED
+182	coffin	tombcoffin	UNDISCOVERED
+233	pillar	hobject2	UNDISCOVERED
+274	hidden stash	tiny pixel shaped thingie	UNDISCOVERED
+360	RockPIle	dungeon	UNDISCOVERED
+518	mrbox	baals	UNDISCOVERED
+535	mrbox	redbaals	UNDISCOVERED
+553	funeralpire	outside	UNDISCOVERED

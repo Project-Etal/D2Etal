@@ -52,9 +52,6 @@ function NTMain(){
 				NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 			}
 		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
-		}
 		if(!NTM_MoveToStair(98, 82)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
 			return;
@@ -86,9 +83,6 @@ function NTMain(){
 			if(!NTA_ClearLevel()){
 				NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 			}
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 		if(!NTM_MoveToStair(99, 82)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
@@ -138,9 +132,6 @@ function NTMain(){
 			if(!NTA_ClearLevel()){
 				NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 			}
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 	}
 	NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");

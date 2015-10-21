@@ -8,7 +8,8 @@ function NTMain(){
 	NTSI_LoadNIPFiles("NTBot/item_configs");
 
 	NTA_Initialize();
-
+	
+	
 	if(!NTTM_CheckAct()){
 		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_CheckAct()");
 		return;
@@ -18,26 +19,54 @@ function NTMain(){
 		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
 		return;
 	}
-	if(!NTM_TakeWaypoint(101)){
-		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
-		return;
+	if(NTConfig_ClearDurance1 > 0){
+		if(!NTM_TakeWaypoint(83)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
+			return;
+		}
+	}else{
+		if(!NTM_TakeWaypoint(101)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
+			return;
+			}
 	}
 	NTP_DoPrecast(true);
-	if(NTConfig_ClearDury > 0){
-		if(NTConfig_ClearDury == 1) {
-			NTConfig_SkipRegularMonsters = false;
-			NTP_DoPrecast();
-			if(!NTA_ClearLevel()){
-				NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+	//If clearing durance 1 will start at trav take stairs then clear durance level 1
+	if(NTConfig_ClearDurance1 > 0){
+		if(!NTM_MoveToStair(me.areaid, 100)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
+			return;
+		}
+		if(!NTM_TakeStair(100)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()");
+			return;
+		}
+		NTP_DoPrecast();
+		NTConfig_SkipRegularMonsters == NTConfig_ClearDurance1 > 1;
+		if(!NTA_ClearLevel())
+			NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+	}	
+	// if clearing durance 2
+	if(NTConfig_ClearDurance2 > 0){
+		//if in level 1 take the stairs to level 2
+		if(me.areaid == 100){
+			if(!NTM_MoveToStair(me.areaid, 101)){
+				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
+				return;
+			}
+			if(!NTM_TakeStair(101)){
+				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()");
+				return;
 			}
 		}
-		if(NTConfig_ClearDury == 2) {
-			NTConfig_SkipRegularMonsters = true;
-			NTP_DoPrecast();
-			if(!NTA_ClearLevel()){
-				NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
-			}
-		}
+		//Clear Level
+		NTP_DoPrecast();
+		NTConfig_SkipRegularMonsters == NTConfig_ClearDurance2 > 1;
+		if(!NTA_ClearLevel())
+			NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+	}	
+	//end script unless killing mephisto or council
+	if(NTConfig_KillMeph || NTConfig_KillDuryCouncil){
 		if(!NTM_MoveToStair(me.areaid, 102)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
 			return;
@@ -46,20 +75,12 @@ function NTMain(){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()");
 			return;
 		}
-	}
-	if(NTConfig_KillDuryCouncil){
-		if(me.areaid == 101) {
-			if(!NTM_MoveToStair(me.areaid, 102)){
-				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
-				return;
-			}
-			if(!NTM_TakeStair(102)){
-				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()");
-				return;
-			}
-			NTC_Delay(200);
-		}
 		NTP_DoPrecast();
+	}else{
+		NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
+	}
+	
+	if(NTConfig_KillDuryCouncil){
 		var _attackpos = [
 						17651, 8066, 17630, 8069, 17625, 8048, 17647, 8040, //bottom council members
 						17610, 8124, 17603, 8138, 17623, 8138, 17571, 8121, //left-side council member
@@ -72,16 +93,6 @@ function NTMain(){
 		}
 	}
 	if(NTConfig_KillMeph){
-		if(me.areaid != 102){
-			if(!NTM_MoveToStair(me.areaid, 102)){
-				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToStair()");
-				return;
-			}
-			if(!NTM_TakeStair(102)){
-				NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeStair()");
-				return;
-			}
-		}
 		if(!NTM_MoveTo(me.areaid, 17564, 8069)){
 			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveTo()");
 			return;
@@ -104,7 +115,7 @@ function NTMain(){
 		if(NTConfig_ClearPosition)
 			NTA_ClearPosition();
 		NTSI_PickItems();
-		if(NTConfig_OpenChest){
+		if(NTConfig_OpenSpecialChests){
 			var _chest;
 		if(NTM_MoveTo(me.areaid, 17520, 8063))
 			NTA_ClearPosition(30, true);
@@ -118,9 +129,6 @@ function NTMain(){
 					}
 				} 	while(_chest.GetNext());
 			}
-		}
-		if(NTConfig_OpenChestsInArea && NTU_DontOpenAreas()){
-			OpenChestsInArea();
 		}
 	}
 	if(NTConfig_RedPortal){

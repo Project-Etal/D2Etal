@@ -550,14 +550,17 @@ function NTA_ClearPosition(range, pickitem, safelevel) {
 		}
 	}
 
-	if (NTConfig_OpenChest) {
+	if (NTConfig_OpenSpecialChests) {
 		_target = NTC_GetSpecialChest();
-
-		if (_target && GetDistance(_orgx, _orgy, _target.x, _target.y) <= range && NTC_OpenChest(_target)) { _attackcount++; _sorcattack++; }
+		if (_target && GetDistance(_orgx, _orgy, _target.x, _target.y) <= range && NTC_OpenChest(_target)) {
+			NTSI_PickItems();
+			_attackcount++;
+			_sorcattack++;
+		}
 	}
-	if (NTConfig_OpenChestsInAreaClearing && NTConfig_AreasToOpenChestClearing.indexOf(me.areaid) != -1) {
+	
+	if (NTC_ShouldClearChests())
 		NTC_OpenChestsInAreaNear(_orgx, _orgy, range);
-	}
 
 	if(NTConfig_IdInField){
 		if (!NTT_CheckSpace(NTConfig_FreeSpaceXY[0], NTConfig_FreeSpaceXY[1])) { 
@@ -816,36 +819,23 @@ function NTA_ClearRoom(pickitem, safelevel) {
 		}
 	}
 
-	if (NTConfig_OpenChest) {
+	if (NTConfig_OpenSpecialChests) {
 		_target = NTC_GetSpecialChest();
-
-		if (_target && _room.UnitInRoom(_target) && NTC_OpenChest(_target)) _attackcount++;
-		_sorcattack++;
+		if (_target && _room.UnitInRoom(_target) && NTC_OpenChest(_target))
+			NTSI_PickItems();
 	}
 
-	if (NTConfig_OpenChestsInAreaClearing && NTConfig_AreasToOpenChestClearing.indexOf(me.areaid) != -1) {
-		NTC_OpenChestsInAreaNear(me.x, me.y, 20);
-	}
+	if (NTC_ShouldClearChests())
+		NTC_OpenChestsInAreaNear(me.x,me.y,25);
 	
-	if(NTConfig_IdInField){
-		if (!NTT_CheckSpace(NTConfig_FreeSpaceXY[0], NTConfig_FreeSpaceXY[1])) { 
-			NT_FieldID(); 
-		} // id in field add
-	}
+	if (pickitem && _attackcount > 0)
+		NTSI_PickItems();
 	
-	if (pickitem && _attackcount > 0) { NTSI_PickItems(); }
-	
-	if(NTConfig_IdInField){
-		if (!NTT_CheckSpace(NTConfig_FreeSpaceXY[0], NTConfig_FreeSpaceXY[1])) { 
-			NT_FieldID(); 
-		} // id in field add
-	}
-
-	if(NTTMGR_CheckCurse(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe, true)) {
+	if(NTConfig_IdInField && !NTT_CheckSpace(NTConfig_FreeSpaceXY[0], NTConfig_FreeSpaceXY[1]))
+			NT_FieldID();
+			
+	if(NTTMGR_CheckCurse(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe, true) || NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe, true))
 		NTTMGR_VisitTown();
-	} else if( NTTMGR_CheckSafe(NTConfig_CheckSelfSafe, NTConfig_CheckMercSafe, true)) {
-		NTTMGR_VisitTown();
-	}
 	return true;
 }
 
