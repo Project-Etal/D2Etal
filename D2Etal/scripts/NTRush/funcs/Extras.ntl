@@ -741,7 +741,7 @@ var Extras =  {
 						NTC_Delay(500);
 					}
 
-					TPCheck();
+					this.TPCheck();
 				}
 			}
 		}
