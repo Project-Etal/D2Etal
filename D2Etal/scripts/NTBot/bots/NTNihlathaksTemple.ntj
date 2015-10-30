@@ -32,10 +32,7 @@ function NTMain()
 		return;
 	}
 	NTTMGR_TownManager();
-	if(!NTTM_CheckAct(5)) {
-		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_CheckAct()");
-		return;
-	}
+
 	if(NTConfig_UseTemplePortal) {
 		if(!NT_PortalMove()) {
 			NT_WPMove();
@@ -172,7 +169,6 @@ function NT_TempPortal()
 		}
 		if(NTConfig_CheckVipers && NTC_FindUnit(NTC_UNIT_MONSTER, GetLocaleString(2956))) {
 			NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "Tomb Vipers found.");
-			NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 			return;
 		}
 		if(!NTA_KillMonster(526)) {
@@ -275,7 +271,6 @@ function NT_TempWP()
 		}
 		if(NTConfig_CheckVipers && NTC_FindUnit(NTC_UNIT_MONSTER, GetLocaleString(2956))) {
 			NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "Tomb Vipers found.");
-			NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 			return;
 		}
 		if(!NTA_KillMonster(526)) {
