@@ -97,7 +97,15 @@ function NTMain() {
 		}
 		if(NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 397, 1, 1)){
 			_target = NTC_GetSpecialChest();
-			if (_target){ NTC_OpenChest(_target); }
+			if (_target){
+                if(NTC_OpenChest(_target))
+                    NTSI_PickItems();
+                else
+                {
+                    NTC_OpenChest(_target);
+                    NTSI_PickItems();
+                }
+            }
 		}
 	}
 	if (NTConfig_OpenChestsInArea && NTU_DontOpenAreas()) {
