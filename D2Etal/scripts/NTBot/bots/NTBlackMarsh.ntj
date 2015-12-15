@@ -55,7 +55,7 @@ function NTMain(){
 			return;
 		}
 		if(NTConfig_ClearTheHole == 1){
-			NTConfig_SkipRegularMonsters = true;
+			NTConfig_SkipRegularMonsters = false;
 			NTP_DoPrecast();
 			if(!NTA_ClearLevel()){
 					NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
@@ -82,7 +82,7 @@ function NTMain(){
 			return;
 		}
 		if(NTConfig_ClearTheHole == 1){
-			NTConfig_SkipRegularMonsters = true;
+			NTConfig_SkipRegularMonsters = false;
 			NTP_DoPrecast();
 			if(!NTA_ClearLevel()){
 					NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");

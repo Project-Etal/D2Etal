@@ -91,6 +91,16 @@ function Organize()
 			_item = NTC_FindUnit(NTC_UNIT_ITEM, keepIds[j]);
 			if(_item) {
 				NTSI_PickUpItemInt(_item);
+			}
+			if(_item) {
+				if(NTT_CheckSpace(_item.xsize, _item.ysize)){
+					NTSI_PickUpItemInt(_item);
+				} 
+				else{
+					Print("Need to make room in inventory!");
+					stashShit();
+					NTSI_PickUpItemInt(_item);
+				}				
 			} 
 		}
 	}
