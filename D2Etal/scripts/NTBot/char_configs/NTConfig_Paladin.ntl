@@ -635,6 +635,7 @@ function NT_LoadConfig()
 	NTConfig_PublicMode = false;						// Enables "Public" features (Partying, Tp'ing etc). (Cannot be true while NTConfig_PartyOnlyLeader is.)
 	NTConfig_CheckCloneDiablo = true;					// Set to true if you want to wait in game after "Diablo Walks the Earth" msg.
 	NTConfig_SoJWaitTime = 5;							// Time in minutes to wait for the next SoJ sale. Set to 0 to disable SoJ notifier.
+	NTConfig_KillDclone = true; 						// set to true if you want char to kill DClone
 	NTConfig_ExitonDclone = false;						// Exit game on Diablo Walks
 	NTConfig_FastPickit = false;						// This is a new option that causes far less crashes(maybe none).  Is independent of snag delay
 	NTConfig_UseMerc = false;							// Set true if you will use a mercenary, will revive merc at a reviver npc.

@@ -341,7 +341,8 @@ var NTConfig_Script = [];
 	var NTConfig_PublicMode;
 	var NTConfig_CheckCloneDiablo;
 	var NTConfig_SoJWaitTime;
-	var NTConfig_ExitonDclone;// testing
+	var	NTConfig_KillDclone;
+	var NTConfig_ExitonDclone;
 	var NTConfig_FastPickit;
 	var NTConfig_UseMerc;
 	var NTConfig_ResetEnigma;

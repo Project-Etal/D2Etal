@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "97-BE";
+var Rev = "98-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -274,6 +274,8 @@ function NT_GameMsgEvents(msg, type)
                     NTC_Delay(500);
 
                     NTTM_CheckAct();
+					if(NTConfig_KillDclone)
+						Load("NTBot/bots/NTClone.ntj");
                 }
             }
 			else if(msg.indexOf(SoJString) != -1 && !CloneDiabloNotify && NTConfig_SoJWaitTime > 0) { // part of soj addon. !CloneDiabloNotify was added to prevent timer start on oversales after Diablo walks.
