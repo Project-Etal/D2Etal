@@ -1,6 +1,6 @@
 var CurScriptIndex = 0;
 var LastScript = false;
-var Rev = "100-BE";
+var Rev = "101-BE";
 
 var SoJNotify = false;
 var CloneDiabloString = GetLocaleString(11005);
@@ -27,7 +27,18 @@ function NTMain()
 	NTC_IncludeConfig("NTBot/char_configs");
 	Include("libs/common/NTExp.ntl");
 
-	NT_LoadConfig();
+	try {
+		NT_LoadConfig();
+	}
+	catch (e) {
+		while(me.ingame){
+			Print(COLOR_1 + "Error in your char config file");
+			Print(COLOR_1 + "You must correct the error before the bot will run");
+			Print(COLOR_2 + "To get help on this error visit");
+			Print(COLOR_2 + "www.projectetal.com/wiki -> load config errors");
+			Delay(10000);
+		}
+	}
 	NTE_InitializeStats();
 	//Print(NTConfig_FreeSpace);
 
