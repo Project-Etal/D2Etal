@@ -1,0 +1,184 @@
+// 2 = stoney fields
+// 3 = Arcane
+// 4 = Frigid-shenk - incomplete not tested
+NTConfig_Leader = me.name;
+var clonearea = 3;
+
+function NTMain()
+{
+	Include("libs/common/NTCommon.ntl");
+	NTC_IncludeLibs();
+	NTC_IncludeConfig("NTBot/char_configs");
+
+	NT_LoadConfig();
+	NTSI_LoadNIPFiles("NTBot/item_configs");
+
+	NTA_Initialize();
+	Print(COLOR_1 + "D Clone Script Started");
+	
+	NTConfig_Leader = me.name;// reset leaders name so this script completes if leader leaves game
+
+	NTTM_CheckAct();
+
+	NTTMGR_TownManager();
+	
+		
+		switch(clonearea){
+
+			case 2: NTCL_Stoney();
+					break;
+			case 3: NTCL_Arcane();
+					break;
+			case 4: NTCL_Frigid();
+					break;
+			case 5: NTCL_Throne();//not sure what to do here here - was used once when spawned in throne room
+					break;
+			default: NTCL_Stoney();
+					break;
+		}
+
+	NTTM_CheckAct();
+	NTTMGR_TownManager();
+	if(NTCL_CheckForAnni()){Delay(3000); ExitGame();}
+	
+	//intentionally left out endscript incase of errors - manual salvage?
+}
+
+function NTCL_CheckForAnni(){
+
+	var _items = me.GetItems(603);//603
+
+	if(_items){
+		for (var i = 0; i< _items.length; i++){
+			if(_items[i].quality == 7){
+				NT_File("AMS/MuleStatus/" + me.account + "_charstatus.txt", 1, "Main");
+				NT_File("AMS/MuleStatus/" + me.account + "_mulingstatus.txt", 1, "true");
+				NTC_SendLogToOOG(NTC_LOG_COMMON, 'Automuling triggered.' + COLOR_2 + 'Picked up anni');
+				Say("!Yeehaa Got Meself an Annihilus");								
+				return true;
+			}
+		}
+	}
+	
+	Print("Anni not found");
+	return false;
+}
+
+function NTCL_PickAnni() {
+
+	var _smallcharm = NTC_FindUnit(NTC_UNIT_ITEM, 603);
+
+	while(_smallcharm){
+		if(_smallcharm.quality == 7){
+			if(	NTSI_PickUpItemInt(_smallcharm)){
+				Print("Picked up "+ COLOR_4+"smallcharm");
+				return;
+			}
+		}
+		var _smallcharm = NTC_FindUnit(NTC_UNIT_ITEM, 603);
+	}
+	return;
+}
+
+function NTCL_Throne(){
+	NTTM_CheckAct(5);
+	NTTM_TownMove("portalspot")
+	NTM_UsePortal("BluePortal", 131, NTConfig_Leader);
+	NTP_DoPrecast(true, true);
+	if(!NTA_KillMonster(333)){
+		NTA_KillMonster(333);
+	}
+	NTCL_PickAnni();
+}
+
+function NTCL_Stoney(){
+
+	if(!NTTM_TownMove("waypoint")){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+		return;
+	}
+	
+	if(!NTM_TakeWaypoint(4)){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
+		return;
+	}
+	NTP_DoPrecast(true, true);
+
+	if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_MONSTER, 737, 10, -10)){
+			NTC_SendMsgToScript("NTBotGame.ntj", "NTM_MoveToPresetUnit()");
+			return;
+	}
+	
+	if(!NTA_KillMonster(333)){
+		NTA_KillMonster(333);
+	}
+	NTCL_PickAnni();
+	
+	return;
+}
+
+function NTCL_Arcane(){
+
+	if(!NTTM_TownMove("waypoint")){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+		return;
+	}
+	
+	if(!NTM_TakeWaypoint(74)){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
+		return;
+	}
+	NTP_DoPrecast(true,true);
+	NTM_TakeUnit(NTC_UNIT_OBJECT, 298);
+	NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_MONSTER, 333);
+	if(!NTA_KillMonster(333)){
+		NTA_KillMonster(333);
+	}
+	NTCL_PickAnni();
+
+	return;
+}
+
+function NTCL_Frigid(){
+	if(!NTTM_TownMove("waypoint")){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_TownMove()");
+		return;
+	}
+
+	if(!NTM_TakeWaypoint(111)){
+		NTC_SendMsgToScript("NTBotGame.ntj", "NTM_TakeWaypoint()");
+		return;
+	}
+	
+	NTP_DoPrecast(true,true);
+	
+	NTM_MoveTo(111, 3752, 5094);
+	
+	NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_MONSTER, 333, 15, 5);
+	/////////////////////////////////////////////////////
+	// code below here was to try to get him to shenk
+	/////////////////////////////////////////////////////
+	//var DiabloC = NTC_FindUnit(NTC_UNIT_MONSTER, 333, 5);
+
+	//if(DiabloC){
+	//var loc = [3786, 5102,3801, 5102,3820, 5107,3820, 5107,3839, 5117,3855, 5124,3873, 5124,3892, 5115];
+
+	//for (var i = 0; i< loc.length; i=i+2){
+	//	NTM_MoveTo(111, loc[i], loc[i+1]);
+	//	if(GetDistance(me, DiabloC) > 25)// try to keep him close
+	//		Delay(2000);
+	//}
+
+
+	//NTA_KillMonster(GetLocaleString(22435));// kill shenk
+	//}
+	
+	if(!NTA_KillMonster(333)){
+		NTA_KillMonster(333);
+	}
+	NTCL_PickAnni();
+	
+	return;
+}
+
+

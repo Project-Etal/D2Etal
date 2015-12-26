@@ -383,21 +383,11 @@ function NTM_TakeWaypoint(areaId, delay) {
 				Delay(200);
 
 				if (GetUIState(0x14)) {
-					//NTC_CancelMenus();
-					//GetUIState(0x14);
 					// build wp we don't have array here
 					NTM_CheckWps();
 					// compare the wp we want to take to the wps we don't have
 					if(debugVoyageTo) { Print(COLOR_9 + "destination area id = " + areaId); }
 					if(NTConfig_VoyageToMissingWps && wpsDontHave.indexOf(areaId) != -1) {
-						NTC_CancelMenus();
-						if(debugVoyageTo) { Print(COLOR_9 + "VoyageTo called"); }
-						// load the arrays and functions here so we don't have to carry all that crap unless we are going to use it
-						Include("libs/common/NTVoyageTo.ntl");
-						Delay(500);
-						Print("You don't have the " + GetArea(areaId).name + " wp");
-						//Print("You don't have the " + NTVT_AreaToName[areaId] + " wp");
-						Print("Let's go get it!!");
 						// if we don't have ws2 wp and haven't done ancients we can't get wp so tell the user
 						if(areaId == 129 && !me.GetQuest(39, 0)) {
 							Print("Can't get ws2 wp because you have not complete ancients quest");
@@ -405,11 +395,17 @@ function NTM_TakeWaypoint(areaId, delay) {
 							return false;
 						}
 						// now we process everything and try and get to the destination area
-						if(NTVT_VoyageToArea(areaId)) {
-							return true;
-						// if the above fails return false to end script
-						} else {
-							return false;
+						Print("You don't have the " + GetArea(areaId).name + " wp");
+						Print("Let's go get it!!");
+						try {// checks if script/function already loaded
+								if(NTVT_VoyageToArea(areaId)){ return true;}
+								return false; // if the above fails return false to end script
+							}
+						catch (e) {
+							if(debugVoyageTo){ Print("Need to include NTVoyageTo.ntl");}
+							Include("libs/common/NTVoyageTo.ntl");
+							if(NTVT_VoyageToArea(areaId)){ return true;}
+							return false; // if the above fails return false to end script
 						}
 					}
 					// we have the wp so business as usual
@@ -417,6 +413,7 @@ function NTM_TakeWaypoint(areaId, delay) {
 						NTC_PingDelay(NTConfig_AreaDelay);
 						return true;
 					}
+					
 
 					break;
 				}

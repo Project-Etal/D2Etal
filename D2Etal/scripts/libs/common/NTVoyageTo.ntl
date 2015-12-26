@@ -1,9 +1,14 @@
 var NTVT_IsTownWpId = [1, 40, 75, 103, 109];
-var NTVT_IsAreaWithWp = [1, 3, 4, 5, 6, 27, 29, 32, 35, 40, 48, 42, 57, 43, 44, 52, 74, 46, 77, 78, 79, 
+var NTVT_IsAreaWithWp = [1, 3, 4, 5, 6, 27, 29, 32, 35, 40, 48, 42, 57, 43, 44, 52, 74, 46, 75, 76, 77, 78, 79, 
 						80, 81, 83, 101, 103, 106, 107, 109, 111, 112, 113, 115, 123, 117, 118, 129];
 
 function NTVT_VoyageToArea(areaID) { // 5
-		
+
+	if(areaID == 123){
+		if (GetUIState(0x14)) { me.Cancel(0);}
+		Print(COLOR_1 + "You need to get this WP manually");
+		return false;
+	}
 	// doing this so we can change areaID to use with the existing code to take the wp we decide on
 	var destinationAreaID = areaID; 
 	// sets checkArea initially to the wp that is the final goal
@@ -18,6 +23,7 @@ function NTVT_VoyageToArea(areaID) { // 5
 		checkNextPrev = NTVT_GetPreviousWp(checkArea); 
 		// basically error handling in case something is not working correctly...eg lag, etc
 		if(checkNextPrev == 9999) {
+			if (GetUIState(0x14)) { me.Cancel(0);}			
 			return false; 
 		}
 		// check to see if have the current checkNextPrev is in the wpsDontHave array
@@ -27,6 +33,9 @@ function NTVT_VoyageToArea(areaID) { // 5
 				NTC_SendLogToOOG(NTC_LOG_COMMON, COLOR_1 + "Couldn't take wp not in that act");
 				Print(COLOR_1 + "You haven't completed the quests to be in that act");
 				Print(COLOR_1 + "Aborting this script");
+				if (GetUIState(0x14)) {
+					me.Cancel(0);
+				}
 				return false;
 			} else {
 				if(debugVoyageTo) { Print(COLOR_9 + "Don't have wp " + checkNextPrev + " checking next previous"); }
@@ -35,13 +44,10 @@ function NTVT_VoyageToArea(areaID) { // 5
 			}
 		} else { 
 			// at this point we have a starting point so let's get out of the loop, take the wp and start pathing and grabbing wps
-			areaID = checkNextPrev; // here we need to set areaID to whatever our starting point it
+			areaID = checkNextPrev; // here we need to set areaID to whatever our starting point is
 			// take the closest(previous) wp we could find
 			if(checkNextPrev != me.areaid) {
 				if(debugVoyageTo) { Print(COLOR_9 + "taking the wp that is closest " + areaID); }
-				var thisWp = NTM_GetWaypointInt();
-				NTM_GetCloserInt(thisWp);
-				NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, thisWp);
 				if(me.TakeWaypoint(checkNextPrev)) {
 					NTC_PingDelay(NTConfig_AreaDelay);
 					if(!NTC_InTown()) {
@@ -105,7 +111,7 @@ function NTVT_VoyageToAreaInt(destArea) {
 		else if(debugVoyageTo) {
 			Print(wpsDontHave);
 			Print(wpsDontHave.indexOf(me.areaid) != -1);
-			Print(NTVT_AreaIdToWpId[me.areaid]);
+			Print(NTC_WPIdToAreaId[me.areaid]);
 			//while(1) Delay(500);
 		}
 	}									
@@ -119,7 +125,7 @@ function NTVT_VoyageToAreaInt(destArea) {
 		// check if we are in an area with a wp
 		if(NTVT_IsAreaWithWp.indexOf(me.areaid) != -1) { 
 			// if we are in an area with a wp check if we have it
-			if(wpsDontHave.indexOf(NTVT_AreaIdToWpId[me.areaid]) != -1) { 
+			if(wpsDontHave.indexOf(NTC_WPIdToAreaId(me.areaid]) != -1) { 
 				// if we are in area with wp and don't have it grab it
 				NTVT_GrabWayPoint(me.areaid); 
 			} 								
@@ -131,9 +137,12 @@ function NTVT_VoyageToAreaInt(destArea) {
 }
 
 function NTVT_AreaExitNextLevel(destArea) {
-	if(!NTC_InTown) {
-		NTP_DoPrecast(); 
+	if (GetUIState(0x14)){
+		me.Cancel(1);	Delay(250);
 	}
+
+	if(!NTC_InTown) { NTP_DoPrecast();}
+	
 	switch(me.areaid) {	
 		
 		// act 1
@@ -194,11 +203,10 @@ function NTVT_AreaExitNextLevel(destArea) {
 			if(destArea == 48) {
 				if(NTVT_ToSewers()) { return true; }			// LUT_GHOLEIN(40) to SEWERS_LEVEL_1(47) [special]
 			}
-			else if(destArea == 52 || destArea == 74 || destArea == 46) { // 52, 74, 46
+			if(destArea == 52 || destArea == 74 || destArea == 46) { // 52, 74, 46
 				if(NTVT_ToHarems()) { return true; }		// LUT_GHOLEIN(40) to HAREM_LEVEL_1(50) [special]
-			} else {
-				if(NTTM_OutOfTown2()) { return true; }	// LUT_GHOLEIN(40) to ROCKY_WASTE(41) [special]
 			}
+			if(NTTM_OutOfTown2()) { return true; }	// LUT_GHOLEIN(40) to ROCKY_WASTE(41) [special]
 			break;
 		case 47:
 			if(NTVT_MoveToTakeStairs(47, 48)) { return true; }	// SEWERS_LEVEL_1(47) to SEWERS_LEVEL_2(48) [stairs]
@@ -226,13 +234,13 @@ function NTVT_AreaExitNextLevel(destArea) {
 			break;
 		case 42: 
 			if(destArea == 57) {
-				if(NTVT_MoveToTakeStairs(53, 56)) { return true; }	// DRY_HILLS(42) to HALLS_OF_THE_DEAD_LEVEL_1(56) [stairs]
+				if(NTVT_MoveToTakeStairs(42, 56)) { return true; }	// DRY_HILLS(42) to HALLS_OF_THE_DEAD_LEVEL_1(56) [stairs]
 			} else {
 				if(NTVT_MoveToClosestPreSetUnit(43)) { return true; }		//DRY_HILLS(42) to FAR_OASIS(43) [presetunit]
 			}
 			break;
 		case 56: 
-			if(NTVT_MoveToTakeStairs(53, 54)) { return true; } 	// HALLS_OF_THE_DEAD_LEVEL_1(56) to HALLS_OF_THE_DEAD_LEVEL_2(57) [stairs]
+			if(NTVT_MoveToTakeStairs(56, 57)) { return true; } 	// HALLS_OF_THE_DEAD_LEVEL_1(56) to HALLS_OF_THE_DEAD_LEVEL_2(57) [stairs]
 			break;
 		case 43: 
 			if(NTVT_MoveToClosestPreSetUnit(44)) { return true; }	 	// FAR_OASIS(43) to LOST_CITY(44) [presetunit]
@@ -429,7 +437,9 @@ function NTVT_MoveToClosestPreSetUnit(Dest) {
 	// take all the coords and compare them putting the shortest from toon in position [0]
 	allUnits.sort(SortCoords);
 	// use the return moveto so if we fail to path it returns false so we can register a failed takewp and end script
+	
 	return NTM_MoveTo(Dest, allUnits[0][0], allUnits[0][1]);
+	
 }
 
 function SortCoords(a, b) {
@@ -479,7 +489,6 @@ function NTVT_GrabWayPoint(_areaid) {  // interesting might be possible to use i
 		case 129: _wp = 494; break;
 	}
 	NTM_KoMoveToPresetUnit(_areaid, NTC_UNIT_OBJECT, _wp, 1, 1)
-	//NTM_MoveToPresetUnit(_areaid, NTC_UNIT_OBJECT, _wp, 1, 1);
 	_unit = NTC_FindUnit(NTC_UNIT_OBJECT, _wp); // this also could probably use NTV_ActivateQuestChest(id, TK)
 	if(_unit){
 		if(GetDistance(me, _unit) > 2)
@@ -503,50 +512,6 @@ function NTVT_MoveToTakeStairs(StartArea, NextArea) {
 	return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// this is a simple info storage that returns the wp id from area id
-////
-var NTVT_AreaIdToWpId = [];
-NTVT_AreaIdToWpId[1] = 0;
-NTVT_AreaIdToWpId[3] = 1;
-NTVT_AreaIdToWpId[4] = 2;
-NTVT_AreaIdToWpId[5] = 3;
-NTVT_AreaIdToWpId[6] = 4;
-NTVT_AreaIdToWpId[27] = 5;
-NTVT_AreaIdToWpId[29] = 6;
-NTVT_AreaIdToWpId[32] = 7;
-NTVT_AreaIdToWpId[35] = 8;
-NTVT_AreaIdToWpId[40] = 9;
-NTVT_AreaIdToWpId[48] = 10;
-NTVT_AreaIdToWpId[42] = 11;
-NTVT_AreaIdToWpId[57] = 12;
-NTVT_AreaIdToWpId[43] = 13;
-NTVT_AreaIdToWpId[44] = 14;
-NTVT_AreaIdToWpId[52] = 15;
-NTVT_AreaIdToWpId[74] = 16;
-NTVT_AreaIdToWpId[46] = 17;
-NTVT_AreaIdToWpId[75] = 18;
-NTVT_AreaIdToWpId[76] = 19;
-NTVT_AreaIdToWpId[77] = 20;
-NTVT_AreaIdToWpId[78] = 21;
-NTVT_AreaIdToWpId[79] = 22;
-NTVT_AreaIdToWpId[80] = 23;
-NTVT_AreaIdToWpId[81] = 24;
-NTVT_AreaIdToWpId[83] = 25;
-NTVT_AreaIdToWpId[101] = 26;
-NTVT_AreaIdToWpId[103] = 27;
-NTVT_AreaIdToWpId[106] = 28;
-NTVT_AreaIdToWpId[107] = 29;
-NTVT_AreaIdToWpId[109] = 30;
-NTVT_AreaIdToWpId[111] = 31;
-NTVT_AreaIdToWpId[112] = 32;
-NTVT_AreaIdToWpId[113] = 33;
-NTVT_AreaIdToWpId[115] = 34;
-NTVT_AreaIdToWpId[123] = 35;
-NTVT_AreaIdToWpId[117] = 36;
-NTVT_AreaIdToWpId[118] = 37;
-NTVT_AreaIdToWpId[129] = 38;
-
 function NTVT_GetPreviousWp(wpArea) {
 	switch(wpArea) {
 		// act 1
@@ -562,9 +527,9 @@ function NTVT_GetPreviousWp(wpArea) {
 		// act 2
 		case 40: return 40; // town
 		case 48: return 40;
-		case 42: return 48;
+		case 42: return 40;
 		case 57: return 42;
-		case 43: return 57;
+		case 43: return 42;
 		case 44: return 43;
 		case 52: return 40;
 		case 74: return 52;
@@ -589,8 +554,8 @@ function NTVT_GetPreviousWp(wpArea) {
 		case 112: return 111;
 		case 113: return 112;
 		case 115: return 113;
-		case 123: return 115;
-		case 117: return 123;
+		//case 123: return 109;
+		case 117: return 115;
 		case 118: return 117;
 		case 129: return 118;
 	
