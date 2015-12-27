@@ -406,6 +406,7 @@ function achmel(){
 			else
 				NTM_WalkTo(me.x-10, me.y);
 		}
+		NTC_PutSkill(NTConfig_AttackSkill[6], NTC_HAND_RIGHT);
 	}
 	var _company = NTC_FindUnit(NTC_UNIT_MONSTER, 105);
 	do{
@@ -421,6 +422,7 @@ function achmel(){
 				else
 					NTM_WalkTo(me.x-10, me.y);
 			}
+		NTC_PutSkill(NTConfig_AttackSkill[6], NTC_HAND_RIGHT);
 		}
 	} while (_company && _company.GetNext());
 }
