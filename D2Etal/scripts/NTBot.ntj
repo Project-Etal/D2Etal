@@ -517,6 +517,7 @@ function timeoutDelay(time, location)
 	{
 		sendEventToOOG(D2NT_MGR_PRINT_STATUS, location.name + " (" + parseInt((endtime-GetTickCount())/1000) + "s)", 0);
 		Delay(1000);
+		if(me.ingame){ Delay(1000); return;}
 	}
 }
 
