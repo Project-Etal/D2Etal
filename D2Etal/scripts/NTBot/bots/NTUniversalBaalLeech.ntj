@@ -529,10 +529,10 @@ function NT_CheckHydraInt(){
 function achmel(){
 	var x = 0;
 	var _holdTargetHp = 0;
-	NTC_PutSkill(NTConfig_AttackSkill[6], NTC_HAND_RIGHT);
 	var _achmel = NTC_FindUnit(NTC_UNIT_MONSTER, GetLocaleString(21852));
 	while (_achmel && _achmel.hp > 0){
 		_holdTargetHp = _achmel.hp;
+		if (NTConfig_AttackSkill[6] > -1){ NTC_PutSkill(NTConfig_AttackSkill[6], NTC_HAND_RIGHT);}
 		for(var i = 0; i < 5 ; i++){
 			NTC_CastSkill(NTConfig_AttackSkill[5], NTC_HAND_LEFT, _achmel);
 		}
