@@ -126,7 +126,7 @@ var controlData = new controlInfo();
 function NTMain()
 {
 	Delay(1000);
-
+	if(!PasswordCheck()){return;}//prevents password length too long - see function 
 	writeInitialSettings();
 	
 	var _ingame = false;
@@ -762,6 +762,14 @@ function NT_File(path, mode, msg, delay) {
     }
 
     return _msg;
+}
+
+function PasswordCheck(){
+	if(muleAccountPassword.length > 12){
+		SendCopyData("D2NT Manager", null, 9<<16, COLOR_1 + "ERROR Mule Account Password is too long : Idling");
+		return false;
+	}
+	return true;
 }
 
 function NT_CheckNameLength(prefix, totallength)
