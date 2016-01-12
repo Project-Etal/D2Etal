@@ -716,7 +716,7 @@ function UDL_LeechFollow(){
 				if(trigger){
 					NTTM_CheckAct();
 					Delay(300);
-					while(me.areaid !=108){	CLM_UsePortal("BluePortal", 108, NTConfig_Leader);Delay(300);}
+					while(me.areaid !=108){	NTM_UsePortal("BluePortal", 108, NTConfig_Leader);Delay(300);}
 					return UDL_LeechFollow();
 				}					
 			}
