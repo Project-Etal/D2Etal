@@ -698,7 +698,7 @@ function NTCS_ClearPosition(range, sortFunc, spectype, classid) {
 	if (NTConfig_OpenChest) {
 		OpenStashes(range);
 	}
-	if (NTT_CheckMerc()) {
+	if (NTT_CheckMerc() && me.areaid == 108) {
 		NTTMGR_VisitTown();
 	}
 	if (NTT_CheckPotionSafe()) {

@@ -16,7 +16,7 @@ function NTMain() {
 
 	NTA_Initialize();
 	
-	RegisterEvent(EVENT_GAMEMSG, UCL_Chat);
+	RegisterEvent(EVENT_GAMEMSG, UDL_Chat);
 	
 	if(!NTTM_CheckAct(4)){
 		NTC_SendMsgToScript("NTBotGame.ntj", "NTTM_CheckAct()");
@@ -29,7 +29,7 @@ function NTMain() {
 	if(NTConfig_LeechChaos >= 1)
 	{
 		if(NTConfig_UseChatCommandPortal){
-			while(!NT_DiabloLeechMessageHandler() && !DiabloDead){				
+			while(!UDL_DiabloLeechMessageHandler() && !DiabloDead){				
 				Delay(500);
 			}
 			if(NTConfig_LeechChaos == 1){Delay(NTConfig_followDelay);}
@@ -55,31 +55,40 @@ function NTMain() {
 	
 	if(NTConfig_LeechChaos == 2 && me.areaid == 108)
 	{	
-		if(NTConfig_LeechBo){NTP_DoPrecast(true, NTConfig_LeechBo);}
-		if(!NTConfig_LeechBo){ Delay(Random(3000, 5000)); }
-	
+		//if(NTConfig_LeechBo){NTP_DoPrecast(true, NTConfig_LeechBo);}
+		//if(!NTConfig_LeechBo){ Delay(Random(3000, 5000)); }
+		if(!NTConfig_LeechBo){
+			for (i = 0; i < 20; i += 1) {
+				Delay(200);
+				if(me.GetState(32) && me.GetState(51)){Print("Got Bo'd");break;}
+			}
+		}
+		
+		NTP_DoPrecast(true, NTConfig_LeechBo);
 
 		if (me.y > 5353){
-			NTCS_ClearPosition(30, EntranceSort);
+			UDL_ClearPosition(30, EntranceSort);
 			var FrontToStarX = [7792, 7794, 7791, 7777, 7813, 7769, 7782, 7802, 7819, 7768, 7770, 7791, 7819, 7804];
 			var FrontToStarY = [5564, 5529, 5495, 5486, 5486, 5445, 5421, 5421, 5446, 5390, 5355, 5355, 5376, 5340];
 			for (var i = 0; i < FrontToStarX.length; i += 1) {
 				NTM_MoveTo(108, FrontToStarX[i], FrontToStarY[i]);
-				NTCS_ClearPosition(35, EntranceSort);
+				UDL_ClearPosition(35, EntranceSort);
 			}
 		}
 
 		for (i = 0; i < 2; i += 1) {
 			NTM_MoveTo(108, 7784, 5310);
-			NTCS_ClearPosition(30, SealSort);
+			UDL_ClearPosition(30, SealSort);
 			NTC_PingDelay(i < 1 ? 1000 : 10);
 		}
+		
+		NTM_MoveTo(108, 7784, 5310);
+		if(!NTConfig_LeechBo){Delay(2000);}
+		NTP_DoPrecast(true, NTConfig_LeechBo);
+		UDL_ClearPosition(30, SealSort);
 
-
-		NTCS_ClearPosition(30, SealSort);
-
-		if (!NT_OpenSealsInt()) {
-			NTC_SendMsgToScript("NTBotGame.ntj", "NT_OpenSealsInt()");
+		if (!UDL_OpenSealsInt()) {
+			NTC_SendMsgToScript("NTBotGame.ntj", "UDL_OpenSealsInt()");
 			return;
 		}
 		if(me.classid == NTC_CHAR_CLASS_SORCERESS)
@@ -91,7 +100,7 @@ function NTMain() {
 			if (GetUnit(NTC_UNIT_MONSTER, 243)) {
 				break;
 			}
-			NTCS_DiaSpam();
+			UDL_DiaSpam();
 		}
 
 		NTA_KillMonster(243);
@@ -100,7 +109,7 @@ function NTMain() {
 	}
 	
 	if(me.areaid == 108 && NTConfig_LeechChaos == 1)
-			ChaosLeechFollow();
+			UDL_LeechFollow();
 	
 	if(NTConfig_LeechChaos == 0)
 	{
@@ -110,7 +119,7 @@ function NTMain() {
 	NTC_SendMsgToScript("NTBotGame.ntj", "SCRIPT_END");
 }
 
-function NT_OpenSealsInt() {
+function UDL_OpenSealsInt() {
 	var _unit;
 	var _result;
 
@@ -120,39 +129,42 @@ function NT_OpenSealsInt() {
 		return false;
 	}
 	if (_unit[0].roomy * 5 + _unit[0].y == 5275) {
-		_result = NT_OpenVizierSealInt(1);
+		_result = UDL_OpenVizierSealInt(1);
 	} else {
-		_result = NT_OpenVizierSealInt(2);
+		_result = UDL_OpenVizierSealInt(2);
 	}
 
-	NTP_DoPrecast(true);
+	if(!NTConfig_LeechBo){Delay(2000);}
+	NTP_DoPrecast(true, NTConfig_LeechBo);
 
 	_unit = GetPresetUnits(108, NTC_UNIT_OBJECT, 394);
 	if (_unit[0].roomx * 5 + _unit[0].x == 7773) {
-		_result = NT_OpenDeSeisSealInt(1);
+		_result = UDL_OpenDeSeisSealInt(1);
 	} else {
-		_result = NT_OpenDeSeisSealInt(2);
+		_result = UDL_OpenDeSeisSealInt(2);
 	}
 	if (!_result) {
 		return false;
 	}
+
+	if(!NTConfig_LeechBo){Delay(2000);}
 	NTP_DoPrecast(true, NTConfig_LeechBo);
-	NTCS_ClearPosition(40, SealSortB);
+	UDL_ClearPosition(40, SealSortB);
 
 	_unit = GetPresetUnits(108, NTC_UNIT_OBJECT, 392);
 	if (!_unit) {
 		return false;
 	}
 	if (_unit[0].roomx * 5 + _unit[0].x == 7893) {
-		_result = NT_OpenVenomSealInt(1);
+		_result = UDL_OpenVenomSealInt(1);
 	} else {
-		_result = NT_OpenVenomSealInt(2);
+		_result = UDL_OpenVenomSealInt(2);
 	}
 	NTP_DoPrecast(true);
 	return _result;
 }
 
-function NT_OpenVizierSealInt(type) {
+function UDL_OpenVizierSealInt(type) {
 	var i;
 
 
@@ -165,11 +177,11 @@ function NT_OpenVizierSealInt(type) {
 		}
 		for (i = 0; i < vx.length; i += 1) {
 			NTM_MoveTo(108, vx[i], vy[i]);
-			NTCS_ClearPosition(30, SealSort);
+			UDL_ClearPosition(30, SealSort);
 		}
 
 
-	if (!NT_OpenSealInt(395) || !NT_OpenSealInt(396)) {
+	if (!UDL_OpenSealInt(395) || !UDL_OpenSealInt(396)) {
 		return false;
 	}
 	if (type == 1) {
@@ -178,17 +190,17 @@ function NT_OpenVizierSealInt(type) {
 		NTM_MoveTo(108, 7695, 5316);
 	}
 
-	NTCS_Preattack(GetLocaleString(2851));
-	NTCS_ClearPosition(40, DistanceSort);
+	UDL_Preattack(GetLocaleString(2851));
+	UDL_ClearPosition(40, DistanceSort);
 	NTA_KillMonster(GetLocaleString(2851)); // Grand Vizier of Chaos
-	NTCS_ClearPosition(40, DistanceSort);
+	UDL_ClearPosition(40, DistanceSort);
 
 	if(NTConfig_IdInField){
 		NT_FieldID();
 	} return true;
 }
 
-function NT_OpenDeSeisSealInt(type) {
+function UDL_OpenDeSeisSealInt(type) {
 	var i, n;
 
 
@@ -201,10 +213,10 @@ function NT_OpenDeSeisSealInt(type) {
 		}
 		for (var i = 0; i < sx.length; i += 1) {
 			NTM_MoveTo(108, sx[i], sy[i]);
-			NTCS_ClearPosition(30, type === 1 ? SealSort : SealSortB);
+			UDL_ClearPosition(30, type === 1 ? SealSort : SealSortB);
 		}
 
-	if (!NT_OpenSealInt(394)) {
+	if (!UDL_OpenSealInt(394)) {
 		return false;
 	}
 	if (type == 1) {
@@ -216,17 +228,17 @@ function NT_OpenDeSeisSealInt(type) {
 		NTM_MoveTo(108, 7798, 5186);
 	}
 
-	NTCS_Preattack(GetLocaleString(2852));
-	NTCS_ClearPosition(40, DistanceSort);
+	UDL_Preattack(GetLocaleString(2852));
+	UDL_ClearPosition(40, DistanceSort);
 	NTA_KillMonster(GetLocaleString(2852)); // Lord De Seis
-	NTCS_ClearPosition(40, DistanceSort);
+	UDL_ClearPosition(40, DistanceSort);
 
 	if(NTConfig_IdInField){
 		NT_FieldID();
 	} return NTM_MoveTo(108, 7800, 5255);
 }
 
-function NT_OpenVenomSealInt(type) {
+function UDL_OpenVenomSealInt(type) {
 
 		if (type === 1) {
 			var IX = [7825, 7827, 7834, 7845, 7855, 7852, 7875, 7896, 7917]; // shape of a "t"
@@ -237,11 +249,11 @@ function NT_OpenVenomSealInt(type) {
 		}
 		for (var i = 0; i < IX.length; i += 1) {
 			NTM_MoveTo(108, IX[i], IY[i]);
-			NTCS_ClearPosition(30, type === 1 ? SealSort : SealSortB);
+			UDL_ClearPosition(30, type === 1 ? SealSort : SealSortB);
 		}
 
 
-	if (!NT_OpenSealInt(393) || !NT_OpenSealInt(392)) {
+	if (!UDL_OpenSealInt(393) || !UDL_OpenSealInt(392)) {
 		return false;
 	}
 	if (type === 1) {
@@ -250,10 +262,10 @@ function NT_OpenVenomSealInt(type) {
 		NTM_MoveTo(108, 7933, 5299);
 	}
 
-	NTCS_Preattack(GetLocaleString(2853));
-	NTCS_ClearPosition(40, DistanceSort);
+	UDL_Preattack(GetLocaleString(2853));
+	UDL_ClearPosition(40, DistanceSort);
 	NTA_KillMonster(GetLocaleString(2853)); // Infector of Souls
-	NTCS_ClearPosition(40, DistanceSort);
+	UDL_ClearPosition(40, DistanceSort);
 
 	if(NTConfig_IdInField){
 		NT_FieldID();
@@ -263,7 +275,7 @@ function NT_OpenVenomSealInt(type) {
 	} return true;
 }
 
-function NT_OpenSealInt(classid) {
+function UDL_OpenSealInt(classid) {
 	var warn;
 	if(classid == 395 || classid == 393)
 		return true;
@@ -297,7 +309,7 @@ function NT_OpenSealInt(classid) {
 	return false;
 }
 
-function NTA_MonsterStats(unit) {
+function UDL_MonsterStats(unit) {
 	this.name = unit.name;
 	this.x = unit.x;
 	this.y = unit.y;
@@ -334,7 +346,7 @@ function SealSortB(unitA, unitB) {
 	return 1;
 }
 
-function NTCS_Preattack(name) {
+function UDL_Preattack(name) {
 	var i, n, target, pos, positions;
 
 	target = NTC_FindUnit(1, name, 10);
@@ -404,7 +416,7 @@ function OpenStashes(range) {
 	}
 }
 
-function NTT_CheckPotionSafe() {
+function UDL_CheckPotionSafe() {
 	var i, items, hpCheck, mpCheck;
 	items = me.GetItems();
 	if (NTConfig_BeltColType.indexOf("hp") > -1) {
@@ -428,7 +440,7 @@ function NTT_CheckPotionSafe() {
 	return !(hpCheck && mpCheck);
 }
 
-function NTA_Dodge(target, distance) {
+function UDL_Dodge(target, distance) {
 	var i, j, coordx, coordy, monster, count, 
 		maxcount = 999, 
 		coords = [], 
@@ -445,12 +457,12 @@ function NTA_Dodge(target, distance) {
 	if (coords.length === 0) { // no valid positions - don't move
 		return true;
 	}
-	coords.sort(NTA_SortRooms);
+	coords.sort(UDL_SortRooms);
 	monster = GetUnit(1);
 	if (monster) {
 		do {
 			if (monster.hp > 0) {
-				monList.push(new NTA_MonsterStats(target));
+				monList.push(new UDL_MonsterStats(target));
 			}
 		} while (monster.GetNext());
 	}
@@ -479,7 +491,7 @@ function NTA_Dodge(target, distance) {
 	return true;
 }
 
-function NTCS_ClearPosition(range, sortFunc, spectype, classid) {
+function UDL_ClearPosition(range, sortFunc, spectype, classid) {
 	var i, orgx, orgy, monList, ignoreList, target, result, 
 		gidAttack = [], 
 		dodgeIDs = [310, 362], 
@@ -508,12 +520,12 @@ function NTCS_ClearPosition(range, sortFunc, spectype, classid) {
 			do {
 				if (target.IsAttackable()) {
 					if ((me.classid === 1 || me.classid === 2 || me.classid === 6) && NTConfig_Dodge && GetDistance(me, target) < 7 && dodgeIDs.indexOf(target.classid) > -1) {
-						NTA_Dodge(target, 15);
+						UDL_Dodge(target, 15);
 						continue MainLoop;
 					}
 					if (ignoreList.indexOf(target.gid) < 0 && GetDistance(orgx, orgy, target.x, target.y) <= range) {
 						if (NTA_IsValidMonster(target)) {
-							monList.push(new NTA_MonsterStats(target));
+							monList.push(new UDL_MonsterStats(target));
 						} else {
 							ignoreList.push(target.gid);
 						}
@@ -526,7 +538,7 @@ function NTCS_ClearPosition(range, sortFunc, spectype, classid) {
 		}
 		monList.sort(sortFunc);
 		target = NTC_FindUnit(NTC_UNIT_MONSTER, monList[0].gid);
-		if (target && target.IsAttackable() && OutOfBounds(target)) {
+		if (target && target.IsAttackable() && UDL_OutOfBounds(target)) {
 			result = NTA_Attack(target, attackcount % 30 === 0);
 			switch (result) {
 			case 1:
@@ -594,10 +606,10 @@ function NTCS_ClearPosition(range, sortFunc, spectype, classid) {
 	if (NTConfig_OpenChest) {
 		OpenStashes(range);
 	}
-	if (NTT_CheckMerc()) {
+	if (NTT_CheckMerc() && me.areaid == 108) {
 		NTTMGR_VisitTown();
 	}
-	if (NTT_CheckPotionSafe()) {
+	if (UDL_CheckPotionSafe()) {
 		NTTMGR_VisitTown();
 	}
 	if (NTConfig_IdInField) {
@@ -607,31 +619,30 @@ function NTCS_ClearPosition(range, sortFunc, spectype, classid) {
 	} return true;
 }
 
-function NTA_SortRooms(a, b) {
+function UDL_SortRooms(a, b) {
 	if (GetDistance(me.x, me.y, a[0], a[1]) < GetDistance(me.x, me.y, b[0], b[1])) {
 		return -1;
 	}
 	return 1;
 }
 
-function NT_DiabloLeechMessageHandler(){///// 
+function UDL_DiabloLeechMessageHandler(){
 	var _msg = NT_File("logs/messagecomands/"+me.charname+"-diablo.txt", 0);
 	if (_msg && _msg != Diablo_PreMessage){
 		Diablo_PreMessage = _msg;
 		if(_msg.substring(_msg.indexOf("/") + 1) == "takedtp"){
-			//Print(COLOR_2 + "retrieved take tp message diablo");
 			return true;
 		}
 	}
 	return false;
 }
 
-function UCL_Chat(msg, type)
+function UDL_Chat(msg, type)
 {
 	if(type != 0 && msg.indexOf(NTConfig_Leader) == -1)
 		return;
 
-	if(!trigger && (msg.indexOf(NTConfig_CS_SafeTP) != -1) && me.areaid == 108 && me.y > 5405){
+	if(!trigger && (msg.indexOf(NTConfig_CS_SafeTP) != -1) && me.areaid == 108 && me.y > 5385){
 		trigger = true;return;
 	}
 	
@@ -662,7 +673,7 @@ function UCL_Chat(msg, type)
 	}
 	
 	if(msg.indexOf("Diablo Dead.") != -1){
-		if(NTConfig_LeechChaos < 2 && me.areaid == 108){
+		if(NTConfig_LeechChaos < 0 && me.areaid == 108){
 			Delay(3000);
 			NTM_MoveTo(me.areaid, 7769, 5284);
 			NTM_UsePortal("BluePortal", 103, NTConfig_Leader);
@@ -684,102 +695,71 @@ function UCL_Chat(msg, type)
 	return;
 }
 
-var chaosentrance = [7791, 5571,7793, 5553, 7793, 5535, 7793, 5520, 7793, 5505, 7776, 5490, 7769, 5475,  7769, 5460, 7769, 5445, 7769, 5430, 7776, 5415, 7776, 5400, 7769, 5385, 7769, 5370, 7776, 5355, 7776, 5340, 7776, 5325]
-var chaosfollow = [7776, 5325, 7768, 5314, 7752, 5314, 7730, 5314, 7709 , 5291];//7776, 5340, 
-var chaosfollow1 =[7725, 5276, 7750, 5273, 7770, 5271, 7774, 5260, 7777, 5250, 7785, 5241, 7800, 5232, 7814, 5229];
-var chaosfollow2 =[7814, 5232, 7814, 5229, 7814, 5245, 7814, 5262, 7821, 5280, 7835, 5280, 7845, 5280, 7855, 5290, 7874, 5293];
+var Sealfollow = [];
 
-function ChaosLeechFollow()
-{	
+function UDL_LeechFollow(){	
+	var chaosentrance = [7791, 5571, 7793, 5553, 7793, 5535, 7793, 5520, 7793, 5505, 7776, 5490,
+						7769, 5475, 7769, 5460, 7769, 5445, 7769, 5430, 7776, 5415, 7776,
+						5400, 7769, 5385, 7769, 5370, 7776, 5355, 7776, 5340, 7776, 5325]
+
 	NTConfig_SnagRange = 15;
-
 	//me.showenemyonautomap = true;
 	
 	if (me.y > 5353 && me.areaid == 108) {
-
-		NTM_MoveTo(108, 7792, 5540);
+		NTM_MoveTo(108, 7793, 5535);
 		NTP_DoPrecast(true, NTConfig_LeechBo);
 		for(var e = 4 ; e < chaosentrance.length ; e+=2){
-			while(!My_Safetoadvance())
-				{	if( e == 0){FallBack(); return;}
-					if(leechwarn && e >= 2)
-						{e=e-2;NTM_MoveTo(108, chaosentrance[e], chaosentrance[e+1]);}
-					Delay(100);
-					if(trigger)
-					{
-						NTTM_CheckAct();
-						//Print("Trigger");
-						Delay(300);
-						while(me.areaid !=108){	NTM_UsePortal("BluePortal", 108, NTConfig_Leader);Delay(300);}
-						return ChaosLeechFollow();
-					}
-					
-				}
-			NTM_MoveTo(108, chaosentrance[e], chaosentrance[e+1]);
-
+			while(!UDL_Safetoadvance()){
+				if( e == 0  || SealBoss1){UDL_FallBack(); return;}
+				if(leechwarn && e >= 2){e=e-2;NTM_MoveTo(108, chaosentrance[e], chaosentrance[e+1]);}
+				Delay(100);
+				if(trigger){
+					NTTM_CheckAct();
+					Delay(300);
+					while(me.areaid !=108){	CLM_UsePortal("BluePortal", 108, NTConfig_Leader);Delay(300);}
+					return UDL_LeechFollow();
+				}					
+			}
+			if(!NTM_MoveTo(108, chaosentrance[e], chaosentrance[e+1]))
+				Print("Error moving to x:" + chaosentrance[e] + " y:" + chaosentrance[e+1]);
 		}
 	}
 	
-	sealbosswaitloc(396);
-
-	NTP_DoPrecast(true, NTConfig_LeechBo);
+	var sealid = [396, 394, 392];
 	
-	for(var e = 2 ; e < chaosfollow.length ; e+=2){
-			while(!My_Safetoadvance())
-				{	if(leechwarn && e == 0){FallBack(); return;}
-					if(leechwarn && e > 0)
-						{e=e-2;NTM_MoveTo(108, chaosfollow[e], chaosfollow[e+1]);}
-					Delay(100);
-				}
-			NTM_MoveTo(108, chaosfollow[e], chaosfollow[e+1]);
-
+	for(var seal = 0 ; seal < 3 ; seal++){
+		UDL_SealPath(sealid[seal]);
+		NTP_DoPrecast(true, NTConfig_LeechBo);	
+		for(var e = 2 ; e < Sealfollow.length ; e+=2){
+			while(!UDL_Safetoadvance()){
+				if(leechwarn && e == 0){UDL_FallBack(); return;}
+				if(leechwarn && e > 0){e=e-2;NTM_MoveTo(108, Sealfollow[e], Sealfollow[e+1]);}
+				Delay(100);
+			}
+			if(!NTM_MoveTo(108, Sealfollow[e], Sealfollow[e+1]))
+				Print("Error moving to x:" + Sealfollow[e] + " y:"+Sealfollow[e+1]);
 		}
+		if(seal == 0){while(!SealBoss1 && !UDL_SealBossDead(GetLocaleString(2851))){Delay(200);}}
+		if(seal == 1){while(!SealBoss2 && !UDL_SealBossDead(GetLocaleString(2852))){Delay(200);}}
+		if(seal == 2){while(!SealBoss3 && !UDL_SealBossDead(GetLocaleString(2853))){Delay(200);}}
+	}
 	
-	while(!SealBoss1){Delay(200);}
-	
-	sealbosswaitloc(394);
-	NTP_DoPrecast(true, NTConfig_LeechBo);
-	for(var e = 0 ; e < chaosfollow1.length ; e+=2){
-			while(!My_Safetoadvance())
-				{	if(leechwarn && e == 0){FallBack(); return;}
-					if(leechwarn && e > 0)
-						{e=e-2;NTM_MoveTo(108, chaosfollow1[e], chaosfollow1[e+1]);}
-					Delay(100);
-				}
-			NTM_MoveTo(108, chaosfollow1[e], chaosfollow1[e+1]);
-		}
-	
-	while(!SealBoss2){Delay(200);}
-
-	sealbosswaitloc(392);
-	NTP_DoPrecast(true, NTConfig_LeechBo);	
-	for(var e = 0 ; e < chaosfollow2.length ; e+=2){
-			while(!My_Safetoadvance())
-				{	if(leechwarn && e == 0){FallBack(); return;}
-					if(leechwarn && e > 0)
-						{e=e-2;NTM_MoveTo(108, chaosfollow2[e], chaosfollow2[e+1]);}
-					Delay(100);
-				}
-			NTM_MoveTo(108, chaosfollow2[e], chaosfollow2[e+1]);
-
-		}
-	
-	while(!SealBoss3){Delay(200);}
-
 	NTM_MoveTo(108, 7821, 5280, 2);
 	NTM_MoveTo(108, NTConfig_Chaosleechpos[0], NTConfig_Chaosleechpos[1]);
 	NTP_DoPrecast(true, NTConfig_LeechBo);
-	while(!DiabloDead)
-			Delay(300)
-
-	Delay(5000);
-	NTM_MoveTo(108, 7769, 5284);
-	NTM_UsePortal("BluePortal", 103, NTConfig_Leader)
+	while(!DiabloDead && !UDL_SealBossDead(GetLocaleString(3060)))
+		Delay(300);
 
 	return;
 }
 
-function My_Safetoadvance()
+function UDL_SealBossDead(classid){
+	_target = NTC_FindUnit(NTC_UNIT_MONSTER, classid, 5);
+	if (!_target) { return false; }	
+	return _target.mode == 12;
+}
+
+function UDL_Safetoadvance()
 {	var monstdist = 100
 	var _enemy = NTC_FindUnit(NTC_UNIT_MONSTER);
 	if(!_enemy){Say("!Very Safe"); leechwarn = false; return true;}
@@ -810,35 +790,42 @@ function My_Safetoadvance()
 	}
 	//Say("!Safe");
 	leechwarn = false;
-	My_Shrine();
+	UDL_Shrine();
 	return true;
 }
 
-function sealbosswaitloc(classid)
-{
-
-	var _leechseal = GetPresetUnits(108, NTC_UNIT_OBJECT, classid);
+function UDL_SealPath(classid){ 
+	var _leechseal = GetPresetUnits(108, NTC_UNIT_OBJECT, classid);	
+	var locx = (_leechseal[0].roomx * 5 + _leechseal[0].x);
+	var locy = (_leechseal[0].roomy * 5 + _leechseal[0].y);
+	//Print("Seal ID = " + classid + " x:"+locx + " y:" + locy);
+	if (locx == 7655 && locy == 5275){//seal boss 1
+		return Sealfollow = [7776, 5325, 7768, 5314, 7752, 5314, 7730, 5314, 7709 , 5291, 7709, 5273];
+	 }
 	
-	locx = (_leechseal[0].roomx * 5 + _leechseal[0].x);
-	locy = (_leechseal[0].roomy * 5 + _leechseal[0].y);
-
-	if (locx == 7655 && locy == 5275)
-		{chaosfollow.push(7709, 5273);return;}
-			
-	if (locx == 7815 && locy == 5155)
-		{chaosfollow1.push(7810,5215);return;}
+	if (locx == 7655 && locy == 5315){//seal boss 1
+		return Sealfollow = [7776, 5325, 7768, 5314, 7752, 5314, 7730, 5314, 7709, 5291];
+	}
+	
+	if (locx == 7815 && locy == 5155){//seal boss 2
+		return Sealfollow = [7725, 5276, 7750, 5273, 7770, 5271, 7774, 5260, 7777, 5250, 7785, 5241, 7800, 5232, 7814, 5229, 7814, 5215, 7814, 5199];
+	}
+	
+	if (locx == 7773 && locy == 5155){//seal boss 2
+		return Sealfollow = [7725, 5276, 7750, 5273, 7770, 5271, 7774, 5260, 7777, 5250, 7785, 5241, 7800, 5232, 7814, 5229];
+	}
+	
+	if (locx == 7915 && locy == 5315){//seal boss 3
+		return Sealfollow = [7814, 5232, 7814, 5229, 7814, 5245, 7814, 5262, 7821, 5280, 7835, 5280, 7845, 5280, 7855, 5290, 7874, 5293, 7880, 5307];
+	}
 		
-	if (locx == 7915 && locy == 5315)
-		{chaosfollow2.push(7880, 5307);return;}
-
-		
-	if (locx == 7893 && locy == 5313)
-		chaosfollow2.push(7885, 5318);
-		
+	if (locx == 7893 && locy == 5313){//seal boss 3
+		return Sealfollow = [7814, 5232, 7814, 5229, 7814, 5245, 7814, 5262, 7821, 5280, 7835, 5280, 7845, 5280, 7855, 5290, 7874, 5293, 7885, 5318];
+	}
 	return;
 }
 
-function NTCS_DiaSpam(){
+function UDL_DiaSpam(){
 	if(me.classid == NTC_CHAR_CLASS_AMAZON){
 		if(NTConfig_DiaSpam > 0)
 			return NTC_CastSkill(NTConfig_DiaSpam, 0, 7792, 5291);
@@ -886,7 +873,7 @@ function NTCS_DiaSpam(){
 	Delay(200);
 }
 
-function FallBack()
+function UDL_FallBack()
 {
 	NTTM_CheckAct();
 	Print("Follow Failed");
@@ -895,7 +882,7 @@ function FallBack()
 	return;
 }
 
-function My_Shrine()
+function UDL_Shrine()
 {	
 	var xx = me.x, yy = me.y;
 	NTSI_PickItems();
@@ -913,7 +900,12 @@ function My_Shrine()
 	return;
 }
 
-function OutOfBounds(Monst){
+function UDL_OutOfBounds(Monst){
+	if(NTC_GetSkillLevel(54) < 1){
+		if(Monst.x > 7757 && Monst.x < 7774 &&  Monst.y > 5258 && Monst.y < 5275){
+			return false;
+		}
+	}
 	
 			if(Monst.x < 7787 && Monst.y > 5501)
 				return false;
