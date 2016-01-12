@@ -806,7 +806,9 @@ function NT_LoadConfig()
 	NTConfig_DanceStartHp = 78;  						// Auto dance if below this % health? (Set -1 to disable, 101 to always.)
 	NTConfig_DanceStartMp = -1;							// Auto dance if below this % mana? (Set -1 to disable, 101 to always.)
 
-	NTConfig_DiaSpam = 0;								// Skill to spam before Diablo Spawns
+	NTConfig_DiaSpam = 0;			// Skill to spam before Diablo Spawns
+	NTConfig_SetDiablo = 0;			// leechers (only) stop attacking Diablo after x% - valid values 0 to 100
+	NTConfig_SetBaal = 0;			// leechers (only) stop attacking Baal after x% - valid values 0 to 100
 
 	prewavespot = [15092, 5040];							// Pre-Wave standing (X,Y) coordinates. (For Baal Scripts.)
 	NTConfig_PreWaveSpam = 0;								// Attack skill to spam between waves.  Set "0" to disable.

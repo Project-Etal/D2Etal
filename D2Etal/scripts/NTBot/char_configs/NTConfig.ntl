@@ -433,7 +433,8 @@ var NTConfig_Script = [];
 	var NTConfig_AttackingThis;
 	var NTConfig_CheckSelfSafe = new Array();
 	var NTConfig_CheckMercSafe = new Array();
-
+	var NTConfig_SetDiablo;
+	var NTConfig_SetBaal;
 
 // NTConfig_Global Variables
 	var Do_PauseBot;

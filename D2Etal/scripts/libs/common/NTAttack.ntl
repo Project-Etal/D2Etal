@@ -320,6 +320,23 @@ function NTA_Initialize() {
 	}
 }
 
+function NTA_SetMonster(classid, targethp) {
+
+    if (NTConfig_AttackSkill[1] < 0) { return false; }	
+    var _target = NTC_FindUnit(NTC_UNIT_MONSTER, classid, 5);
+    if (!_target) { return false; }
+	var thp = Math.floor((targethp*_target.hpmax)/100);
+    if (_target.IsAttackable()) {
+        var _attackcount = 0;
+        while (_attackcount < 300 && NTA_IsValidMonster(_target )&& _target.hp > thp) {
+            if (NTA_Attack(_target, (_attackcount % 30) == 0) < 2) {
+                break;
+            }
+        }
+    }
+    return true;
+}
+
 function NTA_KillMonster(classid) {
 	var _target;
 

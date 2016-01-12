@@ -103,9 +103,12 @@ function NTMain() {
 			UDL_DiaSpam();
 		}
 
-		NTA_KillMonster(243);
-	
-		NTSI_PickItems();
+		if(NTConfig_SetDiablo > 0){
+			NTA_SetMonster(243, NTConfig_SetDiablo);
+		}else{
+			NTA_KillMonster(243);
+			NTSI_PickItems();
+		}
 	}
 	
 	if(me.areaid == 108 && NTConfig_LeechChaos == 1)

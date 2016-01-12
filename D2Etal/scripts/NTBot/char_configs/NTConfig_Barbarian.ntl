@@ -781,7 +781,9 @@ function NT_LoadConfig()
 	NTConfig_AttackSkill[8] = -1; 	// Tertiary untimed skill.
 	NTConfig_AttackSkill[9] = -1; 	// Primary skill to boss (diablo/baal/meph/etc) Not immune to spells I guess.
 
-	NTConfig_DiaSpam = 0;								// Skill to spam before Diablo Spawns
+	NTConfig_DiaSpam = 0;			// Skill to spam before Diablo Spawns
+	NTConfig_SetDiablo = 0;			// leechers (only) stop attacking Diablo after x% - valid values 0 to 100
+	NTConfig_SetBaal = 0;			// leechers (only) stop attacking Baal after x% - valid values 0 to 100
 
 	prewavespot = [15092, 5028];						// Pre-Wave standing (X,Y) coordinates. (For Baal Scripts.)
 

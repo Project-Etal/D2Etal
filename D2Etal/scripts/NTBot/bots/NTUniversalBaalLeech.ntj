@@ -319,10 +319,12 @@ function NT_LeechBaalFighter(){
 			return false;
 		}
 		NTM_MoveTo(me.areaid, 15138, 5916);
-		if(!NTA_KillMonster(544)){
-			return false;
+		if(NTConfig_SetBaal > 0){
+			NTA_SetMonster(544, NTConfig_SetBaal);
+		}else{
+			NTA_KillMonster(544);
+			NTSI_PickItems();
 		}
-		NTSI_PickItems();
 	}
 	return true;
 }

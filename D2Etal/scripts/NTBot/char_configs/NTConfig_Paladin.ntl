@@ -791,7 +791,9 @@ function NT_LoadConfig()
 	NTConfig_AttackSkill[7] = -1;	// Tertiary skill in case monster is immune to primary skill. Set to -1 if you won't
 	NTConfig_AttackSkill[8] = -1;	// Tertiary aura. Set to -1 if you won't
 
-	prewavespot = [15092, 5028];						// Pre-Wave standing (X,Y) coordinates. (For Baal Scripts.)
+	prewavespot = [15092, 5028];	// Pre-Wave standing (X,Y) coordinates. (For Baal Scripts.)
+	NTConfig_SetDiablo = 0;			// leechers (only) stop attacking Diablo after x% - valid values 0 to 100
+	NTConfig_SetBaal = 0;			// leechers (only) stop attacking Baal after x% - valid values 0 to 100
 
 	NTconfig_HighMaxAttack = false;						// Use HighMaxAttacks? (False = LowMaxAttacks.) High/Low are below.
 	NTConfig_HighMaxAttackAreas = [131];				// If above is set false (you're using LowMaxAttacks), add areas to bypass LowMaxAttacks and use HighMaxAttacks instead. (Recommended in Baal's Throne Room.)
