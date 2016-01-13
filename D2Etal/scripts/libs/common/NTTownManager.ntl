@@ -1575,39 +1575,33 @@ function NTTM_CheckToStash(){
 }
 
 function NTTM_GCCheckAmu(){
-	if(me.GetStat(12) < 88)
-		return;
-	if(!NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold && NTTM_GCCheckIfCrafting() && NTConfig_GC){	
-		switch(me.act){
-			case 1: NTTM_GCVisitGheed();
-				break;
-			case 2: NTTM_GCVisitElzix();
-				break;
-			case 3: NTTM_GCVisitAlkor();
-				break;
-			case 4: NTTM_GCVisitJamella();
-				break;
-			case 5: NTTM_GCVisitAnya();
-				break;
-		}
-	}
+	if(NTTM_GCCheckIfCrafting() && NTConfig_GC && me.GetStat(12) >= 88 && !NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold){
+		
+		var _npc;
 	
-	function NTTM_GCVisitGheed()
-	{
-		var _npc;
+		switch(me.act){
+			case 1: NTTM_TownMove("gheed");
+				_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_GHEED, 5);
+				break;
+			case 2: NTTM_TownMove("elzix");
+				_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_ELZIX, 5);
+				break;
+			case 3: NTTM_TownMove("alkor");
+				_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_ALKOR, 5);
+				break;
+			case 4: NTTM_TownMove("jamella");
+				_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_JAMELLA, 5);
+				break;
+			case 5: NTTM_TownMove("anya");
+				_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_ANYA_TOWN, 5);
+				break;
+		}
 		
-		NTTM_TownMove("gheed");
-
-		_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_GHEED, 5);
-
-		if(_npc)
-		{
-			while(!NTTM_GCHaveAmu()){
-				if(NTT_DoInteract(_npc))
-				{
+		if(_npc){
+			while(!NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold){
+				if(NTT_DoInteract(_npc)){
 					if(NTT_DoTrade(_npc, 1))
 						NTTM_GCGambleCraft(_npc);
-
 					me.Cancel(1);
 				}
 				else
@@ -1615,104 +1609,6 @@ function NTTM_GCCheckAmu(){
 			}
 		}
 	}
-
-	function NTTM_GCVisitElzix()
-	{
-		var _npc;
-		
-		NTTM_TownMove("elzix");
-
-		_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_ELZIX, 5);
-
-		if(_npc)
-		{
-			while(!NTTM_GCHaveAmu()){
-				if(NTT_DoInteract(_npc))
-				{
-					if(NTT_DoTrade(_npc, 1))
-						NTTM_GCGambleCraft(_npc);
-
-					me.Cancel(1);
-				}
-				else
-					break;
-			}
-		}
-	}
-
-	function NTTM_GCVisitAlkor()
-	{
-		var _npc;
-		
-		NTTM_TownMove("alkor");
-
-		_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_ALKOR, 5);
-
-		if(_npc)
-		{
-			while(!NTTM_GCHaveAmu()){
-				if(NTT_DoInteract(_npc))
-				{
-					if(NTT_DoTrade(_npc, 1))
-						NTTM_GCGambleCraft(_npc);
-
-					me.Cancel(1);
-				}
-				else
-					break;
-			}
-		}
-	}
-
-
-	function NTTM_GCVisitJamella()
-	{
-		var _npc;
-		
-		NTTM_TownMove("jamella");
-
-		_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_JAMELLA, 5);
-
-		if(_npc)
-		{
-			while(!NTTM_GCHaveAmu()){
-				if(NTT_DoInteract(_npc))
-				{
-					if(NTT_DoTrade(_npc, 1))
-						NTTM_GCGambleCraft(_npc);
-
-					me.Cancel(1);
-				}
-				else
-					break;
-			}
-		}
-	}
-
-
-	function NTTM_GCVisitAnya()
-	{
-		var _npc;
-		
-		NTTM_TownMove("anya");
-
-		_npc = NTC_FindUnit(NTC_UNIT_NPC, NTC_NPC_ID_ANYA_TOWN, 5);
-
-		if(_npc)
-		{
-			while(!NTTM_GCHaveAmu()){
-				if(NTT_DoInteract(_npc))
-				{
-					if(NTT_DoTrade(_npc, 1))
-						NTTM_GCGambleCraft(_npc);
-
-					me.Cancel(1);
-				}
-				else
-					break;
-			}
-		}
-	}	
 }
 
 function NTTM_GCHaveAmu(){
