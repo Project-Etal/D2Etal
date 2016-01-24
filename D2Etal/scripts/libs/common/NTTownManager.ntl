@@ -30,6 +30,8 @@ function NTTMGR_TownManager(simple, ranged)
 	NTT_ClearBelt();
 	NT_CheckInventorypots();
 	NTT_CleanPotions();
+	NTTMGR_TossScrolls();
+	
 	_NTTMGR_BuyPotsInt = NTT_CheckBelt();
 	_NTTMGR_BuyPots = NTConfig_CheckPotsTown ? NTT_NeedPots(true) : NTT_CheckBelt();
 	
@@ -1938,4 +1940,23 @@ function statusSet()
 	} else {
 		return false;
 	}
+}
+
+function NTTMGR_TossScrolls(){
+	var tptome = me.GetItems(518);
+	var idtome = me.GetItems(519);
+	var _items = me.GetItems();
+	if(!_items)
+		return;	
+
+	for(var g = 0; g < _items.length; g++){
+		if((_items[g].classid == 529 && tptome) || (_items[g].classid == 530 && idtome)){
+			if(_items[g].mode == 0 && _items[g].itemloc == 0 && NTConfig_Columns[_items[g].y][_items[g].x] > 0 ){
+				if(!GetUIState(0x01)){SetUIState(0x01, true);}
+				NTT_DropItem(_items[g]);
+			}			
+		}
+	}
+	if(GetUIState(0x01)){me.Cancel(1);}
+	return;
 }
