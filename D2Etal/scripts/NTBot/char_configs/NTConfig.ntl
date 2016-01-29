@@ -153,6 +153,7 @@ var NTConfig_Script = [];
 		var NTConfig_PositionAndy;
 		var NTConfig_ClearAndarielThrone;
 		var NTConfig_CowKingChicken;
+		var NTConfig_Dodge_Cows;
 	// Act 2
 		var NTConfig_RadSewerStairs;
 		var NTConfig_ClearRadSewers;

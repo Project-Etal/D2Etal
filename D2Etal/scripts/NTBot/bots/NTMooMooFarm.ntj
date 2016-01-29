@@ -1,5 +1,5 @@
 // D2NT Cow script
-// Version 1.4.3
+// Version 1.4.4
 
 function NTMain()
 {
@@ -306,7 +306,7 @@ function NTR_ClearPosition(range, pickitem, safelevel, failed){
 	for(var i = 0 ; i < _spectype.length ; i++){
 		_skiplist = new Array();
 
-		while(_attackcount < (i+1)*100){
+		MainLoop : while(_attackcount < (i+1)*100){
 			_mindistance = 100000;
 
 			_target = NTC_FindUnit(NTC_UNIT_MONSTER);
@@ -315,6 +315,10 @@ function NTR_ClearPosition(range, pickitem, safelevel, failed){
 				do{
 					if(_skiplist.indexOf(_target.gid) < 0){
 						if(_target.IsAttackable() && (_target.spectype&_spectype[i])){
+							if ((me.classid === 1 || me.classid === 2 || me.classid === 6) && NTConfig_Dodge_Cows && GetDistance(me, _target) < 7) {
+								NTA_Dodge(_target, 15);
+								continue MainLoop;
+							}
 							if(GetDistance(_orgx, _orgy, _target.x, _target.y) <= range && NTA_IsValidMonster(_target)){
 								_distance = GetDistance(me, _target);
 								if(_distance < _mindistance){
@@ -518,4 +522,71 @@ function NT_TakeCowPortal()
 		}
 	}
 	return (me.areaid == 39);
+}
+
+function NTA_Dodge(target, distance) {
+	var i, j, coordx, coordy, monster, count,
+		maxcount = 999,
+		coords = [],
+		goodCoords = [],
+		monList = [],
+		angles = [45, 90, 135, 180, 225, 270, 305, 360];
+	for (i = 0; i < angles.length; i += 1) {
+		coordx = Math.round((Math.cos(angles[i] * Math.PI / 180)) * distance + target.x);
+		coordy = Math.round((Math.sin(angles[i] * Math.PI / 180)) * distance + target.y);
+		if (CheckCollision(me.areaid, coordx, coordy, 1)) {
+			coords.push([coordx, coordy]);
+		}
+	}
+	if (coords.length === 0) { // no valid positions - don't move
+		return true;
+	}
+	coords.sort(NTA_SortRooms);
+	monster = GetUnit(1);
+	if (monster) {
+		do {
+			if (monster.hp > 0) {
+				monList.push(new NTA_MonsterStats(target));
+			}
+		} while (monster.GetNext());
+	}
+	for (i = 0; i < coords.length; i += 1) {
+		count = 0;
+		for (j = 0; j < monList.length; j += 1) {
+			if (monList[j].hp > 0 && GetDistance(monList[j].x, monList[j].y, coords[i][0], coords[i][1]) < 10) {
+				count += 1;
+			}
+		}
+		if (count < maxcount) {
+			goodCoords = [coords[i][0], coords[i][1]];
+			maxcount = count;
+			if (count === 0) {
+				break;
+			}
+		}
+	}
+	if (goodCoords.length > 0) { // just in case goodCoords is empty (shouldn't happen)
+		if (Math.abs(me.x - goodCoords[0]) < 3 && Math.abs(me.y - goodCoords[1]) < 3) { // close enough
+			return true;
+		}
+		Say("!Dodge " + target.name);
+		NTM_MoveTo(me.areaid, goodCoords[0], goodCoords[1]);
+	}
+	return true;
+}
+
+function NTA_SortRooms(a, b) {
+	if (GetDistance(me.x, me.y, a[0], a[1]) < GetDistance(me.x, me.y, b[0], b[1])) {
+		return -1;
+	}
+	return 1;
+}
+
+function NTA_MonsterStats(unit) {
+	this.name = unit.name;
+	this.x = unit.x;
+	this.y = unit.y;
+	this.gid = unit.gid;
+	this.classid = unit.classid;
+	this.spectype = unit.spectype;
 }
