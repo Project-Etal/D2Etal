@@ -37,7 +37,7 @@ function NTTMGR_TownManager(simple, ranged)
 	
 	_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 	
-	_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
+	_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 8);
 	_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 	_NTTMGR_DoHeal = NTT_CheckHeal();
 	_NTTMGR_DoID = NTT_CheckUnids();
@@ -67,7 +67,7 @@ function NTTMGR_TownManager(simple, ranged)
 	
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
-		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
+		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 8);
 		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyPots || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey) {
@@ -107,7 +107,7 @@ function NTTMGR_TownManager(simple, ranged)
 		
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
-		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
+		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 8);
 		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoRepair || _NTTMGR_BuyArrows)
@@ -146,7 +146,7 @@ function NTTMGR_TownManager(simple, ranged)
 		
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
-		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
+		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 8);
 		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyPots)
@@ -183,7 +183,7 @@ function NTTMGR_TownManager(simple, ranged)
 		
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
-		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
+		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 8);
 		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey || _NTTMGR_BuyPots)
@@ -220,7 +220,7 @@ function NTTMGR_TownManager(simple, ranged)
 		
 		_NTTMGR_BuyID = (NTConfig_IdInField && NTTMGR_CheckScrolls(0) < 10);// id in field add
 		
-		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 4);
+		_NTTMGR_BuyTP = (NTTMGR_CheckScrolls(1) < 8);
 		_NTTMGR_BuyKey = ((NTConfig_OpenChest || NTConfig_OpenChestsInArea || NTConfig_OpenHallsSuperChests || NTConfig_UseKeysForPlaceHolder) && NTTMGR_CheckKeys() < 6);
 
 		if(_NTTMGR_DoHeal || _NTTMGR_RemoveCurse || _NTTMGR_DoID || _NTTMGR_BuyTP || _NTTMGR_BuyID || _NTTMGR_BuyKey || _NTTMGR_BuyPots)
