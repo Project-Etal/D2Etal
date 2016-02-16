@@ -52,12 +52,9 @@ function Command() {
 					}
 					if (checkCommand(_command)) {
 						_busy = true;
-						SetStatusText(Rev + " Running " + _command);
+						SetStatusText(Rev + "     Running " + _command);
 						NTTMGR_TownManager();
 						switch (_command) {
-						case "cain":
-							Extras.Cain();
-							break;
 						case "andy":
 							Quests.Andy();
 							break;
@@ -91,9 +88,6 @@ function Command() {
 						case "izual":
 							Extras.Izual();
 							break;
-						case "hephasto":
-							Extras.Hephasto();
-							break;
 						case "diablo":
 							Quests.Diablo();
 							break;
@@ -108,9 +102,6 @@ function Command() {
 							break;
 						case "baal":
 							Quests.Baal();
-							break;
-						case "waypoints":
-							Extras.Waypoints();
 							break;
 						case "end":
 							_end = true;
@@ -140,7 +131,7 @@ function Command() {
 							break;
 						}
 						_busy = false;
-						SetStatusText(Rev + "Awaiting command");
+						SetStatusText(Rev + "     Awaiting command");
 					}
 					break;
 				}
@@ -156,7 +147,7 @@ function Command() {
 		if (_master !== "" && !_set) {
 			_masterlock = true;
 			_set = true;
-			SetStatusText(Rev + "Awaiting command");
+			SetStatusText(Rev + "     Awaiting command");
 		}
 		Delay(500);
 	}
@@ -165,7 +156,7 @@ function Command() {
 
 function checkCommand(comm) {
 	var i,
-		possibles = ["cain", "andy", "radament", "cube", "staff", "ammy", "summoner", "duriel", "tome", "travincal", "mephisto", "izual", "hephasto", "diablo", "shenk", "anya", "ancients", "baal", "waypoints", "end", "list", "rushone", "rushtwo", "rushthree", "rushfour", "rushfive", "rushall"];
+		possibles = ["andy", "radament", "cube", "staff", "ammy", "summoner", "duriel", "tome", "travincal", "mephisto", "izual", "diablo", "shenk", "anya", "ancients", "baal", "waypoints", "end", "list", "rushone", "rushtwo", "rushthree", "rushfour", "rushfive", "rushall"];
 
 	for (i = 0; i < possibles.length; i += 1) {
 		if (possibles[i] === comm) {
@@ -178,7 +169,6 @@ function checkCommand(comm) {
 function RushAct(act) {
 	switch (act) {
 		case 1:
-			Extras.Cain();
 			Quests.Andy();
 		break;
 
@@ -199,7 +189,6 @@ function RushAct(act) {
 
 		case 4:
 			Extras.Izual();
-			Extras.Hephasto();
 			Quests.Diablo();
 		break;
 
@@ -213,21 +202,21 @@ function RushAct(act) {
 }
 
 function commandList() {
-	var comms = ["cain, ", "andy, ", "radament, ", "cube, ", "staff, ", // said in first line
+	var comms = ["andy, ", "radament, ", "cube, ", "staff, ", // said in first line
 		"ammy, ", "summoner, ", "duriel, ", "tome, ", "travincal, ", // said in second line
 		"mephisto, ", "izual, ", "hephasto, ", "diablo, ", "shenk, ", // said in third line
-		"anya, ", "ancients, ", "baal, ", "waypoints, ", "end, ", "list, ", // said in forth line
+		"anya, ", "ancients, ", "baal, ", "end, ", "list, ", // said in forth line
 		"rushone, ", "rushtwo, ", "rushthree, ", "rushfour, ", "rushfive, ", "rushall"]; // said in last line
 
 	Say("Available commands for the master are the trigger and any of the following ");
 	Delay(1000);
-	Say(comms[0] + comms[1] + comms[2] + comms[3] + comms[4]);
+	Say(comms[0] + comms[1] + comms[2] + comms[3]);
 	Delay(1000);
-	Say(comms[5] + comms[6] + comms[7] + comms[8] + comms[9]);
+	Say(comms[4] + comms[5] + comms[6] + comms[7] + comms[8]);
 	Delay(1000);
-	Say(comms[10] + comms[11] + comms[12] + comms[13] + comms[14]);
+	Say(comms[9] + comms[10] + comms[11] + comms[12] + comms[13]);
 	Delay(1000);
-	Say(comms[15] + comms[16] + comms[17] + comms[18] + comms[19] + comms[20]);
+	Say(comms[14] + comms[15] + comms[16] + comms[17] + comms[18]);
 	Delay(1000);
-	Say(comms[21] + comms[22] + comms[23] + comms[24] + comms[25] + comms[26]);
+	Say(comms[19] + comms[20] + comms[21] + comms[22] + comms[23] + comms[24]);
 }

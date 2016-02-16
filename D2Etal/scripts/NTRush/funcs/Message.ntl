@@ -1,9 +1,4 @@
 var Messages =  {
-	cainscroll: "Tp up for scroll to cairn stones.",
-	cainstones: "Tp up for the stones to tristam.",
-	caintristup: "Go to town and wait for tp at cain.",
-	cainup: "Tp for cain in trist is up.",
-	cainfreed: "Get to town and talk to akara.",
 	andyup: "Andariel tp up. Come for quest.",
 	andydown: "Andariel is dead. Talk to warriv and get to act 2.",
 	radamentup: "Tp up for Radament. Get in here.",
@@ -24,7 +19,6 @@ var Messages =  {
 	mephdown: "Meph is dead. Get thru the portal to act 4.",
 	izzyup: "Tp up for Izual. Get in here.",
 	izzydown: "Izual has been murdered. Back to town.",
-	forgeup: "Forge is clear come on in. ",
 	diabloup: "Tp up for Diablo. Get in here and hide for a second.",
 	diablodown: "The big lizzard is dead. Get to act 5.",
 	shenkup: "Portal for Shenk is up.",
@@ -36,7 +30,6 @@ var Messages =  {
 	baalup: "Baals throne is up. Xp in here.",
 	wavesdown: "Going to kill Baal now. Follow through portal.",
 	endgame: "This rush has been completed. If getting waypoints, hang out.",
-	waypoint: "Portal up for "
 };
 
 var Rules = {

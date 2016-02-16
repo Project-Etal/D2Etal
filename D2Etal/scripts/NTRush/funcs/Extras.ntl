@@ -1,170 +1,12 @@
 var Extras =  {
-	Cain: function() {
-		var i, n, xx, yy, _unit, _treex, _treey,
-			_stoneArray = new Array(10);
-
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
-
-		NTTMGR_TownManager();
-		
-		if (!NTTM_TownMove("waypoint")) {
-			Common.LogError("NTTM_TownMove()");
-			return false;
-		}
-
-		if (!NTM_TakeWaypoint(5)) {
-			Common.LogError("NTM_TakeWaypoint()");
-			return false;
-		}
-
-		NTP_DoPrecast(true);	
-
-		_unit = GetPresetUnits(me.areaid, 2);
-
-		for (i = 0; i < _unit.length; i += 1) {
-			if (_unit[i].id == 30) {
-				_treex = _unit[i].roomx*5+_unit[i].x;
-				_treey = _unit[i].roomy*5+_unit[i].y;					
-			}
-		}
-
-		NTM_MoveTo(me.areaid, _treex-4, _treey);
-		xx = me.x;
-		yy = me.y;
-
-		NTA_ClearPosition(30);
-
-		NTM_MoveTo(me.areaid, xx, yy);
-
-		Say(Messages.cainscroll);
-
-		NTM_MakeTP();
-
-		while (!NTC_IsQuesterIn()) {
-			NTC_TPGuard(20);
-			NTM_MoveTo(me.areaid, xx, yy);
-		}
-
-		while (NTC_IsQuesterIn()) {
-			NTC_TPGuard(20);
-			NTM_MoveTo(me.areaid, xx, yy);		
-		}
-
-		NTSI_PickItems();
-
-		NTM_UsePortal("BluePortal", 1, me.charname);
-
-		NTC_PutSkill(115, NTC_HAND_RIGHT);
-
-		NTTMGR_TownManager();
-
-		if (!NTTM_TownMove("waypoint")) {
-			Common.LogError("NTTM_TownMove()");
-			return false;
-		}
-
-		if (!NTM_TakeWaypoint(4)) {
-			Common.LogError("NTM_TakeWaypoint()");
-			return false;
-		}
-
-		NTP_DoPrecast(false);
-
-		_unit = GetPresetUnits(me.areaid, 2);
-					
-		for (i=0;i < _unit.length; i++) {
-			if (_unit[i].id == 17) {
-				_stoneArray[0] = _unit[i].roomx*5+_unit[i].x;
-				_stoneArray[1] = _unit[i].roomy*5+_unit[i].y;					
-			} else if (_unit[i].id == 18) {
-				_stoneArray[2] = _unit[i].roomx*5+_unit[i].x;
-				_stoneArray[3] = _unit[i].roomy*5+_unit[i].y;					
-			} else if (_unit[i].id == 19) {
-				_stoneArray[4] = _unit[i].roomx*5+_unit[i].x;
-				_stoneArray[5] = _unit[i].roomy*5+_unit[i].y;					
-			} else if (_unit[i].id == 20) {
-				_stoneArray[6] = _unit[i].roomx*5+_unit[i].x;
-				_stoneArray[7] = _unit[i].roomy*5+_unit[i].y;					
-			} else if (_unit[i].id == 21) {
-				_stoneArray[8] = _unit[i].roomx*5+_unit[i].x;
-				_stoneArray[9] = _unit[i].roomy*5+_unit[i].y;					
-			}					
-		}
-
-		NTM_MoveTo(me.areaid, _stoneArray[0], _stoneArray[1]);				
-
-		NTA_ClearPosition();	
-
-		NTSI_PickItems();
-					
-		for (n = 0; n < 10; n += 2) {
-			NTM_MoveTo(me.areaid, _stoneArray[i], _stoneArray[i+1]);
-			NTA_ClearPosition();
-		}
-
-		NTM_MoveTo(me.areaid, _stoneArray[0]-2, _stoneArray[1]-2);
-		xx = me.x; 
-		yy = me.y;
-		
-		NTM_MakeTP();
-		Say(Messages.cainstones);	
-
-		while (!NTC_IsQuesterIn()) {
-			NTC_TPGuard(25);
-			NTM_MoveTo(me.areaid, xx, yy);
-		}
-
-		while (!NTC_IsQuesterOut()) {
-			NTC_TPGuard(25);
-			NTM_MoveTo(me.areaid, xx, yy);
-		}
-
-		Say(Messages.caintristup);
-
-		NTSI_PickItems();						
-
-		while (!NTM_UsePortal("Portal", 38)) {
-			NTC_Delay(500);
-		}
-
-		NTM_MoveTo(me.areaid, 25134, 5143);
-
-		NTA_ClearPosition(30);
-
-		NTM_MoveTo(me.areaid, 25134, 5143);
-		
-		NTM_MakeTP();
-		Say(Messages.cainup);
-		
-		while (!NTC_IsQuesterIn()) {
-			NTC_TPGuard(25);
-			NTM_MoveTo(me.areaid, 25134, 5143);
-		}
-
-		while (!NTC_IsQuesterOut()) {
-			NTC_TPGuard(25);
-			NTM_MoveTo(me.areaid, 25134, 5143);		
-		}
-
-		Say(Messages.cainfreed);
-
-		NTSI_PickItems();	
-
-		NTM_UsePortal("BluePortal", 1, me.charname);
-
-		return true;
-	},
-
 	Radament: function() {
 		var _rad, _chest, _chestx, _chesty, _radtp;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		if (!Scripts.Radament) {
+			return true;
 		}
+
+		SetStatusText(Rev + "      Running Radament");
 
 		NTTMGR_TownManager();
 
@@ -225,17 +67,11 @@ var Extras =  {
 			return false;
 		}
 
-		NTA_ClearPosition();
-
-		if (NTA_KillMonster(229)) {
-			_rad = [me.x, me.y];
-		}
-
-		NTSI_PickItems();
+		_rad = [me.x, me.y];
 
 		Say(Messages.radamentdown);
 
-		NTA_ClearPosition(25);
+		NTA_ClearPosition(30);
 
 		NTSI_PickItems();
 
@@ -243,20 +79,17 @@ var Extras =  {
 
 		NTM_MakeTP();
 
-		while (NTC_IsQuesterIn()) {
-			NTC_TPGuard(30);
-		}
-
 		NTM_UsePortal("BluePortal", 40, me.charname);
 		
 		return true;
 	},
 
 	Tome: function() {
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		if (!Scripts.Tome) {
+			return true;
 		}
+
+		SetStatusText(Rev + "      Running Tome");
 
 		NTTMGR_TownManager();
 
@@ -271,10 +104,8 @@ var Extras =  {
 		}
 
 		NTP_DoPrecast(true);
-
 		NTM_MoveToStair(me.areaid, 94);
 		NTM_TakeStair(94);
-
 		NTC_Delay(500);
 
 		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 193)) {
@@ -291,15 +122,11 @@ var Extras =  {
 			return false;
 		}	
 
-		Say(Messages.tomeup);
-
 		NTM_MakeTP();
 
-		while (!NTC_IsQuesterIn()) {
-			NTC_TPGuard(25);
-		}
+		Say(Messages.tomeup);
 
-		while (NTC_IsQuesterIn()) {
+		while (!NTC_IsQuesterIn()) {
 			NTC_TPGuard(25);
 		}
 
@@ -384,10 +211,11 @@ var Extras =  {
 	Izual: function() {
 		var _izzy;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		if (!Scripts.Izual) {
+			return true;
 		}
+
+		SetStatusText(Rev + "      Running Izual");
 
 		NTTMGR_TownManager();
 
@@ -414,11 +242,11 @@ var Extras =  {
 		NTM_MoveTo(me.areaid, xx, yy);
 
 		NTM_MakeTP();
-		
+
 		Say(Messages.izzyup);
 
 		while (!NTC_IsQuesterIn()) {
-			NTC_TPGuard(20);
+			NTC_TPGuard(10);
 			NTM_MoveTo(me.areaid, xx, yy);
 		}
 
@@ -433,72 +261,9 @@ var Extras =  {
 
 		NTSI_PickItems();
 
-		NTM_MakeTP();
-
 		Say(Messages.izzydown);
 
-		NTA_ClearPosition(10);
-
-		NTSI_PickItems();
-
-		NTM_UsePortal("BluePortal", 103, me.charname);
-
-		return true;
-	},
-
-	Hephasto: function() {
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
-
-		NTTMGR_TownManager();
-
-		if (!NTTM_TownMove("waypoint")) {
-			Common.LogError("NTTM_TownMove()");
-			return false;
-		}
-
-		if (!NTM_TakeWaypoint(107)) {
-			Common.LogError("NTM_TakeWaypoint()");
-			return false;
-		}
-
-		NTP_DoPrecast(true);
-
-		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 376)) {
-			Common.LogError("NTM_MoveToPresetUnit()");
-			return false;
-		}
-
-		if (!NTA_KillMonster(409)) {
-			Common.LogError("NTA_KillMonster()");
-			return false;
-		}
-
-		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 376)) {
-			Common.LogError("NTM_MoveToPresetUnit()");
-			return false;
-		}
-
-		NTA_ClearPosition(40);
-
-		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 376, +3, -3)) {
-			Common.LogError("NTM_MoveToPresetUnit()");
-			return false;
-		}
-
-		Say(Messages.forgeup);
-
-		NTM_MakeTP();
-
-		while (!NTC_IsQuesterIn()) {
-			NTC_TPGuard(20);
-		}
-
-		while (NTC_IsQuesterIn()) {
-			Delay(1000);
-		}
+		NTM_MoveTo(me.areaid, xx, yy);
 
 		NTM_UsePortal("BluePortal", 103, me.charname);
 
@@ -506,10 +271,11 @@ var Extras =  {
 	},
 
 	Shenk: function() {
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		if (!Scripts.Shenk) {
+			return true;
 		}
+
+		SetStatusText(Rev + "      Running Shenk");
 
 		NTTMGR_TownManager();
 
@@ -534,9 +300,9 @@ var Extras =  {
 			NTM_MoveTo(110, 3855, 5125);
 		}
 
-		Say(Messages.shenkup);
-
 		NTM_MakeTP();
+
+		Say(Messages.shenkup);
 
 		while (!NTC_IsQuesterIn()) {
 			NTC_TPGuard(20);
@@ -546,10 +312,6 @@ var Extras =  {
 			Common.LogError("NTA_KillMonster()");
 			return false;
 		}
-
-		NTA_ClearPosition();
-
-		NTSI_PickItems();
 
 		Say(Messages.shenkdown);
 
@@ -575,13 +337,13 @@ var Extras =  {
 	Anya: function() {
 		var _Anya;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		if (!Scripts.Anya) {
+			return true;
 		}
 
-		NTTMGR_TownManager();
+		SetStatusText(Rev + "      Running Anya");
 
+		NTTMGR_TownManager();
 
 		if (!NTTM_TownMove("waypoint")) {
 			Common.LogError("NTTM_TownMove()");
@@ -615,7 +377,7 @@ var Extras =  {
 			return false;
 		}
 
-		NTA_ClearPosition(40);
+		NTA_ClearPosition(30);
 
 		NTSI_PickItems();		
 
@@ -637,8 +399,8 @@ var Extras =  {
 			}
 
 			NTC_OpenChest(_Anya);
-			NTC_Delay(100);
 			me.Cancel(0);
+			NTC_Delay(100);
 			me.Cancel(0);
 		}
 
@@ -654,97 +416,6 @@ var Extras =  {
 
 		NTM_UsePortal("BluePortal", 109, me.charname);
 		
-		return true;
-	},
-
-	TPCheck: function() {
-		var townid,
-			_currentwp = me.areaid;
-
-		if(NTTMGR_CheckScrolls(1) > 4) {
-			return;
-		}
-
-		switch(me.act) {
-			case 1:
-				townid = 1;
-			break;
-			case 2:
-				townid = 40;
-			break;
-			case 3:
-				townid = 75;
-			break;
-			case 4:
-				townid = 103;
-			break;
-			case 5:
-				townid = 109;
-			break;
-		}
-
-		NTM_TakeWaypoint(townid);
-		NTTMGR_TownManager();
-
-		NTTM_TownMove("waypoint");
-		return;
-	},
-
-	Waypoints: function() {
-		var i, _start, _wppos,
-			_wps = [3, 4, 5, 6, 27, 29, 32, 35, 48, 42, 57, 43, 44, 52, 74, 46, 76, 77, 78, 79, 80, 81, 83, 101, 106, 107, 111, 112, 113, 115, 123, 117, 118, 129];
-
-		if(!NTTM_CheckAct(1)) {
-			Common.LogError("NTTM_CheckAct()");
-			return false;
-		}
-
-		switch(me.act) {
-			case 1:
-				_start = 0;
-				break;
-			case 2:
-				_start = 8;
-				break;
-			case 3:
-				_start = 16;
-				break;
-			case 4:
-				_start = 24;
-				break;
-			case 5:
-				_start = 26;
-				break;
-		}
-
-		NTTMGR_TownManager();
-		NTTM_TownMove("waypoint");
-
-		for(i = _start; i < _wps.length; i += 1) {
-			if(NTM_TakeWaypoint(_wps[i])) {
-				NTM_MoveTo(me.areaid, me.x - 6, me.y - 6);
-				if(NTM_MakeTP()) {					
-					_wppos = [me.x, me.y];
-
-					Say(Messages.waypoint + GetArea().name);
-
-					if(!me.GetState(51)) {
-						NTP_DoPrecast(true);
-					}
-
-					while(!NTC_IsQuesterIn()) {
-						NTC_TPGuard(30);
-						NTM_MoveTo(me.areaid, _wppos[0], _wppos[1]);
-					}
-
-					while(!NTC_IsQuesterOut(me.areaid)) {
-						NTC_Delay(500);
-					}
-
-					this.TPCheck();
-				}
-			}
-		}
 		return true;
 	}
 };

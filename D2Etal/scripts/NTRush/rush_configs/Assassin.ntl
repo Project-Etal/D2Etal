@@ -1,7 +1,9 @@
 function NT_LoadConfig()
 {
-	Scripts.Command = false; // Overrides all other scripts set here
-	Scripts.Cain = true;
+	//------------------------------------------------------------------------------
+	// Script Settings
+	//------------------------------------------------------------------------------
+	Scripts.Command = true; // Overrides all other scripts set here
 	Scripts.Andy = true;
 	Scripts.Radament = true;
 	Scripts.Cube = true;
@@ -13,23 +15,24 @@ function NT_LoadConfig()
 	Scripts.Travincal = true;
 	Scripts.Mephisto = true;
 	Scripts.Izual = true;
-	Scripts.Hephasto = false;
 	Scripts.Diablo = true;
 	Scripts.Shenk = true;
 	Scripts.Anya = true;
 	Scripts.Ancients = true;
 	Scripts.Baal = true;
-	Scripts.Waypoints = true;
 
+	//------------------------------------------------------------------------------
+	// Script Sub Settings
+	//------------------------------------------------------------------------------
 	NTConfig_TpHarem = true;
 	NTConfig_KillCouncils = true;
-	NTConfig_ClearCS = true;	
-	NTConfig_CSDodge = true;
+	NTConfig_ClearCS = false;	
+	NTConfig_CSDodge = false;
 
 	//------------------------------------------------------------------------------
 	// Speed Settings
 	//------------------------------------------------------------------------------
-	me.maxgametime = 1200; 								// Maximum game length in seconds (0 is infinite).
+	me.maxgametime = 0; 								// Maximum game length in seconds (0 is infinite).
 	NTConfig_StartDelay = 0;							// Delay time in milliseconds to wait at start.
 	NTConfig_AreaDelay = 500;							// Delay time in milliseconds to wait on each area change.
 	NTConfig_SnagDelay = 500;							// Delay time in milliseconds (added to ping delay) to wait before each pickit call.
@@ -132,9 +135,9 @@ function NT_LoadConfig()
 	//------------------------------------------------------------------------------
 	// General configuration
 	//------------------------------------------------------------------------------
-	NTConfig_PublicMode = false;						// Enables "Public" features (Partying, Tp'ing etc). (Cannot be true while NTConfig_PartyOnlyLeader is.)
-	NTConfig_CheckCloneDiablo = true;					// Set to true if you want to wait in game after "Diablo Walks the Earth" msg.
-	NTConfig_SoJWaitTime = 5;							// Time in minutes to wait for the next SoJ sale. Set to 0 to disable SoJ notifier.
+	NTConfig_PublicMode = true;						// Enables "Public" features (Partying, Tp'ing etc). (Cannot be true while NTConfig_PartyOnlyLeader is.)
+	NTConfig_CheckCloneDiablo = false;					// Set to true if you want to wait in game after "Diablo Walks the Earth" msg.
+	NTConfig_SoJWaitTime = 0;							// Time in minutes to wait for the next SoJ sale. Set to 0 to disable SoJ notifier.
 	NTConfig_FastPickit = false;						// This is a new option that causes far less crashes(maybe none).  Is independent of snag delay	
 	NTConfig_UseMerc = false;							// Set true if you will use a mercenary, will revive merc at a reviver npc.
 	NTConfig_ResetEnigma = false;  						// Set true to reset enigma when tele bug exists. (Safe.)

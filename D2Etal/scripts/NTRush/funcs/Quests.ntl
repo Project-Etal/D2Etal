@@ -2,10 +2,7 @@ var Quests =  {
 	Andy: function () {
 		var i, _clearpos;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
+		SetStatusText(Rev + "      Running Andariel");
 
 		NTTMGR_TownManager();
 
@@ -46,9 +43,9 @@ var Quests =  {
 			NTC_PingDelay(200);
 		}
 
-		Say(Messages.andyup);
-
 		NTM_MakeTP();
+
+		Say(Messages.andyup);
 
 		NTA_ClearPosition(20);
 
@@ -88,21 +85,13 @@ var Quests =  {
 			Delay(500);
 		}
 
-		if (!NTM_TakeWaypoint(40)) {
-			Common.LogError("NTM_TakeWaypoint()");
-			return false;
-		}
-
 		return true;
 	},
 
 	Cube: function () {
-		if (me.diff == 0) {
-			if (!NTTM_CheckAct()) {
-				Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-				return;
-			}
+		SetStatusText(Rev + "      Running Cube");
 
+		if (me.diff == 0) {
 			NTTMGR_TownManager();
 
 			if (!NTTM_TownMove("waypoint")) {
@@ -126,8 +115,6 @@ var Quests =  {
 				Common.LogError("NTM_TakeStair()");
 				return false;
 			}
-
-			NTP_DoPrecast(true);
 
 			if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 354, -5, -5)) {
 				Common.LogError("NTM_MoveToPresetUnit()");
@@ -161,11 +148,6 @@ var Quests =  {
 
 			Say(Messages.cubeup);
 
-			while (!NTC_IsQuesterIn()) {
-				NTC_TPGuard(30);
-				NTM_MoveTo(me.areaid, _Cube.x-5, _Cube.y-5);
-			}
-
 			NTSI_PickItems();
 
 			NTM_UsePortal("BluePortal", 40, me.charname);
@@ -176,10 +158,7 @@ var Quests =  {
 	Staff: function () {
 		var i, _Staff;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
+		SetStatusText(Rev + "      Running Staff");
 
 		NTTMGR_TownManager();
 
@@ -241,25 +220,26 @@ var Quests =  {
 		}
 
 		if (NTM_MoveTo(_Staff.areaid, _Staff.x+3, _Staff.y+3)) {
-			NTA_ClearPosition(15);
+			NTA_ClearPosition(30);
 			NTSI_PickItems();
 		}
 
-		NTA_ClearPosition(30);
 		NTM_MoveTo(_Staff.areaid, _Staff.x-5, _Staff.y-5);
+
+		NTM_MakeTP();
 
 		Say(Messages.staffup);
 
-		NTM_MakeTP(true);
+		Delay(1000);
+
+		NTM_UsePortal("BluePortal", 40, me.charname);
 		
 		return true;
 	},
 
 	Ammy: function () {
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
+
+		SetStatusText(Rev + "      Running Ammy");
 
 		NTTMGR_TownManager();
 
@@ -284,7 +264,7 @@ var Quests =  {
 			Common.LogError("NTM_TakeStair()");
 			return false;
 		}
-				
+
 		if (!NTM_MoveToStair(me.areaid, 61)) {
 			Common.LogError("NTM_MoveToStair()");
 			return false;
@@ -300,7 +280,7 @@ var Quests =  {
 			NTA_ClearPosition(15);
 		}
 
-		NTA_ClearLevel(true);	
+		NTA_ClearLevel(true);
 			
 		if (!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 149, +4, -8)) {
 			Common.LogError("NTM_MoveToPresetUnit()");
@@ -310,11 +290,11 @@ var Quests =  {
 		NTM_MakeTP();
 			
 		NTC_PingDelay(100);
-			
+
 		Say(Messages.ammyup);
-			
+
 		while (!NTC_IsQuesterIn()) {
-			NTC_TPGuard(5);
+			Delay(500);
 		}
 
 		NTM_UsePortal("BluePortal", 40, me.charname);
@@ -322,13 +302,34 @@ var Quests =  {
 		return true;
 	},
 
-	Summoner: function () {
-		var _unit, _journalx, _journaly ;
+	ToCanyon: function () {
+		var journal;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		if(!NTM_MoveToPresetUnit(me.areaid, NTC_UNIT_OBJECT, 357, 2, 2)){
+			return false;
 		}
+
+		journal = NTC_FindUnit(NTC_UNIT_OBJECT, 357); // this needs to change to NTV_ActivateQuestChest(id, TK)
+
+		if(!NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, journal)){
+			return false;
+		}
+
+		me.Cancel(0);
+		Delay(500);
+		me.Cancel(0);
+
+		if(!NTM_TakeUnit(NTC_UNIT_OBJECT, 60)){
+			return false;
+		}
+
+		return true;
+	},
+
+	Summoner: function () {
+		var _unit, _journalx, _journaly;
+
+		SetStatusText(Rev + "      Running Summoner");
 
 		NTTMGR_TownManager();
 
@@ -373,7 +374,8 @@ var Quests =  {
 		}
 
 		NTM_MakeTP();
-
+		NTA_ClearPosition(20);
+		
 		Say(Messages.summonerup);
 		
 		while (!NTC_IsQuesterIn()) {
@@ -398,11 +400,7 @@ var Quests =  {
 			return false;
 		}
 
-		while (!NTM_UsePortal("Portal", 46)) {
-			NTA_ClearPosition(40);
-			NTM_MoveTo(me.areaid, _journalx, _journaly);
-			NTC_Delay(500);
-		}
+		this.ToCanyon();
 
 		if (!NTM_MoveTo(me.areaid, me.x-17, me.y-21)) {
 			Common.LogError("NTM_MoveTo()");
@@ -417,15 +415,35 @@ var Quests =  {
 		return true;
 	},
 
+	GoTyrael: function () {
+		var _npc;
+		var px = [22579,22576,22577];
+		var py = [15660,15638,15593];
+		var bx = [22632,22621,22609,22592,22579, 22579];
+		var by = [15708,15710,15707,15706,15704, 15690];
+			
+		for(var i = 0 ; i < bx.length ; i += 1){
+			NTM_WalkTo(bx[i], by[i]);
+		}
+		
+		for(var i = 0 ; i < px.length ; i += 1){
+			NTM_WalkTo(px[i], py[i]);
+		}
+		
+		_npc = NTC_FindUnit(NTC_UNIT_NPC, GetLocaleString(1013), 5);
+		if(_npc){
+			if(GetDistance(me, _npc) > 2)
+				NTM_WalkTo(_npc.x, _npc.y-3);
+		}	
+		NTM_MakeTP();
+
+		Say(Messages.durydown);
+	},
+
 	Duriel: function () {
 		var _tombs, _harem;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
-
-		NTTMGR_TownManager();
+		SetStatusText(Rev + "      Running Duriel");
 
 		if (!NTTM_TownMove("waypoint")) {
 			Common.LogError("NTTM_TownMove()");
@@ -483,9 +501,9 @@ var Quests =  {
 
 			NTC_Delay(150);
 
-			Say(Messages.durychamber);
-
 			NTM_MakeTP();
+
+			Say(Messages.durychamber);
 
 			while (!NTC_IsQuesterIn()) {
 				NTC_TPGuard(20);
@@ -513,9 +531,11 @@ var Quests =  {
 
 			NTC_Delay(2000);
 
-			Say(Messages.durydown);
+			this.GoTyrael();
 
-			NTM_MakeTP(true);	
+			Delay(1000);
+
+			NTM_UsePortal("BluePortal", 40, me.charname);
 		}
 		
 		NTC_PutSkill(115, NTC_HAND_RIGHT);	
@@ -565,7 +585,7 @@ var Quests =  {
 			NTM_MakeTP(true);
 
 			NTC_PingDelay(100);
-				
+
 			Say(Messages.palacetp);
 		}
 
@@ -580,11 +600,6 @@ var Quests =  {
 
 		while (!NTC_IsGroupInAct(3)) {
 			Delay(500);
-		}
-
-		if (!NTM_TakeWaypoint(75)) {
-			Common.LogError("NTM_TakeWaypoint()");
-			return false;
 		}
 
 		return true;
@@ -607,10 +622,7 @@ var Quests =  {
 		var i,_pretp, _waypoint, _deltax, _deltay,
 			_attackpos = [5800, 1554, 5799, 1534, 5799, 1526, 5797, 1514, 5795, 1490, 5787, 1491, 5797, 1514, 5781, 1514];
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
+		SetStatusText(Rev + "      Running Travincal");
 
 		NTTMGR_TownManager();
 
@@ -647,13 +659,13 @@ var Quests =  {
 
 		for (i = 0 ; i < _pretp.length ; i += 2) {
 			NTM_MoveTo(me.areaid, _pretp[i], _pretp[i+1]);
-			NTA_ClearPosition(10);
+			NTA_ClearPosition(20);
 			NTC_PingDelay(200);
 		}
-			
-		Say(Messages.travup);
 
 		NTM_MakeTP();
+
+		Say(Messages.travup);
 
 		while (!NTC_IsQuesterIn()) {
 			NTC_TPGuard(20);
@@ -666,7 +678,7 @@ var Quests =  {
 			return false;
 		}
 
-		for (i = 0 ; i < _attackpos.length ; i += 2) {
+		for (i = 0; i < _attackpos.length; i += 2) {
 			NTM_MoveTo(me.areaid, _attackpos[i]+_deltax, _attackpos[i+1]+_deltay);
 			NTA_ClearPosition(25);
 			NTC_PingDelay(200);
@@ -679,7 +691,7 @@ var Quests =  {
 		}
 
 		NTSI_PickItems();
-			
+
 		NTM_MoveTo(me.areaid, _todurx-17, _todury+10);
 
 		NTM_MakeTP(true);
@@ -690,10 +702,7 @@ var Quests =  {
 	Mephisto: function () {
 		var i, _chest, _councils, _unit;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
+		SetStatusText(Rev + "      Running Mephisto");
 
 		NTTMGR_TownManager();
 
@@ -719,7 +728,7 @@ var Quests =  {
 			return false;
 		}
 
-		NTP_DoPrecast(true);
+		NTP_DoPrecast();
 
 		if (!NTM_MoveTo(me.areaid, 17617, 8068)) {
 			Common.LogError("NTM_MoveTo()");
@@ -746,15 +755,14 @@ var Quests =  {
 			return false;
 		}
 
-		Say(Messages.mephup);
-
 		NTM_MakeTP();
+		Say(Messages.mephup);
 
 		while (!NTC_IsQuesterIn()) {
 			NTC_Delay(500);
 		}
 
-		NTP_DoPrecast(true);
+		NTP_DoPrecast();
 
 		if (!NTM_MoveTo(me.areaid, 17564, 8069)) {
 			Common.LogError("NTM_MoveTo()");
@@ -775,28 +783,6 @@ var Quests =  {
 
 		Say(Messages.mephdown);
 
-		if (NTConfig_OpenChest) {
-			if (!NTM_MoveTo(me.areaid, 17520, 8063)) {
-				Common.LogError("NTM_MoveTo()");
-				return false;
-			}
-
-			_chest = NTC_FindUnit(NTC_UNIT_OBJECT, GetLocaleString(3260));
-
-			if (_chest) {
-				do {
-					if (_chest.x == 17513 && _chest.y == 8063) {
-						if (NTM_MoveTo(_chest.areaid, _chest.x+1, _chest.y)) {
-							if (NTC_OpenChest(_chest)) {
-								NTSI_PickItems();
-								break;
-							}
-						}
-					}
-				} while(_chest.GetNext());
-			}
-		}	
-
 		NTM_MoveTo(me.areaid, 17589, 8068);
 
 		NTM_UsePortal("BluePortal", 75, me.charname);
@@ -809,13 +795,6 @@ var Quests =  {
 		while(!NTC_IsGroupInAct(4)) {
 			Delay(500);
 		}
-
-		if(!NTM_TakeWaypoint(103)) {
-			Common.LogError("NTM_TakeWaypoint()");
-			return false;
-		}
-
-		NTC_Delay(2000);
 
 		return true;
 	},
@@ -880,10 +859,10 @@ var Quests =  {
 			return false;
 		}
 
-		this.ClearPosition(40, this.DistanceSort);
-		NTA_KillMonster(GetLocaleString(2851)); // Grand Vizier of Chaos
-		this.ClearPosition(20, this.DistanceSort);
-		
+		while (!NTA_KillMonster(GetLocaleString(2851))) {
+			NTC_Delay(500);
+		}
+
 		return true;
 	},
 
@@ -916,10 +895,9 @@ var Quests =  {
 			NTM_MoveTo(108, 7798, 5186);
 		}
 
-		this.Preattack(GetLocaleString(2852));
-		this.ClearPosition(40, this.DistanceSort);
-		NTA_KillMonster(GetLocaleString(2852)); // Lord De Seis
-		this.ClearPosition(20, this.DistanceSort);
+		while (!NTA_KillMonster(GetLocaleString(2852))) {
+			NTC_Delay(500);
+		}
 
 		return NTM_MoveTo(108, 7800, 5255);
 	},
@@ -944,10 +922,9 @@ var Quests =  {
 			return false;
 		}
 
-		this.Preattack(GetLocaleString(2853));
-		this.ClearPosition(40, this.DistanceSort);
-		NTA_KillMonster(GetLocaleString(2853)); // Infector of Souls
-		this.ClearPosition(20, this.DistanceSort);
+		while (!NTA_KillMonster(GetLocaleString(2853))) {
+			NTC_Delay(500);
+		}
 		
 		if (NTC_PutSkill(124, NTC_HAND_RIGHT)) {
 			NTC_PingDelay(1000);
@@ -956,17 +933,7 @@ var Quests =  {
 	},
 
 	OpenSealInt: function(classid) {
-		var warn, i, seal;
-		switch (classid) {
-		case 396:
-		case 394:
-		case 392:
-			warn = true;
-			break;
-		default:
-			warn = false;
-			break;
-		}
+		var i, seal;
 
 		for (i = 0; i < 5; i += 1) {
 			NTM_MoveToPresetUnit(108, 2, classid, classid === 394 ? 5 : 2, classid === 394 ? 5 : 0);
@@ -976,15 +943,6 @@ var Quests =  {
 			if (!seal) {
 				return false;
 			}
-
-			if (seal.mode) { // for pubbies
-				if (warn) {
-					Say("Dont touch the fucking seals!");
-				}
-				return true;
-			}
-
-			warn = false;
 
 			NTC_DoClick(NTC_CLICK_LDOWN, NTC_SHIFT_NONE, seal);
 			NTC_Delay(classid === 394 ? 1000 : 500);
@@ -1059,7 +1017,7 @@ var Quests =  {
 				positions = [[6, 11], [0, 8], [8, -1], [-9, 2], [0, -11], [8, -8]];
 				for (i = 0; i < positions.length; i += 1) {
 					if (CheckCollision(me.areaid, target.x + positions[i][0], target.y + positions[i][1], 1)) { // check if we can move there
-						Print("Preattack position: " + positions[i][0] + " " + positions[i][1]);
+						//Print("Preattack position: " + positions[i][0] + " " + positions[i][1]);
 						NTM_MoveTo(108, target.x + positions[i][0], target.y + positions[i][1]);
 						NTC_PutSkill(NTConfig_AttackSkill[2], NTC_HAND_RIGHT);
 						for (n = 0; n < 8; n += 1) {
@@ -1318,10 +1276,7 @@ var Quests =  {
 	Diablo: function () {
 		NTConfig_DancingSorc = false;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
-		}
+		SetStatusText(Rev + "      Running Diablo");
 
 		NTTMGR_TownManager();
 
@@ -1351,7 +1306,7 @@ var Quests =  {
 
 		NTM_MoveTo(108, 7760, 5267);
 		NTM_MakeTP();
-			
+
 		Say(Messages.diabloup);
 
 		while (!NTC_IsQuesterIn()) {
@@ -1373,9 +1328,9 @@ var Quests =  {
 		}
 
 		NTSI_PickItems();
-		
+
 		Say(Messages.diablodown);
-		
+
 		NTM_UsePortal("BluePortal", 103, me.charname);
 		
 		if (!NTTM_TownMove("waypoint")) {
@@ -1387,21 +1342,19 @@ var Quests =  {
 			Delay(500);
 		}
 
-		if (!NTM_TakeWaypoint(109)) {
-			Common.LogError("NTM_TakeWaypoint()");
-			return false;
-		}
-
 		return true;
 	},
 
 	Ancients: function () {
-		var _Altar, _Korlic, _Talic, _Madawc ;
+		var _Altar, _Korlic, _Talic, _Madawc;
 
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		if (me.diff === 2) {
+			NTTM_CheckAct();
+			Say(Messages.endgame);
+			return true;
 		}
+
+		SetStatusText(Rev + "      Running Ancients");
 
 		NTTMGR_TownManager();
 
@@ -1426,21 +1379,19 @@ var Quests =  {
 			Common.LogError("NTM_TakeStair()");
 			return false;
 		}
-			
+
 		if (!NTM_MoveTo(me.areaid, 10057, 12645)) {
 			Common.LogError("NTM_MoveTo()");
 			return false;
 		}
-			
-		Say(Messages.ancientsup);
-				
+
 		NTM_MakeTP();
-				
+
+		Say(Messages.ancientsup);
+
 		while (!NTC_IsQuesterIn()) {
 			NTC_Delay(500);
 		}
-
-		NTA_ClearPosition(10);
 
 		NTP_DoPrecast(true);	
 
@@ -1540,30 +1491,13 @@ var Quests =  {
 		return false;
 	},
 
-	CheckHydraInt: function() {
-		var _hydra1, _hydra2, _hydra3;
-
-		_hydra1 = NTC_FindUnit(NTC_UNIT_MONSTER, 351);
-		_hydra2 = NTC_FindUnit(NTC_UNIT_MONSTER, 352);
-		_hydra3 = NTC_FindUnit(NTC_UNIT_MONSTER, 353);
-
-		if ((_hydra1 && _hydra1.GetStat(172) != 2 && _hydra1.GetState(105))
-			|| (_hydra2 && _hydra2.GetStat(172) != 2 && _hydra2.GetState(105))
-			|| (_hydra3 && _hydra3.GetStat(172) != 2 && _hydra3.GetState(105))) {
-			NTM_MoveTo(me.areaid, 15112, 5004);
-
-			if (me.GetState(2)) {
-				NTC_PutSkill(109, NTC_HAND_RIGHT);
-			}
-			NTC_PingDelay(3000);
-		}
-	},
-
 	Baal: function () {
-		if (!NTTM_CheckAct()) {
-			Script.SendMsg("OverWatch.ntj", "NTTM_CheckAct()");
-			return;
+		var i;
+		if (me.diff === 2) {
+			return true;
 		}
+
+		SetStatusText(Rev + "      Running Baal");
 
 		NTTMGR_TownManager();
 
@@ -1577,28 +1511,27 @@ var Quests =  {
 			return false;
 		}
 
-		NTP_DoPrecast(true);	
-			
-		for (i = 0 ; i < 2 ; i += 1) {
-			if (!NTM_MoveToStair(me.areaid, 130+i)) {
-			Common.LogError("NTM_MoveToStair()");
-			return false;
+		NTP_DoPrecast(true);
+
+		while (me.areaid < 131) {
+			if (!NTM_MoveToStair(me.areaid, me.areaid+1)) {
+					Common.LogError("NTM_MoveToStair()");
+					return false;
 			}
 
-			if (!NTM_TakeStair(130+i)) {
-			Common.LogError("NTM_TakeStair()");
-			return false;
+			if (!NTM_TakeStair(me.areaid+1)) {
+				Common.LogError("NTM_TakeStair()");
+				return false;
 			}
 		}
 
-		NTM_MoveTo(me.areaid, 15116, 5068);
+		NTM_MoveTo(me.areaid, 15116, 5068, 1, );
 			
 		this.ClearThroneInt();
 
-		NTM_MoveTo(me.areaid, 15112, 5004, 1, true);
-			
+		NTM_MoveTo(me.areaid, 15112, 5004, 1, );
+
 		Say(Messages.baalup);
-			
 		NTM_MakeTP();
 
 		NTC_PingDelay(1000);
@@ -1644,7 +1577,7 @@ var Quests =  {
 					break;
 				case 3:
 					NTA_ClearPosition(40, true, 2);
-					this.CheckHydraInt();
+					Delay(2000);
 					break;
 				case 4:
 					NTA_ClearPosition(40, true, 2);
@@ -1682,6 +1615,10 @@ var Quests =  {
 			return false;
 		}
 
+		while (!NTC_IsQuesterIn()) {
+			Delay(500);
+		}
+
 		NTM_MoveTo(me.areaid, 15138, 5916);
 
 		if (!NTA_KillMonster(544)) {
@@ -1692,7 +1629,13 @@ var Quests =  {
 		NTSI_PickItems();
 		NTC_PingDelay(200);
 
+		NTTM_CheckAct();
+
 		Say(Messages.endgame);
+
+		while (NTC_InMyParty()) {
+			Delay(500);
+		}
 		
 		return true;
 	}

@@ -708,8 +708,15 @@ function NTC_InMyParty(playerName)
 		{
 			do
 			{
-				if(_player.name == playerName && _myPartyId == _player.partyid)
-					return true;
+				if (playerName === undefined) {
+					if(_player.name != me.name && _myPartyId == _player.partyid) {
+						return true;
+					}
+				} else if (playerName !== undefined) {
+					if(_player.name == playerName && _myPartyId == _player.partyid) {
+						return true;
+					}
+				}
 			} while(_player.GetNext());
 		}
 	}
@@ -1534,7 +1541,6 @@ function NTC_IsGroupInAct(act)
 
 	do
 	{
-
 		if(_player.areaid <= 39)
 			questeract = 1;
 		else if(_player.areaid >= 40 && _player.areaid <= 74)
@@ -1546,14 +1552,14 @@ function NTC_IsGroupInAct(act)
 		else
 			questeract = 5;
 
-		if(questeract == act && _myPartyId == _player.partyid && _player.name != me.charname)
-			return true;
+		if(questeract < act && _myPartyId == _player.partyid && _player.name != me.charname)
+			return false;
 
 		NTC_Delay(100);
 
 	} while(_player.GetNext());
 
-	return false;	
+	return true;	
 }
 
 function NTC_GetNextGame() {
