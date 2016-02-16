@@ -327,7 +327,7 @@ var Quests =  {
 	},
 
 	Summoner: function () {
-		var _unit, _journalx, _journaly;
+		var _unit, _journalx, _journaly, i;
 
 		SetStatusText(Rev + "      Running Summoner");
 
@@ -366,7 +366,8 @@ var Quests =  {
 		if (_journaly > 5500) {
 			NTM_MoveTo(me.areaid, _journalx+15, _journaly-40);
 		}
-		var xx = me.x; var yy = me.y
+		var xx = me.x;
+		var yy = me.y;
 		
 		for (i = 0; i < 5; i += 1) {
 			NTA_ClearPosition(20);
@@ -563,8 +564,8 @@ var Quests =  {
 
 			_harem = [10031, 5608, 10058, 5610, 10084, 5611, 10109, 5612, 10133, 5613, 10148, 5603, 10143, 5599];
 
-			for (i = 0; i < _harem.length; i += 2) {
-				for (n = 0 ; n < 2 ; n++) {
+			for (var i = 0; i < _harem.length; i += 2) {
+				for (var n = 0 ; n < 2 ; n++) {
 					if (!NTM_TeleportTo(_harem[i]+Random(-n, n), _harem[i+1]+Random(-n, n))) {
 						Common.LogError("NTM_TeleportTo()");
 						return false;
@@ -581,7 +582,7 @@ var Quests =  {
 				Common.LogError("NTM_MoveTo()");
 				return false;
 			}
-				
+
 			NTM_MakeTP(true);
 
 			NTC_PingDelay(100);
@@ -700,7 +701,7 @@ var Quests =  {
 	},
 
 	Mephisto: function () {
-		var i, _chest, _councils, _unit;
+		var i, _councils, _unit;
 
 		SetStatusText(Rev + "      Running Mephisto");
 
@@ -735,7 +736,7 @@ var Quests =  {
 			return false;
 		}
 
-		if (NTConfig_KillCouncils) {	
+		if (NTConfig_KillCouncils) {
 			_unit = GetUnit(NTC_UNIT_MONSTER);
 			_councils = ["Bremm Sparkfist",  "Wyand Voidbringer", "Maffer Dragonhand", "Council Member"];
 
@@ -867,7 +868,7 @@ var Quests =  {
 	},
 
 	OpenDeSeisSealInt: function(type) {
-		var i, n, sx, sy;
+		var i, sx, sy;
 
 		if (NTConfig_ClearCS) {
 			if (type === 1) {
@@ -1165,7 +1166,7 @@ var Quests =  {
 					if (target.IsAttackable()) {
 						if ((me.classid === 1 || me.classid === 2 || me.classid === 6) && NTConfig_CSDodge && GetDistance(me, target) < 7 && dodgeIDs.indexOf(target.classid) > -1) {
 							this.Dodge(target, 15);
-							continue MainLoop;
+							continue;
 						}
 						if (ignoreList.indexOf(target.gid) < 0 && GetDistance(orgx, orgy, target.x, target.y) <= range) {
 							if (NTA_IsValidMonster(target)) {
@@ -1222,7 +1223,7 @@ var Quests =  {
 				}
 				break;
 			case NTC_CHAR_CLASS_NECROMANCER:
-				if (typeof(NTA_SkeletonArmy) === 'function') { // old summon code
+				if (typeof NTA_SkeletonArmy === 'function') { // old summon code
 					NTA_SkeletonArmy(NTConfig_SkeletonArmy);
 					NTA_MageArmy(NTConfig_MageArmy);
 					NTA_ReviveArmy(NTConfig_ReviveArmy);
@@ -1237,7 +1238,7 @@ var Quests =  {
 				break;
 			case NTC_CHAR_CLASS_BARBARIAN:
 				if (attackcount > 0) {
-					if (typeof(MWL_FindItem) === 'function') { // in case of using muddy's item find (like myself)
+					if (typeof MWL_FindItem === 'function') { // in case of using muddy's item find (like myself)
 						MWL_FindItem(20);
 					} else if (NTConfig_UseFindItem && !NTA_CheckForCloseMonsters(10)) {
 						NTA_FindItem(NTConfig_FindItemRange);
@@ -1347,12 +1348,6 @@ var Quests =  {
 
 	Ancients: function () {
 		var _Altar, _Korlic, _Talic, _Madawc;
-
-		if (me.diff === 2) {
-			NTTM_CheckAct();
-			Say(Messages.endgame);
-			return true;
-		}
 
 		SetStatusText(Rev + "      Running Ancients");
 
@@ -1492,11 +1487,6 @@ var Quests =  {
 	},
 
 	Baal: function () {
-		var i;
-		if (me.diff === 2) {
-			return true;
-		}
-
 		SetStatusText(Rev + "      Running Baal");
 
 		NTTMGR_TownManager();
@@ -1515,8 +1505,8 @@ var Quests =  {
 
 		while (me.areaid < 131) {
 			if (!NTM_MoveToStair(me.areaid, me.areaid+1)) {
-					Common.LogError("NTM_MoveToStair()");
-					return false;
+				Common.LogError("NTM_MoveToStair()");
+				return false;
 			}
 
 			if (!NTM_TakeStair(me.areaid+1)) {
@@ -1525,11 +1515,11 @@ var Quests =  {
 			}
 		}
 
-		NTM_MoveTo(me.areaid, 15116, 5068, 1, );
-			
+		NTM_MoveTo(me.areaid, 15116, 5068);
+
 		this.ClearThroneInt();
 
-		NTM_MoveTo(me.areaid, 15112, 5004, 1, );
+		NTM_MoveTo(me.areaid, 15112, 5004);
 
 		Say(Messages.baalup);
 		NTM_MakeTP();
@@ -1636,7 +1626,6 @@ var Quests =  {
 		while (NTC_InMyParty()) {
 			Delay(500);
 		}
-		
 		return true;
 	}
 };
