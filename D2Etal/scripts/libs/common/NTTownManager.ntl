@@ -1604,7 +1604,7 @@ function NTTM_GCCheckAmu(){
 
 		if(_npc)
 		{
-			while(!NTTM_GCHaveAmu()){
+			while(!NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold){
 				if(NTT_DoInteract(_npc))
 				{
 					if(NTT_DoTrade(_npc, 1))
@@ -1628,7 +1628,7 @@ function NTTM_GCCheckAmu(){
 
 		if(_npc)
 		{
-			while(!NTTM_GCHaveAmu()){
+			while(!NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold){
 				if(NTT_DoInteract(_npc))
 				{
 					if(NTT_DoTrade(_npc, 1))
@@ -1652,7 +1652,7 @@ function NTTM_GCCheckAmu(){
 
 		if(_npc)
 		{
-			while(!NTTM_GCHaveAmu()){
+			while(!NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold){
 				if(NTT_DoInteract(_npc))
 				{
 					if(NTT_DoTrade(_npc, 1))
@@ -1677,7 +1677,7 @@ function NTTM_GCCheckAmu(){
 
 		if(_npc)
 		{
-			while(!NTTM_GCHaveAmu()){
+			while(!NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold){
 				if(NTT_DoInteract(_npc))
 				{
 					if(NTT_DoTrade(_npc, 1))
@@ -1702,7 +1702,7 @@ function NTTM_GCCheckAmu(){
 
 		if(_npc)
 		{
-			while(!NTTM_GCHaveAmu()){
+			while(!NTTM_GCHaveAmu() && NTC_MyGold() > NTConfig_GCAmuGold){
 				if(NTT_DoInteract(_npc))
 				{
 					if(NTT_DoTrade(_npc, 1))
